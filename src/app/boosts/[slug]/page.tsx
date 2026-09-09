@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Users } from "lucide-react";
+import { Users, Share2 } from "lucide-react";
 import { getBoostBySlug } from "@/services/boosts.service";
 import { getMapBySlug } from "@/services/maps.service";
+import { getLikeState } from "@/services/likes.service";
+import { getFavoriteState } from "@/services/favorites.service";
+import { getComments } from "@/services/comments.service";
+import { getCurrentProfile } from "@/lib/auth/get-current-profile";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DifficultyDots } from "@/components/ui/difficulty-dots";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { VideoEmbed } from "@/components/ui/video-embed";
+import { LikeButton } from "@/components/ui/like-button";
+import { FavoriteButton } from "@/components/ui/favorite-button";
+import { CommentSection } from "@/components/comments/comment-section";
 import { boostCategoryLabels } from "@/lib/labels/boost-labels";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +40,12 @@ export default async function BoostDetailPage({ params }: { params: Promise<{ sl
   const boost = await getBoostBySlug(slug);
   if (!boost) notFound();
 
-  const map = await getMapBySlug(boost.mapSlug);
+  const [map, profile] = await Promise.all([getMapBySlug(boost.mapSlug), getCurrentProfile()]);
+  const [likeState, favorited, comments] = await Promise.all([
+    getLikeState("boost", boost.id),
+    getFavoriteState("boost", boost.id),
+    getComments("boost", boost.id),
+  ]);
 
   return (
     <div className="px-4 py-8 lg:px-6">
@@ -62,6 +75,34 @@ export default async function BoostDetailPage({ params }: { params: Promise<{ sl
       </div>
 
       <p className="mt-6 max-w-2xl text-sm leading-relaxed text-foreground-muted">{boost.description}</p>
+
+      <div className="mt-6 flex items-center gap-2">
+        <LikeButton
+          contentType="boost"
+          contentId={boost.id}
+          isLoggedIn={Boolean(profile)}
+          initialLiked={likeState.likedByMe}
+          initialCount={likeState.count}
+        />
+        <FavoriteButton
+          contentType="boost"
+          contentId={boost.id}
+          isLoggedIn={Boolean(profile)}
+          initialFavorited={favorited}
+        />
+        <Button variant="secondary" size="sm">
+          <Share2 size={14} /> Compartir
+        </Button>
+      </div>
+
+      <div className="mt-8 border-t border-border pt-6">
+        <CommentSection
+          contentType="boost"
+          contentId={boost.id}
+          comments={comments}
+          isLoggedIn={Boolean(profile)}
+        />
+      </div>
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { Heart, MessageCircle, Share2, Bookmark } from "lucide-react";
+import { MessageCircle, Share2 } from "lucide-react";
 import type { FeedItem } from "@/types/content";
+import type { ContentTypeEnum } from "@/types/database";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { LikeButton } from "@/components/ui/like-button";
+import { FavoriteButton } from "@/components/ui/favorite-button";
 import { formatRelativeDate } from "@/lib/utils/format";
 
 const typeToPath: Record<FeedItem["type"], string> = {
@@ -19,7 +22,9 @@ const typeLabel: Record<FeedItem["type"], string> = {
   boost: "Boost",
 };
 
-export function FeedItemCard({ item }: { item: FeedItem }) {
+export function FeedItemCard({ item, isLoggedIn }: { item: FeedItem; isLoggedIn: boolean }) {
+  const href = `${typeToPath[item.type]}/${item.targetSlug}`;
+
   return (
     <Card className="p-4">
       <div className="flex items-start gap-3">
@@ -35,24 +40,41 @@ export function FeedItemCard({ item }: { item: FeedItem }) {
             <Badge>{typeLabel[item.type]}</Badge>
             <span className="text-xs text-foreground-subtle">{formatRelativeDate(item.createdAt)}</span>
           </div>
-          <Link
-            href={`${typeToPath[item.type]}/${item.targetSlug}`}
-            className="mt-2 block text-sm font-medium text-brand hover:underline"
-          >
+          <Link href={href} className="mt-2 block text-sm font-medium text-brand hover:underline">
             Ver contenido →
           </Link>
-          <div className="mt-3 flex items-center gap-4 text-foreground-muted">
-            <button className="flex items-center gap-1 text-xs hover:text-brand" aria-label="Me gusta">
-              <Heart size={14} /> Like
-            </button>
-            <button className="flex items-center gap-1 text-xs hover:text-brand" aria-label="Comentar">
-              <MessageCircle size={14} /> Comentar
-            </button>
-            <button className="flex items-center gap-1 text-xs hover:text-brand" aria-label="Guardar">
-              <Bookmark size={14} /> Guardar
-            </button>
-            <button className="flex items-center gap-1 text-xs hover:text-brand" aria-label="Compartir">
-              <Share2 size={14} /> Compartir
+          <div className="mt-3 flex items-center gap-2">
+            {item.contentId ? (
+              <>
+                <LikeButton
+                  contentType={item.type as ContentTypeEnum}
+                  contentId={item.contentId}
+                  isLoggedIn={isLoggedIn}
+                  initialLiked={item.likedByMe ?? false}
+                  initialCount={item.likeCount ?? 0}
+                  size="sm"
+                />
+                <FavoriteButton
+                  contentType={item.type as ContentTypeEnum}
+                  contentId={item.contentId}
+                  isLoggedIn={isLoggedIn}
+                  initialFavorited={item.favoritedByMe ?? false}
+                  size="sm"
+                />
+              </>
+            ) : null}
+            <Link
+              href={href}
+              className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium text-foreground-muted hover:text-foreground"
+            >
+              <MessageCircle size={12} /> Comentar
+            </Link>
+            <button
+              type="button"
+              className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium text-foreground-muted hover:text-foreground"
+              aria-label="Compartir"
+            >
+              <Share2 size={12} /> Compartir
             </button>
           </div>
         </div>

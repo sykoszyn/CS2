@@ -23,6 +23,7 @@ interface BoostJoinRow {
   difficulty: number;
   description: string;
   image_url: string | null;
+  created_at: string;
   maps: { slug: string } | null;
   profiles: { username: string } | null;
   videos: VideoRow | null;
@@ -43,6 +44,7 @@ function toBoost(row: BoostJoinRow): Boost {
     description: row.description,
     authorUsername: row.profiles?.username,
     imageUrl: row.image_url ?? "",
+    createdAt: row.created_at,
     video: row.videos
       ? {
           id: row.videos.id,
@@ -69,6 +71,20 @@ export async function getBoosts(): Promise<Boost[]> {
     return (data as unknown as BoostJoinRow[]).map(toBoost);
   } catch {
     return mockBoosts;
+  }
+}
+
+export async function getBoostsByIds(ids: string[]): Promise<Boost[]> {
+  if (ids.length === 0) return [];
+  if (!isSupabaseConfigured()) return mockBoosts.filter((b) => ids.includes(b.id));
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase.from("boosts").select(BOOST_SELECT).in("id", ids);
+    if (error) throw error;
+    return (data as unknown as BoostJoinRow[]).map(toBoost);
+  } catch {
+    return mockBoosts.filter((b) => ids.includes(b.id));
   }
 }
 

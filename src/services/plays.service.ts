@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { getMapBySlug } from "@/services/maps.service";
+import { getLikeStates } from "@/services/likes.service";
 import { plays as mockPlays, getPlaysByMap as getMockPlaysByMap } from "@/lib/mock/plays";
 import type { Play } from "@/types/content";
 import type { VideoRow } from "@/types/database";
@@ -50,6 +51,22 @@ function toPlay(row: PlayJoinRow): Play {
   };
 }
 
+/**
+ * `plays.like_count` is a denormalized column nothing updates yet, so it
+ * would always read 0 for real content. Overlay the live count (+ whether
+ * the current viewer liked it) from the real `likes` table instead — one
+ * batched query regardless of list size.
+ */
+async function attachLiveLikeState(plays: Play[]): Promise<Play[]> {
+  if (!isSupabaseConfigured() || plays.length === 0) return plays;
+
+  const states = await getLikeStates("play", plays.map((p) => p.id));
+  return plays.map((p) => {
+    const state = states.get(p.id);
+    return state ? { ...p, likeCount: state.count, likedByMe: state.likedByMe } : p;
+  });
+}
+
 export async function getPlays(): Promise<Play[]> {
   if (!isSupabaseConfigured()) return mockPlays;
 
@@ -60,9 +77,23 @@ export async function getPlays(): Promise<Play[]> {
       .select(PLAY_SELECT)
       .order("created_at", { ascending: false });
     if (error) throw error;
-    return (data as unknown as PlayJoinRow[]).map(toPlay);
+    return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
   } catch {
     return mockPlays;
+  }
+}
+
+export async function getPlaysByIds(ids: string[]): Promise<Play[]> {
+  if (ids.length === 0) return [];
+  if (!isSupabaseConfigured()) return mockPlays.filter((p) => ids.includes(p.id));
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase.from("plays").select(PLAY_SELECT).in("id", ids);
+    if (error) throw error;
+    return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
+  } catch {
+    return mockPlays.filter((p) => ids.includes(p.id));
   }
 }
 
@@ -80,7 +111,7 @@ export async function getPlaysByMap(mapSlug: string): Promise<Play[]> {
       .eq("map_id", map.id)
       .order("created_at", { ascending: false });
     if (error) throw error;
-    return (data as unknown as PlayJoinRow[]).map(toPlay);
+    return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
   } catch {
     return getMockPlaysByMap(mapSlug);
   }
@@ -97,7 +128,9 @@ export async function getPlayBySlug(slug: string): Promise<Play | null> {
       .eq("slug", slug)
       .maybeSingle();
     if (error) throw error;
-    return data ? toPlay(data as unknown as PlayJoinRow) : null;
+    if (!data) return null;
+    const [play] = await attachLiveLikeState([toPlay(data as unknown as PlayJoinRow)]);
+    return play;
   } catch {
     return mockPlays.find((p) => p.slug === slug) ?? null;
   }

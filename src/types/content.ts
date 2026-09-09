@@ -95,6 +95,7 @@ export interface Boost {
   authorUsername?: string;
   video?: Video;
   imageUrl: string;
+  createdAt: string;
   isDemo?: boolean;
 }
 
@@ -108,6 +109,7 @@ export interface Play {
   authorUsername: string;
   video: Video;
   likeCount: number;
+  likedByMe?: boolean;
   commentCount: number;
   createdAt: string;
   isDemo?: boolean;
@@ -142,6 +144,20 @@ export interface FeedItem {
   targetSlug: string;
   mapSlug?: string;
   createdAt: string;
+  /** Present only for real (DB-backed) items — enables the like/save buttons. */
+  contentId?: string;
+  likeCount?: number;
+  likedByMe?: boolean;
+  favoritedByMe?: boolean;
+}
+
+export interface CommentWithAuthor {
+  id: string;
+  body: string;
+  createdAt: string;
+  authorUsername: string;
+  authorAvatarUrl?: string;
+  isOwn: boolean;
 }
 
 export interface PublicProfile {

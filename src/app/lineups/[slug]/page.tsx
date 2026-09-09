@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Bookmark, Share2, LogIn } from "lucide-react";
+import { Share2, LogIn } from "lucide-react";
 import { getLineupBySlug, getUserRating } from "@/services/lineups.service";
 import { getMapBySlug } from "@/services/maps.service";
+import { getLikeState } from "@/services/likes.service";
+import { getFavoriteState } from "@/services/favorites.service";
+import { getComments } from "@/services/comments.service";
 import { getCurrentProfile } from "@/lib/auth/get-current-profile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,8 +15,11 @@ import { DifficultyDots } from "@/components/ui/difficulty-dots";
 import { VerifiedBadge } from "@/components/ui/verified-badge";
 import { VideoEmbed } from "@/components/ui/video-embed";
 import { EmptyState } from "@/components/ui/empty-state";
+import { LikeButton } from "@/components/ui/like-button";
+import { FavoriteButton } from "@/components/ui/favorite-button";
 import { LineupStepViewer } from "@/components/lineups/lineup-step-viewer";
 import { RatingForm } from "@/components/lineups/rating-form";
+import { CommentSection } from "@/components/comments/comment-section";
 import { grenadeTypeLabels } from "@/lib/labels/lineup-labels";
 import { siteConfig } from "@/lib/site-config";
 
@@ -43,7 +49,12 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
   if (!lineup) notFound();
 
   const [map, profile] = await Promise.all([getMapBySlug(lineup.mapSlug), getCurrentProfile()]);
-  const userRating = profile ? await getUserRating(lineup.id) : null;
+  const [userRating, likeState, favorited, comments] = await Promise.all([
+    profile ? getUserRating(lineup.id) : Promise.resolve(null),
+    getLikeState("lineup", lineup.id),
+    getFavoriteState("lineup", lineup.id),
+    getComments("lineup", lineup.id),
+  ]);
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -89,9 +100,19 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
         </div>
 
         <div className="flex gap-2">
-          <Button variant="secondary" size="sm">
-            <Bookmark size={14} /> Guardar
-          </Button>
+          <LikeButton
+            contentType="lineup"
+            contentId={lineup.id}
+            isLoggedIn={Boolean(profile)}
+            initialLiked={likeState.likedByMe}
+            initialCount={likeState.count}
+          />
+          <FavoriteButton
+            contentType="lineup"
+            contentId={lineup.id}
+            isLoggedIn={Boolean(profile)}
+            initialFavorited={favorited}
+          />
           <Button variant="secondary" size="sm">
             <Share2 size={14} /> Compartir
           </Button>
@@ -161,6 +182,15 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
             }
           />
         )}
+      </div>
+
+      <div className="mt-8 border-t border-border pt-6">
+        <CommentSection
+          contentType="lineup"
+          contentId={lineup.id}
+          comments={comments}
+          isLoggedIn={Boolean(profile)}
+        />
       </div>
     </div>
   );

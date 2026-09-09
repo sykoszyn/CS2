@@ -148,6 +148,20 @@ export async function getLineupsByMap(mapSlug: string): Promise<Lineup[]> {
   return getLineups({ mapSlug: mapSlug as LineupFilters["mapSlug"] });
 }
 
+export async function getLineupsByIds(ids: string[]): Promise<Lineup[]> {
+  if (ids.length === 0) return [];
+  if (!isSupabaseConfigured()) return mockLineups.filter((l) => ids.includes(l.id));
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase.from("lineups").select(LINEUP_SELECT).in("id", ids);
+    if (error) throw error;
+    return (data as unknown as LineupJoinRow[]).map((row) => toLineup(row));
+  } catch {
+    return mockLineups.filter((l) => ids.includes(l.id));
+  }
+}
+
 export async function getLineupBySlug(slug: string): Promise<Lineup | null> {
   if (!isSupabaseConfigured()) return getMockLineupBySlug(slug) ?? null;
 

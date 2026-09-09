@@ -14,6 +14,7 @@ export const boosts: Boost[] = [
     description:
       "Boost clásico para ver por el vent exterior y sorprender a los CT que rotan por Garage.",
     imageUrl: "/boosts/nuke-vent/cover.jpg",
+    createdAt: "2026-01-16T10:00:00Z",
     isDemo: true,
   },
   {
@@ -28,6 +29,7 @@ export const boosts: Boost[] = [
     difficulty: 5,
     description: "Boost exótico para tomar un ángulo elevado sobre A site durante un execute.",
     imageUrl: "/boosts/vertigo-ramp/cover.jpg",
+    createdAt: "2026-01-22T10:00:00Z",
     isDemo: true,
   },
 ];

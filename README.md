@@ -50,10 +50,23 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
 - El video sigue siendo siempre un embed (YouTube hoy) — nunca se aloja
   archivo de video propio, tal como se definió en la Fase 1.
 
+**FASE 5** (Feed, Likes, Comentarios, Favoritos) — completa:
+
+- El feed ya no es una lista estática: se arma en tiempo real combinando
+  lineups, jugadas y boosts recientes (`services/feed.service.ts`), sin
+  necesitar una tabla de actividad separada.
+- Likes y favoritos reales sobre lineups, jugadas y boosts — un solo botón
+  reusable (`LikeButton`/`FavoriteButton`) en cards, feed y páginas de
+  detalle, con estado optimista y gate de login.
+- Comentarios reales (crear + borrado propio, soft delete) en cada página
+  de detalle.
+- `/favorites` ya no es un stub: muestra lo que el usuario guardó de verdad,
+  agrupado por tipo de contenido.
+
 Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
-(hoy siguen siendo mock), likes/favoritos/colecciones/comentarios
-funcionales, búsqueda contra la base (hoy es en memoria sobre datos mock),
-gamificación, panel admin con moderación real, PWA instalable, analytics.
+(hoy siguen siendo mock), colecciones funcionales, búsqueda contra la base
+(hoy es en memoria sobre datos mock), gamificación, panel admin con
+moderación real, PWA instalable, analytics.
 
 ## Estructura del proyecto
 
@@ -70,6 +83,9 @@ src/
     auth/         Server actions y helpers de autenticación.
     lineups/ boosts/ plays/
                    Server actions de creación (y rating, en lineups).
+    likes/ favorites/ comments/
+                   Server actions genéricas para cualquier tipo de
+                   contenido (polimórficas por content_type).
     labels/       Mapas enum -> etiqueta en español, compartidos entre
                    cards, filtros y formularios.
     mock/         Datos de demostración usados hasta que la DB esté poblada.
