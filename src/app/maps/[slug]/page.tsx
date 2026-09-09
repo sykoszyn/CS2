@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getMapBySlug, mapZones, maps } from "@/lib/mock/maps";
+import { getMapBySlug, getMapZones } from "@/services/maps.service";
 import { getLineupsByMap } from "@/lib/mock/lineups";
 import { getBoostsByMap } from "@/lib/mock/boosts";
 import { getPlaysByMap } from "@/lib/mock/plays";
@@ -15,9 +15,7 @@ import { PlayCard } from "@/components/plays/play-card";
 import { GuideCard } from "@/components/guides/guide-card";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 
-export function generateStaticParams() {
-  return maps.map((map) => ({ slug: map.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -25,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const map = getMapBySlug(slug);
+  const map = await getMapBySlug(slug);
   if (!map) return {};
 
   return {
@@ -36,10 +34,10 @@ export async function generateMetadata({
 
 export default async function MapDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const map = getMapBySlug(slug);
+  const map = await getMapBySlug(slug);
   if (!map) notFound();
 
-  const zones = mapZones[slug] ?? [];
+  const zones = await getMapZones(map);
   const mapLineups = getLineupsByMap(slug);
   const mapBoosts = getBoostsByMap(slug);
   const mapPlays = getPlaysByMap(slug);

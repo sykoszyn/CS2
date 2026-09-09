@@ -6,9 +6,11 @@ import { primaryNav } from "@/lib/site-config";
 import { iconMap } from "@/components/layout/icon-map";
 import { cn } from "@/lib/utils/cn";
 import { Heart, Bookmark, Settings } from "lucide-react";
+import type { ProfileRow } from "@/types/database";
 
-export function Sidebar() {
+export function Sidebar({ profile }: { profile: ProfileRow | null }) {
   const pathname = usePathname();
+  const isStaff = profile?.role === "admin" || profile?.role === "moderator";
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-background-elevated/40 lg:flex">
@@ -58,15 +60,17 @@ export function Sidebar() {
         </div>
       </nav>
 
-      <div className="border-t border-border p-3">
-        <Link
-          href="/admin"
-          className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground-subtle hover:bg-background-card hover:text-foreground"
-        >
-          <Settings size={18} />
-          Admin
-        </Link>
-      </div>
+      {(!profile || isStaff) && (
+        <div className="border-t border-border p-3">
+          <Link
+            href="/admin"
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground-subtle hover:bg-background-card hover:text-foreground"
+          >
+            <Settings size={18} />
+            Admin
+          </Link>
+        </div>
+      )}
     </aside>
   );
 }

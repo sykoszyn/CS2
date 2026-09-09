@@ -14,6 +14,8 @@ En el **SQL Editor** de Supabase, ejecutar en este orden:
    políticas de Row Level Security.
 2. `seed/0002_seed.sql` — datos de demostración (mapas, algunos lineups, boosts,
    jugadas y una guía), todos marcados `is_demo = true` y `verified = false`.
+3. `migrations/0003_steam_auth.sql` — columna `steam_id` en `profiles`, usada para
+   reconocer a un jugador que vuelve a entrar con Steam.
 
 Si preferís la CLI de Supabase:
 
@@ -45,7 +47,27 @@ SUPABASE_SERVICE_ROLE_KEY=   # solo servidor, nunca en el bundle de cliente
 - La `service_role` key nunca se usa desde el navegador — solo desde Server
   Actions/Route Handlers vía `src/lib/supabase/admin.ts`, marcado `server-only`.
 
-## 5. Regenerar tipos TypeScript
+## 5. Proveedores de autenticación
+
+- **Email/password**: funciona out-of-the-box. Si querés que las cuentas queden
+  activas sin esperar el email de confirmación mientras estás en desarrollo,
+  desactivá "Confirm email" en Authentication → Providers → Email.
+- **Google**: Authentication → Providers → Google. Necesitás un Client ID/Secret
+  de OAuth 2.0 de Google Cloud Console, con el redirect URI que Supabase te
+  muestra ahí mismo (`https://<project-ref>.supabase.co/auth/v1/callback`). La
+  app ya llama a `signInWithOAuth({ provider: "google" })` y redirige a
+  `/auth/callback`, que intercambia el código por una sesión.
+- **Steam**: Steam usa OpenID 2.0, no OAuth — Supabase no tiene un proveedor
+  nativo para esto. La app implementa el handshake OpenID directamente
+  (`/auth/steam` → Steam → `/auth/steam/callback`), verifica la respuesta
+  contra Steam (`check_authentication`, nunca confía en el `claimed_id` sin
+  verificar) y crea/reconoce al usuario con un email sintético no-entregable
+  (`steam-<id>@steam.users.cs2academy.internal`) usando la Admin API
+  (`generateLink` + `verifyOtp`) para abrir la sesión sin contraseña. Opcional:
+  `STEAM_WEB_API_KEY` (https://steamcommunity.com/dev/apikey) para traer el
+  nombre y avatar de Steam en el primer login.
+
+## 6. Regenerar tipos TypeScript
 
 `src/types/database.ts` está escrito a mano como stand-in. Cuando el proyecto
 esté provisionado, reemplazarlo con:

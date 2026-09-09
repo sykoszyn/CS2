@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { MapCard } from "@/components/maps/map-card";
-import { maps } from "@/lib/mock/maps";
+import { getMaps } from "@/services/maps.service";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Mapas de CS2",
   description: "Todos los mapas competitivos de Counter-Strike 2: calls, lineups, boosts y guías.",
 };
 
-export default function MapsPage() {
+export default async function MapsPage() {
+  const maps = await getMaps();
+
   return (
     <div className="px-4 py-8 lg:px-6">
       <h1 className="font-display text-2xl font-bold">Mapas</h1>

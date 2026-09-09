@@ -5,10 +5,12 @@ import { MapCard } from "@/components/maps/map-card";
 import { LineupCard } from "@/components/lineups/lineup-card";
 import { PlayCard } from "@/components/plays/play-card";
 import { GuideCard } from "@/components/guides/guide-card";
-import { maps } from "@/lib/mock/maps";
 import { lineups } from "@/lib/mock/lineups";
 import { plays } from "@/lib/mock/plays";
 import { guides } from "@/lib/mock/guides";
+import { getMaps } from "@/services/maps.service";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Aprendé Counter-Strike 2",
@@ -16,7 +18,8 @@ export const metadata: Metadata = {
     "Lineups, calls, boosts, jugadas y estrategias de CS2 creadas por la comunidad hispanohablante. Sin registro obligatorio.",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const maps = await getMaps();
   const popularLineups = [...lineups].sort((a, b) => b.usageCount - a.usageCount);
 
   return (

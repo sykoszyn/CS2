@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { Tabs } from "@/components/ui/tabs";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
@@ -8,14 +9,37 @@ import { plays } from "@/lib/mock/plays";
 import { boosts } from "@/lib/mock/boosts";
 import { guides } from "@/lib/mock/guides";
 import { profiles } from "@/lib/mock/profiles";
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert, ShieldX } from "lucide-react";
+import { getCurrentProfile } from "@/lib/auth/get-current-profile";
+import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin",
   robots: { index: false, follow: false },
 };
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  // Once Supabase Auth is wired up, only admins/moderators get in. Before
+  // that, there is no real user system to gate against, so the page stays
+  // open — it's already noindex/nofollow and shows only demo content.
+  if (isSupabaseConfigured()) {
+    const profile = await getCurrentProfile();
+    if (!profile) redirect("/login?next=/admin");
+    if (profile.role !== "admin" && profile.role !== "moderator") {
+      return (
+        <div className="px-4 py-16 lg:px-6">
+          <EmptyState
+            icon={ShieldX}
+            title="No tenés permisos para ver esta página"
+            description="El panel de administración es solo para administradores y moderadores."
+          />
+        </div>
+      );
+    }
+  }
+
   const pendingContent = [...lineups.filter((l) => !l.verified), ...plays];
 
   return (

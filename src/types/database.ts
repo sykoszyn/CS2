@@ -14,6 +14,7 @@ type Table<Row> = {
   Row: Row;
   Insert: Partial<Row>;
   Update: Partial<Row>;
+  Relationships: [];
 };
 
 export type UserRole = "user" | "moderator" | "admin";
@@ -45,7 +46,7 @@ export type ReportReason =
   | "duplicate"
   | "other";
 
-export interface ProfileRow {
+export type ProfileRow = {
   id: string;
   username: string;
   display_name: string;
@@ -54,11 +55,12 @@ export interface ProfileRow {
   role: UserRole;
   level: number;
   xp: number;
+  steam_id: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface MapRow {
+export type MapRow = {
   id: string;
   slug: string;
   name: string;
@@ -71,9 +73,9 @@ export interface MapRow {
   active: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface MapZoneRow {
+export type MapZoneRow = {
   id: string;
   map_id: string;
   name: string;
@@ -83,9 +85,9 @@ export interface MapZoneRow {
   y: number;
   image_url: string | null;
   created_at: string;
-}
+};
 
-export interface VideoRow {
+export type VideoRow = {
   id: string;
   source: VideoSourceEnum;
   url: string;
@@ -93,9 +95,9 @@ export interface VideoRow {
   thumbnail_url: string | null;
   uploader_id: string | null;
   created_at: string;
-}
+};
 
-export interface LineupRow {
+export type LineupRow = {
   id: string;
   slug: string;
   name: string;
@@ -116,9 +118,9 @@ export interface LineupRow {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-}
+};
 
-export interface LineupStepRow {
+export type LineupStepRow = {
   id: string;
   lineup_id: string;
   step_order: number;
@@ -128,17 +130,17 @@ export interface LineupStepRow {
   jumpthrow: boolean;
   click_type: ClickTypeEnum | null;
   created_at: string;
-}
+};
 
-export interface LineupMediaRow {
+export type LineupMediaRow = {
   id: string;
   lineup_id: string;
   image_url: string;
   caption: string | null;
   created_at: string;
-}
+};
 
-export interface GuideRow {
+export type GuideRow = {
   id: string;
   slug: string;
   title: string;
@@ -152,18 +154,18 @@ export interface GuideRow {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-}
+};
 
-export interface GuideSectionRow {
+export type GuideSectionRow = {
   id: string;
   guide_id: string;
   section_order: number;
   title: string;
   content: string;
   created_at: string;
-}
+};
 
-export interface BoostRow {
+export type BoostRow = {
   id: string;
   slug: string;
   name: string;
@@ -182,9 +184,9 @@ export interface BoostRow {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-}
+};
 
-export interface PlayRow {
+export type PlayRow = {
   id: string;
   slug: string;
   title: string;
@@ -200,29 +202,29 @@ export interface PlayRow {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-}
+};
 
-export interface TagRow {
+export type TagRow = {
   id: string;
   slug: string;
   name: string;
-}
+};
 
-export interface ContentTagRow {
+export type ContentTagRow = {
   content_type: ContentTypeEnum;
   content_id: string;
   tag_id: string;
-}
+};
 
-export interface FavoriteRow {
+export type FavoriteRow = {
   id: string;
   user_id: string;
   content_type: ContentTypeEnum;
   content_id: string;
   created_at: string;
-}
+};
 
-export interface CollectionRow {
+export type CollectionRow = {
   id: string;
   user_id: string;
   name: string;
@@ -230,25 +232,25 @@ export interface CollectionRow {
   is_public: boolean;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface CollectionItemRow {
+export type CollectionItemRow = {
   id: string;
   collection_id: string;
   content_type: ContentTypeEnum;
   content_id: string;
   created_at: string;
-}
+};
 
-export interface LikeRow {
+export type LikeRow = {
   id: string;
   user_id: string;
   content_type: ContentTypeEnum;
   content_id: string;
   created_at: string;
-}
+};
 
-export interface CommentRow {
+export type CommentRow = {
   id: string;
   user_id: string;
   content_type: ContentTypeEnum;
@@ -258,15 +260,15 @@ export interface CommentRow {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-}
+};
 
-export interface FollowRow {
+export type FollowRow = {
   follower_id: string;
   following_id: string;
   created_at: string;
-}
+};
 
-export interface ReportRow {
+export type ReportRow = {
   id: string;
   reporter_id: string | null;
   content_type: ContentTypeEnum;
@@ -277,47 +279,47 @@ export interface ReportRow {
   resolved_by: string | null;
   created_at: string;
   resolved_at: string | null;
-}
+};
 
-export interface RatingRow {
+export type RatingRow = {
   id: string;
   user_id: string;
   lineup_id: string;
   stars: number;
   worked: boolean;
   created_at: string;
-}
+};
 
-export interface NotificationRow {
+export type NotificationRow = {
   id: string;
   user_id: string;
   type: string;
   data: Record<string, unknown>;
   read_at: string | null;
   created_at: string;
-}
+};
 
-export interface AchievementRow {
+export type AchievementRow = {
   id: string;
   slug: string;
   name: string;
   description: string;
   icon: string | null;
-}
+};
 
-export interface UserAchievementRow {
+export type UserAchievementRow = {
   user_id: string;
   achievement_id: string;
   earned_at: string;
-}
+};
 
-export interface UserProgressRow {
+export type UserProgressRow = {
   user_id: string;
   map_id: string;
   calls_quiz_score: number;
   lineups_viewed: number;
   updated_at: string;
-}
+};
 
 export interface Database {
   public: {
@@ -348,5 +350,9 @@ export interface Database {
       user_achievements: Table<UserAchievementRow>;
       user_progress: Table<UserProgressRow>;
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
-}
+};
