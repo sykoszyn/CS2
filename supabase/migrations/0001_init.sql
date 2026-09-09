@@ -44,18 +44,6 @@ begin
 end;
 $$;
 
-create or replace function is_admin(uid uuid)
-returns boolean
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select exists (
-    select 1 from profiles p where p.id = uid and p.role in ('admin', 'moderator')
-  );
-$$;
-
 -- ---------------------------------------------------------------------------
 -- profiles (1:1 with auth.users)
 -- ---------------------------------------------------------------------------
@@ -79,6 +67,21 @@ create index profiles_username_idx on profiles (lower(username));
 create trigger profiles_set_updated_at
   before update on profiles
   for each row execute function set_updated_at();
+
+-- Defined here (not in the Helpers block above) because it queries `profiles`
+-- — a `language sql` function is validated against the catalog at CREATE
+-- time, so the table it references must already exist.
+create or replace function is_admin(uid uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from profiles p where p.id = uid and p.role in ('admin', 'moderator')
+  );
+$$;
 
 -- Auto-create a profile row whenever a new auth user signs up.
 create or replace function handle_new_user()
