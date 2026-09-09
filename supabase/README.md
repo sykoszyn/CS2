@@ -6,7 +6,28 @@
 2. Copiar `Project URL` y `anon public` key al `.env.local` del proyecto Next.js
    (ver `.env.example` en la raíz del repo).
 
-## 2. Ejecutar las migraciones
+## 2. Configurar las URLs de autenticación (Authentication → URL Configuration)
+
+Este paso es obligatorio incluso si solo usás email/password — sin él, los
+links de confirmación de email fallan con `{"error":"requested path is
+invalid"}` porque Supabase rechaza cualquier redirect que no esté en esta
+lista.
+
+En **Authentication → URL Configuration**:
+
+- **Site URL**: `http://localhost:3000` mientras estás en desarrollo local
+  (actualizalo a tu dominio real de Vercel cuando despliegues).
+- **Redirect URLs**: agregá, uno por línea:
+  - `http://localhost:3000/auth/callback`
+  - `http://localhost:3000/auth/steam/callback`
+  - y cuando tengas dominio de producción, las mismas dos rutas con esa URL.
+
+La app ya manda `emailRedirectTo`/`redirectTo` apuntando a `/auth/callback`
+en cada flujo (signup, login con Google, magic link de Steam) — pero
+Supabase igual exige que esa URL exacta esté en la lista, o la rechaza antes
+de que la app la vea.
+
+## 3. Ejecutar las migraciones
 
 Los tres archivos viven en `supabase/migrations/` y se corren en orden numérico:
 
@@ -27,7 +48,7 @@ supabase link --project-ref <project-ref>
 supabase db push
 ```
 
-## 3. Variables de entorno
+## 4. Variables de entorno
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
@@ -35,7 +56,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=   # solo servidor, nunca en el bundle de cliente
 ```
 
-## 4. Modelo de seguridad (resumen)
+## 5. Modelo de seguridad (resumen)
 
 - RLS está **habilitado en todas las tablas**.
 - Contenido público (`maps`, `map_zones`, `lineups`, `guides`, `boosts`, `plays`,
@@ -49,11 +70,12 @@ SUPABASE_SERVICE_ROLE_KEY=   # solo servidor, nunca en el bundle de cliente
 - La `service_role` key nunca se usa desde el navegador — solo desde Server
   Actions/Route Handlers vía `src/lib/supabase/admin.ts`, marcado `server-only`.
 
-## 5. Proveedores de autenticación
+## 6. Proveedores de autenticación
 
-- **Email/password**: funciona out-of-the-box. Si querés que las cuentas queden
-  activas sin esperar el email de confirmación mientras estás en desarrollo,
-  desactivá "Confirm email" en Authentication → Providers → Email.
+- **Email/password**: funciona una vez hecho el paso 2. Si querés que las
+  cuentas queden activas sin esperar el email de confirmación mientras estás
+  en desarrollo, desactivá "Confirm email" en Authentication → Providers →
+  Email (así te salteás el link de confirmación por completo).
 - **Google**: Authentication → Providers → Google. Necesitás un Client ID/Secret
   de OAuth 2.0 de Google Cloud Console, con el redirect URI que Supabase te
   muestra ahí mismo (`https://<project-ref>.supabase.co/auth/v1/callback`). La
@@ -69,7 +91,7 @@ SUPABASE_SERVICE_ROLE_KEY=   # solo servidor, nunca en el bundle de cliente
   `STEAM_WEB_API_KEY` (https://steamcommunity.com/dev/apikey) para traer el
   nombre y avatar de Steam en el primer login.
 
-## 6. Regenerar tipos TypeScript
+## 7. Regenerar tipos TypeScript
 
 `src/types/database.ts` está escrito a mano como stand-in. Cuando el proyecto
 esté provisionado, reemplazarlo con:

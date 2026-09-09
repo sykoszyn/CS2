@@ -53,10 +53,14 @@ export async function signUpWithPasswordAction(
   }
 
   const supabase = await createServerSupabaseClient();
+  const baseUrl = await getBaseUrl();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { username, display_name: username } },
+    options: {
+      data: { username, display_name: username },
+      emailRedirectTo: `${baseUrl}/auth/callback`,
+    },
   });
 
   if (error) {
