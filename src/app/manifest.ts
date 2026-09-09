@@ -27,5 +27,27 @@ export default function manifest(): MetadataRoute.Manifest {
       { name: "Feed", url: "/feed" },
       { name: "Buscar", url: "/search" },
     ],
+    // Used by the browser's install UI and by Play Store's "rich install"
+    // card when the app is published there via TWA (see docs/app-stores.md).
+    screenshots: [
+      {
+        src: "/screenshots/mobile-home.png",
+        sizes: "824x1830",
+        type: "image/png",
+        form_factor: "narrow",
+      },
+      {
+        src: "/screenshots/mobile-lineups.png",
+        sizes: "824x1830",
+        type: "image/png",
+        form_factor: "narrow",
+      },
+      {
+        src: "/screenshots/desktop-home.png",
+        sizes: "1920x1080",
+        type: "image/png",
+        form_factor: "wide",
+      },
+    ],
   };
 }

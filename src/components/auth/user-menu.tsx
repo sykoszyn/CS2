@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import { signOutAction } from "@/lib/auth/actions";
 import type { ProfileRow } from "@/types/database";
 
@@ -45,6 +45,13 @@ export function UserMenu({ profile }: { profile: ProfileRow }) {
               Admin
             </Link>
           )}
+          <Link
+            href="/settings"
+            className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-background-card"
+          >
+            <Settings size={14} />
+            Configuración
+          </Link>
           <form action={signOutAction} className="border-t border-border">
             <button
               type="submit"

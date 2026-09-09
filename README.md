@@ -152,9 +152,37 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   claves ni configuración adicional (y no rompen nada corriendo local o en
   otro hosting, simplemente no reportan nada).
 
+**FASE 10** (Preparación Play Store / App Store) — completa:
+
+- **Eliminar cuenta** (`/settings`): ambas tiendas exigen que una app con
+  registro permita borrar la cuenta desde adentro. Borra el usuario de
+  Supabase Auth, lo que en cascada elimina sus datos privados (likes,
+  favoritos, comentarios, calificaciones) y deja su contenido publicado
+  (lineups, boosts, jugadas) sin autor — mismo comportamiento que ya tenía
+  la app para cualquier autor eliminado. Verificado con Postgres local
+  simulando la cascada completa antes de escribir el server action.
+- **Política de privacidad** (`/privacy`) y **Términos de uso** (`/terms`)
+  reales, linkeados desde un footer nuevo — ambas tiendas exigen una URL de
+  privacidad para poder publicar. Son un borrador razonable basado en lo
+  que la app hace de verdad, no una revisión legal.
+- **Capturas reales de la app** en `public/screenshots/` (no mockups),
+  referenciadas en el manifest para la instalación enriquecida de
+  Android/Chrome.
+- **`public/.well-known/assetlinks.json`**: el archivo de Digital Asset
+  Links que Android necesita para verificar una Trusted Web Activity, con
+  placeholders documentados para completar con la firma real.
+- Assets de tienda en `store-assets/` (feature graphic de Play Store,
+  ícono de App Store) generados a partir de la misma marca del resto de la
+  app.
+- `docs/app-stores.md`: guía paso a paso para publicar en ambas tiendas —
+  qué ya está listo acá y qué pasos le quedan a quien tenga las cuentas de
+  desarrollador reales (Play Console, Apple Developer Program) y el
+  hardware necesario (Android SDK, o una Mac con Xcode para iOS), que este
+  entorno no puede proveer.
+
 Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
 (hoy siguen siendo mock), colecciones funcionales, búsqueda contra la base
-(hoy es en memoria sobre datos mock), preparación para tiendas de apps.
+(hoy es en memoria sobre datos mock).
 
 ## Estructura del proyecto
 
