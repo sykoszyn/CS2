@@ -97,6 +97,23 @@ export async function getPlaysByIds(ids: string[]): Promise<Play[]> {
   }
 }
 
+export async function getPlaysByAuthor(userId: string): Promise<Play[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase
+      .from("plays")
+      .select(PLAY_SELECT)
+      .eq("author_id", userId)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
+  } catch {
+    return [];
+  }
+}
+
 export async function getPlaysByMap(mapSlug: string): Promise<Play[]> {
   if (!isSupabaseConfigured()) return getMockPlaysByMap(mapSlug);
 

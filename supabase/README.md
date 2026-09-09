@@ -46,6 +46,11 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
    políticas RLS existentes siguen aplicando tal cual). La usa el formulario
    de `/lineups/new` — si algo falla a mitad de camino, no queda un lineup
    a medio crear.
+5. `0005_gamification.sql` — 5 achievements semilla + triggers `after
+   insert` en `lineups`/`plays`/`boosts` que otorgan XP y achievements
+   automáticamente. Deliberadamente **no** es un RPC llamable desde el
+   cliente (`security definer` pero solo invocado por el trigger) — así
+   nadie puede pedir XP directo sin publicar contenido real.
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.

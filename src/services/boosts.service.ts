@@ -88,6 +88,23 @@ export async function getBoostsByIds(ids: string[]): Promise<Boost[]> {
   }
 }
 
+export async function getBoostsByAuthor(userId: string): Promise<Boost[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase
+      .from("boosts")
+      .select(BOOST_SELECT)
+      .eq("author_id", userId)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data as unknown as BoostJoinRow[]).map(toBoost);
+  } catch {
+    return [];
+  }
+}
+
 export async function getBoostsByMap(mapSlug: string): Promise<Boost[]> {
   if (!isSupabaseConfigured()) return getMockBoostsByMap(mapSlug);
 

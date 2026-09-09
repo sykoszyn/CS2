@@ -162,6 +162,23 @@ export async function getLineupsByIds(ids: string[]): Promise<Lineup[]> {
   }
 }
 
+export async function getLineupsByAuthor(userId: string): Promise<Lineup[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase
+      .from("lineups")
+      .select(LINEUP_SELECT)
+      .eq("author_id", userId)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data as unknown as LineupJoinRow[]).map((row) => toLineup(row));
+  } catch {
+    return [];
+  }
+}
+
 export async function getLineupBySlug(slug: string): Promise<Lineup | null> {
   if (!isSupabaseConfigured()) return getMockLineupBySlug(slug) ?? null;
 

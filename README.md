@@ -63,10 +63,24 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
 - `/favorites` ya no es un stub: muestra lo que el usuario guardó de verdad,
   agrupado por tipo de contenido.
 
+**FASE 6** (Perfil, Gamificación) — completa:
+
+- XP y niveles reales: subir un lineup da 15 XP, una jugada o boost 10 XP,
+  el nivel se deriva de la XP (100 xp por nivel). Esto corre en triggers
+  `after insert` de Postgres (`0005_gamification.sql`), nunca en un RPC que
+  un cliente pudiera llamar directo para inflarse la XP — solo se dispara
+  como efecto de un insert que RLS ya validó.
+- 5 achievements (First Smoke, Primera Jugada, Primer Boost, Smoke Master,
+  Community Contributor), otorgados por el mismo trigger y mostrados como
+  badges en el perfil.
+- El perfil real ya no es un placeholder: estadísticas reales (lineups,
+  jugadas, boosts, likes recibidos, contenido verificado) y tabs con todo
+  lo que esa persona publicó.
+
 Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
 (hoy siguen siendo mock), colecciones funcionales, búsqueda contra la base
-(hoy es en memoria sobre datos mock), gamificación, panel admin con
-moderación real, PWA instalable, analytics.
+(hoy es en memoria sobre datos mock), panel admin con moderación real, PWA
+instalable, analytics.
 
 ## Estructura del proyecto
 
