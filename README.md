@@ -128,10 +128,33 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   cacheada cae correctamente en `/offline` (con el shell de la app
   renderizado, no la pantalla de error del navegador).
 
+**FASE 9** (SEO, Performance, Analytics) — completa:
+
+- **SEO**: imagen Open Graph real generada con `next/og` (`app/opengraph-image.tsx`,
+  reemplaza una referencia a `/og-image.png` que nunca existió y que ningún
+  código llegó a usar), JSON-LD `Organization` + `WebSite` (con `SearchAction`
+  apuntando a `/search?q=`) en el layout raíz, y `lastModified` faltante en
+  las rutas de boosts del sitemap.
+- **Performance**: `getCurrentProfile()` estaba corriendo dos veces por
+  request (una desde `AppShell` para el header/sidebar, otra desde casi
+  todas las páginas que necesitan saber si el usuario es dueño/admin del
+  contenido) — cada llamada es un round-trip real a Supabase Auth más un
+  `select` a `profiles`. Se envolvió con `cache()` de React (el patrón que
+  la propia documentación de Next.js recomienda para deduplicar llamadas
+  que no pasan por `fetch`), así todas las llamadas dentro de un mismo
+  request comparten un solo round-trip. También se agregaron pantallas
+  `loading.tsx` (esqueletos) a las páginas de listado y detalle más
+  visitadas (mapas, lineups, boosts, jugadas, guías, feed, perfil), para
+  que la navegación se sienta instantánea mientras el Server Component
+  todavía está pidiendo datos.
+- **Analytics**: `@vercel/analytics` y `@vercel/speed-insights` en el layout
+  raíz — funcionan automáticamente en el deploy de Vercel sin necesitar
+  claves ni configuración adicional (y no rompen nada corriendo local o en
+  otro hosting, simplemente no reportan nada).
+
 Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
 (hoy siguen siendo mock), colecciones funcionales, búsqueda contra la base
-(hoy es en memoria sobre datos mock), SEO/performance/analytics, preparación
-para tiendas de apps.
+(hoy es en memoria sobre datos mock), preparación para tiendas de apps.
 
 ## Estructura del proyecto
 

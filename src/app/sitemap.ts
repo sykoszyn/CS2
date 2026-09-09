@@ -30,7 +30,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${siteConfig.url}/guides/${g.slug}`,
     lastModified: g.createdAt,
   }));
-  const boostRoutes = boosts.map((b) => ({ url: `${siteConfig.url}/boosts/${b.slug}` }));
+  const boostRoutes = boosts.map((b) => ({
+    url: `${siteConfig.url}/boosts/${b.slug}`,
+    lastModified: b.createdAt,
+  }));
   const playRoutes = plays.map((p) => ({
     url: `${siteConfig.url}/plays/${p.slug}`,
     lastModified: p.createdAt,

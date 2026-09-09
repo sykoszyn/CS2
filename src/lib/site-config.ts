@@ -5,7 +5,6 @@ export const siteConfig = {
     "El hub de aprendizaje de Counter-Strike 2 en español: lineups, calls, boosts, jugadas y estrategias creadas por la comunidad.",
   url: "https://smokear.vercel.app",
   locale: "es",
-  ogImage: "/og-image.png",
   twitterHandle: "@smokear",
 } as const;
 
