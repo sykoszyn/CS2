@@ -104,9 +104,34 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
      contra la fila resultante. Se corrigió dejando que los admins vean
      contenido eliminado.
 
+**FASE 8** (PWA instalable) — completa:
+
+- `src/app/manifest.ts` genera `/manifest.webmanifest` (nombre, colores de
+  marca, `display: standalone`, atajos a Lineups/Mapas/Feed/Buscar).
+- Ícono de marca real (el mismo mark "S" naranja sobre fondo oscuro que ya
+  usaba la sidebar) generado con `sharp` en varios tamaños: `favicon.ico`
+  multi-resolución, `icon.png`/`apple-icon.png` (detectados automáticamente
+  por Next.js) y los `icon-192/512` + `maskable-192/512` que pide el
+  manifest para Android/Chrome.
+- Service worker propio en `public/sw.js` (sin librerías de terceros, para
+  no depender de un plugin no probado sobre Turbopack): no intenta
+  precachear los bundles de JS/CSS con hash de cada deploy —eso rompería
+  con contenido viejo—, solo garantiza una página `/offline` de respaldo
+  cuando falla una navegación sin red, y sirve íconos/manifest desde caché
+  una vez descargados una vez.
+- Banner de instalación (`PwaInstall`, en el layout raíz): escucha
+  `beforeinstallprompt`, se descarta con un click y no vuelve a aparecer
+  (se guarda en `localStorage`).
+- Verificado con Playwright contra el build de producción: el service
+  worker se registra y activa, el manifest resuelve como JSON válido, y
+  desconectando la red por completo una navegación a una página no
+  cacheada cae correctamente en `/offline` (con el shell de la app
+  renderizado, no la pantalla de error del navegador).
+
 Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
 (hoy siguen siendo mock), colecciones funcionales, búsqueda contra la base
-(hoy es en memoria sobre datos mock), PWA instalable, analytics.
+(hoy es en memoria sobre datos mock), SEO/performance/analytics, preparación
+para tiendas de apps.
 
 ## Estructura del proyecto
 

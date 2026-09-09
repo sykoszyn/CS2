@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Rajdhani } from "next/font/google";
 import { AppShell } from "@/components/layout/app-shell";
+import { PwaInstall } from "@/components/pwa/pwa-install";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -35,12 +36,18 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: siteConfig.twitterHandle,
   },
+  appleWebApp: {
+    capable: true,
+    title: siteConfig.shortName,
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: "#0b0d10",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -48,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es" className={`${inter.variable} ${rajdhani.variable} h-full antialiased`}>
       <body className="min-h-full">
         <AppShell>{children}</AppShell>
+        <PwaInstall />
       </body>
     </html>
   );
