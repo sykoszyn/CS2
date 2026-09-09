@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Bookmark, Share2 } from "lucide-react";
-import { getLineupBySlug, lineups } from "@/lib/mock/lineups";
-import { getMapBySlug } from "@/lib/mock/maps";
+import Link from "next/link";
+import { Bookmark, Share2, LogIn } from "lucide-react";
+import { getLineupBySlug, getUserRating } from "@/services/lineups.service";
+import { getMapBySlug } from "@/services/maps.service";
+import { getCurrentProfile } from "@/lib/auth/get-current-profile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RatingStars } from "@/components/ui/rating-stars";
 import { DifficultyDots } from "@/components/ui/difficulty-dots";
 import { VerifiedBadge } from "@/components/ui/verified-badge";
 import { VideoEmbed } from "@/components/ui/video-embed";
+import { EmptyState } from "@/components/ui/empty-state";
 import { LineupStepViewer } from "@/components/lineups/lineup-step-viewer";
+import { RatingForm } from "@/components/lineups/rating-form";
+import { grenadeTypeLabels } from "@/lib/labels/lineup-labels";
 import { siteConfig } from "@/lib/site-config";
 
-export function generateStaticParams() {
-  return lineups.map((l) => ({ slug: l.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -22,7 +25,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const lineup = getLineupBySlug(slug);
+  const lineup = await getLineupBySlug(slug);
   if (!lineup) return {};
 
   const title = `${lineup.name} — CS2`;
@@ -36,10 +39,11 @@ export async function generateMetadata({
 
 export default async function LineupDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const lineup = getLineupBySlug(slug);
+  const lineup = await getLineupBySlug(slug);
   if (!lineup) notFound();
 
-  const map = getMapBySlug(lineup.mapSlug);
+  const [map, profile] = await Promise.all([getMapBySlug(lineup.mapSlug), getCurrentProfile()]);
+  const userRating = profile ? await getUserRating(lineup.id) : null;
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -68,7 +72,7 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
               {map?.name ?? lineup.mapSlug}
             </a>
             <span>/</span>
-            <span>{lineup.grenadeType}</span>
+            <span>{grenadeTypeLabels[lineup.grenadeType]}</span>
           </div>
           <h1 className="mt-1 font-display text-2xl font-bold">{lineup.name}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -79,6 +83,9 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
             {lineup.verified && <VerifiedBadge />}
             {lineup.isDemo && <Badge variant="default">DEMO</Badge>}
           </div>
+          <Link href={`/profile/${lineup.authorUsername}`} className="mt-2 inline-block text-sm text-foreground-muted hover:text-brand">
+            por @{lineup.authorUsername}
+          </Link>
         </div>
 
         <div className="flex gap-2">
@@ -98,7 +105,9 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
         </div>
         <div>
           <p className="text-xs text-foreground-subtle">Funciona</p>
-          <p className="font-display font-semibold text-success">{lineup.workedPercent}%</p>
+          <p className="font-display font-semibold text-success">
+            {lineup.ratingCount > 0 ? `${lineup.workedPercent}%` : "Sin datos"}
+          </p>
         </div>
         <div>
           <p className="text-xs text-foreground-subtle">Dificultad</p>
@@ -118,13 +127,40 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
 
       <div className="mt-6">
         <h2 className="mb-3 font-display text-lg font-semibold">Instrucciones paso a paso</h2>
-        <LineupStepViewer steps={lineup.steps} />
+        {lineup.steps.length > 0 ? (
+          <LineupStepViewer steps={lineup.steps} />
+        ) : (
+          <EmptyState title="Este lineup todavía no tiene pasos cargados" />
+        )}
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-1.5">
-        {lineup.tags.map((tag) => (
-          <Badge key={tag}>#{tag}</Badge>
-        ))}
+      {lineup.tags.length > 0 && (
+        <div className="mt-6 flex flex-wrap gap-1.5">
+          {lineup.tags.map((tag) => (
+            <Badge key={tag}>#{tag}</Badge>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-6">
+        {profile ? (
+          <RatingForm
+            lineupId={lineup.id}
+            lineupSlug={lineup.slug}
+            initialStars={userRating?.stars}
+            initialWorked={userRating?.worked}
+          />
+        ) : (
+          <EmptyState
+            icon={LogIn}
+            title="Iniciá sesión para calificar este lineup"
+            action={
+              <Button href={`/login?next=/lineups/${lineup.slug}`} size="sm">
+                Ingresar
+              </Button>
+            }
+          />
+        )}
       </div>
     </div>
   );

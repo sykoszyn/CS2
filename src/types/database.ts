@@ -351,7 +351,12 @@ export interface Database {
       user_progress: Table<UserProgressRow>;
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      create_lineup_with_steps: {
+        Args: { payload: Record<string, unknown> };
+        Returns: string;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

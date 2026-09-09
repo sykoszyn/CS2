@@ -32,7 +32,7 @@ de que la app la vea.
 
 ## 3. Ejecutar las migraciones
 
-Los tres archivos viven en `supabase/migrations/` y se corren en orden numérico:
+Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
 
 1. `0001_init.sql` — esquema completo: tablas, enums, índices, triggers y
    políticas de Row Level Security.
@@ -40,11 +40,17 @@ Los tres archivos viven en `supabase/migrations/` y se corren en orden numérico
    jugadas y una guía), todos marcados `is_demo = true` y `verified = false`.
 3. `0003_steam_auth.sql` — columna `steam_id` en `profiles`, usada para
    reconocer a un jugador que vuelve a entrar con Steam.
+4. `0004_lineup_rpc.sql` — función `create_lineup_with_steps(payload jsonb)`
+   que inserta un lineup + su video + sus pasos en una sola transacción
+   (`security invoker`: corre con los permisos de quien la llama, las
+   políticas RLS existentes siguen aplicando tal cual). La usa el formulario
+   de `/lineups/new` — si algo falla a mitad de camino, no queda un lineup
+   a medio crear.
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.
 
-Si preferís la CLI de Supabase, un solo comando aplica los tres:
+Si preferís la CLI de Supabase, un solo comando aplica todo:
 
 ```bash
 supabase link --project-ref <project-ref>

@@ -5,10 +5,10 @@ import { MapCard } from "@/components/maps/map-card";
 import { LineupCard } from "@/components/lineups/lineup-card";
 import { PlayCard } from "@/components/plays/play-card";
 import { GuideCard } from "@/components/guides/guide-card";
-import { lineups } from "@/lib/mock/lineups";
 import { plays } from "@/lib/mock/plays";
 import { guides } from "@/lib/mock/guides";
 import { getMaps } from "@/services/maps.service";
+import { getLineups } from "@/services/lineups.service";
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const maps = await getMaps();
-  const popularLineups = [...lineups].sort((a, b) => b.usageCount - a.usageCount);
+  const [maps, allLineups] = await Promise.all([getMaps(), getLineups()]);
+  const popularLineups = [...allLineups].sort((a, b) => b.usageCount - a.usageCount).slice(0, 6);
 
   return (
     <div>

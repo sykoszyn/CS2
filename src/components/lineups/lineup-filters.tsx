@@ -1,22 +1,12 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { maps } from "@/lib/mock/maps";
+import type { GameMap } from "@/types/content";
+import { grenadeTypeOptions, sideOptions } from "@/lib/labels/lineup-labels";
 
-const grenades = [
-  { value: "smoke", label: "Smoke" },
-  { value: "flash", label: "Flash" },
-  { value: "molotov", label: "Molotov" },
-  { value: "he", label: "HE" },
-  { value: "decoy", label: "Decoy" },
-];
+const filterableSides = sideOptions.filter((s) => s.value !== "both");
 
-const sides = [
-  { value: "t", label: "T" },
-  { value: "ct", label: "CT" },
-];
-
-export function LineupFilters() {
+export function LineupFilters({ maps }: { maps: GameMap[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -51,7 +41,7 @@ export function LineupFilters() {
         onChange={(e) => setParam("side", e.target.value)}
       >
         <option value="">Ambos lados</option>
-        {sides.map((s) => (
+        {filterableSides.map((s) => (
           <option key={s.value} value={s.value}>
             {s.label}
           </option>
@@ -64,7 +54,7 @@ export function LineupFilters() {
         onChange={(e) => setParam("grenade", e.target.value)}
       >
         <option value="">Toda granada</option>
-        {grenades.map((g) => (
+        {grenadeTypeOptions.map((g) => (
           <option key={g.value} value={g.value}>
             {g.label}
           </option>

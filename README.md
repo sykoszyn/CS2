@@ -29,10 +29,21 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   proyecto no está configurado o una consulta falla.
 - Desplegado en Vercel: https://smokear.vercel.app
 
-Pendiente (fases siguientes, ver brief): lineups/boosts/jugadas/guías
-conectados a la base de datos (hoy siguen siendo mock), likes/favoritos/
-colecciones funcionales, gamificación, panel admin con moderación real, PWA
-instalable, analytics.
+**FASE 3** (Sistema de lineups) — completa:
+
+- Lineups leen de Supabase (con el mismo fallback a datos demo), incluyendo
+  el join a mapa/autor/video/pasos/rating en una sola consulta.
+- Usuarios registrados pueden subir un lineup propio (`/lineups/new`): mapa,
+  granada, lado, pasos, video opcional y tags. La inserción es atómica vía
+  una función Postgres (`create_lineup_with_steps`, `security invoker`) —
+  si falla un paso, no queda un lineup a medio crear.
+- Sistema de rating: estrellas + "¿funcionó?", agregado en tiempo real desde
+  la tabla `ratings`.
+
+Pendiente (fases siguientes, ver brief): boosts/jugadas/guías conectados a
+la base de datos (hoy siguen siendo mock), likes/favoritos/colecciones
+funcionales, búsqueda contra la base (hoy es en memoria sobre datos mock),
+gamificación, panel admin con moderación real, PWA instalable, analytics.
 
 ## Estructura del proyecto
 
@@ -47,11 +58,14 @@ src/
   lib/
     supabase/     Clientes de Supabase (browser, server, admin, proxy).
     auth/         Server actions y helpers de autenticación.
+    lineups/      Server actions de lineups (rating, creación).
+    labels/       Mapas enum -> etiqueta en español, compartidos entre
+                   cards, filtros y formularios.
     mock/         Datos de demostración usados hasta que la DB esté poblada.
-    utils/        Helpers (cn, formato de fechas/números, base URL).
+    utils/        Helpers (cn, slugify, formato de fechas/números, base URL).
     site-config.ts Navegación y metadata global del sitio.
-  services/       Capa de acceso a datos (mapas, perfiles, búsqueda). Punto de
-                   reemplazo cuando se conecten el resto de las tablas.
+  services/       Capa de acceso a datos (mapas, lineups, perfiles, búsqueda).
+                   Punto de reemplazo cuando se conecten el resto de las tablas.
   types/          Tipos de dominio (`content.ts`) y de base de datos (`database.ts`).
   proxy.ts        Reemplazo de middleware.ts en Next 16 — refresca la sesión.
 supabase/
