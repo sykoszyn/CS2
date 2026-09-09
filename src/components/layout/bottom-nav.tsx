@@ -1,0 +1,33 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { mobileNav } from "@/lib/site-config";
+import { iconMap } from "@/components/layout/icon-map";
+import { cn } from "@/lib/utils/cn";
+
+export function BottomNav() {
+  const pathname = usePathname();
+
+  return (
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex h-16 items-stretch border-t border-border bg-background-elevated/95 backdrop-blur lg:hidden">
+      {mobileNav.map((item) => {
+        const Icon = iconMap[item.icon];
+        const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "flex flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium",
+              active ? "text-brand" : "text-foreground-muted",
+            )}
+          >
+            <Icon size={20} />
+            {item.label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}

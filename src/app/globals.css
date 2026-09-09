@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/*
+  CS2 Academy — design tokens.
+  Dark mode is the primary experience (esports/competitive product).
+  Light mode is supported as a secondary theme.
+*/
+:root {
+  --background: #0b0d10;
+  --background-elevated: #12151a;
+  --background-card: #151920;
+  --border: #232830;
+  --border-strong: #2e3540;
+
+  --foreground: #f2f4f7;
+  --foreground-muted: #9aa3b2;
+  --foreground-subtle: #656d7a;
+
+  --brand: #ff5c1a;
+  --brand-foreground: #0b0d10;
+  --brand-muted: #ff5c1a1a;
+
+  --accent: #35e0a1;
+  --accent-foreground: #06120c;
+
+  --danger: #ef4444;
+  --warning: #f5b942;
+  --success: #35e0a1;
+
+  --ct: #6ea8ff;
+  --t: #f5b942;
+
+  --radius: 0.75rem;
+}
+
+[data-theme="light"] {
+  --background: #f7f8fa;
+  --background-elevated: #ffffff;
+  --background-card: #ffffff;
+  --border: #e4e7ec;
+  --border-strong: #d0d5dd;
+
+  --foreground: #0b0d10;
+  --foreground-muted: #4b5563;
+  --foreground-subtle: #8a94a3;
+
+  --brand-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-elevated: var(--background-elevated);
+  --color-background-card: var(--background-card);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-muted: var(--brand-muted);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+
+  --color-ct: var(--ct);
+  --color-t: var(--t);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-rajdhani);
+
+  --radius-md: var(--radius);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--brand);
+  color: var(--brand-foreground);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  letter-spacing: 0.01em;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out;
+}
