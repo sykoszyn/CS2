@@ -66,6 +66,7 @@ export async function getBoosts(): Promise<Boost[]> {
     const { data, error } = await supabase
       .from("boosts")
       .select(BOOST_SELECT)
+      .neq("status", "removed")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return (data as unknown as BoostJoinRow[]).map(toBoost);
@@ -80,7 +81,7 @@ export async function getBoostsByIds(ids: string[]): Promise<Boost[]> {
 
   try {
     const supabase = await createServerSupabaseClient();
-    const { data, error } = await supabase.from("boosts").select(BOOST_SELECT).in("id", ids);
+    const { data, error } = await supabase.from("boosts").select(BOOST_SELECT).neq("status", "removed").in("id", ids);
     if (error) throw error;
     return (data as unknown as BoostJoinRow[]).map(toBoost);
   } catch {
@@ -97,6 +98,7 @@ export async function getBoostsByAuthor(userId: string): Promise<Boost[]> {
       .from("boosts")
       .select(BOOST_SELECT)
       .eq("author_id", userId)
+      .neq("status", "removed")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return (data as unknown as BoostJoinRow[]).map(toBoost);
@@ -117,6 +119,7 @@ export async function getBoostsByMap(mapSlug: string): Promise<Boost[]> {
       .from("boosts")
       .select(BOOST_SELECT)
       .eq("map_id", map.id)
+      .neq("status", "removed")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return (data as unknown as BoostJoinRow[]).map(toBoost);
@@ -134,6 +137,7 @@ export async function getBoostBySlug(slug: string): Promise<Boost | null> {
       .from("boosts")
       .select(BOOST_SELECT)
       .eq("slug", slug)
+      .neq("status", "removed")
       .maybeSingle();
     if (error) throw error;
     return data ? toBoost(data as unknown as BoostJoinRow) : null;

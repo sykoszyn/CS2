@@ -17,6 +17,8 @@ import { VideoEmbed } from "@/components/ui/video-embed";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LikeButton } from "@/components/ui/like-button";
 import { FavoriteButton } from "@/components/ui/favorite-button";
+import { ReportButton } from "@/components/reports/report-button";
+import { ModerationControls } from "@/components/moderation/moderation-controls";
 import { LineupStepViewer } from "@/components/lineups/lineup-step-viewer";
 import { RatingForm } from "@/components/lineups/rating-form";
 import { CommentSection } from "@/components/comments/comment-section";
@@ -116,6 +118,7 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
           <Button variant="secondary" size="sm">
             <Share2 size={14} /> Compartir
           </Button>
+          <ReportButton contentType="lineup" contentId={lineup.id} isLoggedIn={Boolean(profile)} />
         </div>
       </div>
 
@@ -139,6 +142,17 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
           <p className="font-display font-semibold">{lineup.usageCount.toLocaleString(siteConfig.locale)}</p>
         </div>
       </div>
+
+      {(profile?.role === "admin" || profile?.role === "moderator") && (
+        <div className="mt-4">
+          <ModerationControls
+            contentType="lineup"
+            contentId={lineup.id}
+            verified={lineup.verified}
+            pathToRevalidate={`/lineups/${lineup.slug}`}
+          />
+        </div>
+      )}
 
       {lineup.video && (
         <div className="mt-6">

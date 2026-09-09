@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { ShieldX } from "lucide-react";
 import { getCurrentProfile } from "@/lib/auth/get-current-profile";
 import { getMaps } from "@/services/maps.service";
 import { CreatePlayForm } from "@/components/plays/create-play-form";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,18 @@ export const metadata: Metadata = {
 export default async function NewPlayPage() {
   const profile = await getCurrentProfile();
   if (!profile) redirect("/login?next=/plays/new");
+
+  if (profile.banned_at) {
+    return (
+      <div className="px-4 py-16 lg:px-6">
+        <EmptyState
+          icon={ShieldX}
+          title="Tu cuenta está suspendida"
+          description="No podés subir contenido nuevo mientras tu cuenta esté suspendida."
+        />
+      </div>
+    );
+  }
 
   const maps = await getMaps();
 

@@ -51,6 +51,41 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
    automáticamente. Deliberadamente **no** es un RPC llamable desde el
    cliente (`security definer` pero solo invocado por el trigger) — así
    nadie puede pedir XP directo sin publicar contenido real.
+6. `0006_moderation.sql` — bans (`profiles.banned_at`), y dos correcciones
+   de seguridad sobre el diseño RLS original de la fase 1. Vale la pena
+   leerlas porque son gotchas reales de Postgres, no bugs de la app:
+   - **RLS es por fila, no por columna.** La política
+     `profiles_update_own_or_admin` (`using (auth.uid() = id or
+     is_admin(...))`) deja que cualquiera actualice su propia fila — pero
+     sin un `with check` explícito, Postgres reusa esa misma condición
+     para validar el resultado, y esa condición no dice nada sobre qué
+     columnas cambiaron. Un usuario común podía hacer
+     `update profiles set role = 'admin' where id = auth.uid()` y
+     Postgres lo permitía. Lo mismo pasaba en `lineups`/`boosts`/`plays`:
+     el autor podía revertir un `status = 'removed'` puesto por un
+     moderador, o (en lineups) poner `verified = true` él mismo. La
+     corrección son triggers `before update` (`guard_profile_sensitive_columns`,
+     `guard_content_status_column`, `guard_lineup_moderation_columns`) que
+     inspeccionan `NEW`/`OLD` y rechazan el cambio a esas columnas
+     específicas salvo que quien lo hace ya sea admin/moderador — o que no
+     haya sesión de usuario en absoluto (`auth.uid() is null`), que es
+     exactamente el caso del SQL Editor o el service role, y es cómo se
+     bootstrapea la primera cuenta admin del proyecto.
+   - **La política de `select` también se aplica al resultado de un
+     `update`.** `lineups_select_public` ocultaba filas con
+     `status = 'removed'` — razonable para que el público no las vea. Pero
+     eso significaba que ni un admin podía escribir `status = 'removed'`:
+     Postgres revisa esa misma política contra la fila *después* del
+     update, y si el nuevo valor no pasa el `select`, rechaza el `update`
+     entero con "new row violates row-level security policy", sin importar
+     que la política de `update` sí lo permitiera. Se corrigió agregando
+     `or is_admin(auth.uid())` a esas políticas de `select` — que de paso
+     es lo que necesita un admin para poder revisar contenido eliminado.
+
+   Todo esto se verificó localmente con una instancia de Postgres +
+   simulación de RLS antes de escribirlo acá: un moderador no puede
+   auto-promoverse ni banear a otros, un admin real sí puede, y una cuenta
+   suspendida pierde la posibilidad de publicar pero no de leer.
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.

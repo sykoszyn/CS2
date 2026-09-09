@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { VideoEmbed } from "@/components/ui/video-embed";
 import { LikeButton } from "@/components/ui/like-button";
 import { FavoriteButton } from "@/components/ui/favorite-button";
+import { ReportButton } from "@/components/reports/report-button";
+import { ModerationControls } from "@/components/moderation/moderation-controls";
 import { CommentSection } from "@/components/comments/comment-section";
 import { playCategoryLabels } from "@/lib/labels/play-labels";
 
@@ -59,6 +61,12 @@ export default async function PlayDetailPage({ params }: { params: Promise<{ slu
         </a>
       </div>
 
+      {(profile?.role === "admin" || profile?.role === "moderator") && (
+        <div className="mt-4">
+          <ModerationControls contentType="play" contentId={play.id} pathToRevalidate={`/plays/${play.slug}`} />
+        </div>
+      )}
+
       <div className="mt-6">
         <VideoEmbed video={play.video} />
       </div>
@@ -82,6 +90,7 @@ export default async function PlayDetailPage({ params }: { params: Promise<{ slu
         <Button variant="secondary" size="sm">
           <Share2 size={14} /> Compartir
         </Button>
+        <ReportButton contentType="play" contentId={play.id} isLoggedIn={Boolean(profile)} />
       </div>
 
       <div className="mt-8 border-t border-border pt-6">

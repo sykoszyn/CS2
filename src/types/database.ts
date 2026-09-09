@@ -56,6 +56,7 @@ export type ProfileRow = {
   level: number;
   xp: number;
   steam_id: string | null;
+  banned_at: string | null;
   created_at: string;
   updated_at: string;
 };

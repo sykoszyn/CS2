@@ -75,6 +75,7 @@ export async function getPlays(): Promise<Play[]> {
     const { data, error } = await supabase
       .from("plays")
       .select(PLAY_SELECT)
+      .neq("status", "removed")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
@@ -89,7 +90,7 @@ export async function getPlaysByIds(ids: string[]): Promise<Play[]> {
 
   try {
     const supabase = await createServerSupabaseClient();
-    const { data, error } = await supabase.from("plays").select(PLAY_SELECT).in("id", ids);
+    const { data, error } = await supabase.from("plays").select(PLAY_SELECT).neq("status", "removed").in("id", ids);
     if (error) throw error;
     return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
   } catch {
@@ -106,6 +107,7 @@ export async function getPlaysByAuthor(userId: string): Promise<Play[]> {
       .from("plays")
       .select(PLAY_SELECT)
       .eq("author_id", userId)
+      .neq("status", "removed")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
@@ -126,6 +128,7 @@ export async function getPlaysByMap(mapSlug: string): Promise<Play[]> {
       .from("plays")
       .select(PLAY_SELECT)
       .eq("map_id", map.id)
+      .neq("status", "removed")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
@@ -143,6 +146,7 @@ export async function getPlayBySlug(slug: string): Promise<Play | null> {
       .from("plays")
       .select(PLAY_SELECT)
       .eq("slug", slug)
+      .neq("status", "removed")
       .maybeSingle();
     if (error) throw error;
     if (!data) return null;

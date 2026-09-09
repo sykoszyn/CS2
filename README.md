@@ -77,10 +77,36 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   jugadas, boosts, likes recibidos, contenido verificado) y tabs con todo
   lo que esa persona publicó.
 
+**FASE 7** (Admin, Moderación) — completa:
+
+- Sistema de reportes real: cualquier usuario puede reportar un lineup, boost
+  o jugada (motivo + descripción opcional) desde su página de detalle.
+- Panel `/admin` reescrito sin datos mock: dashboard con conteos reales,
+  cola de reportes pendientes (aprobar elimina el contenido, rechazar
+  descarta el reporte), cola de lineups sin verificar, y gestión de usuarios
+  (banear/desbanear, cambiar rol) — esta última solo para admins, no
+  moderadores.
+- Cuentas suspendidas (`banned_at`) pierden la posibilidad de subir
+  contenido, comentar o reportar, pero mantienen acceso de lectura completo
+  — nunca hay muro de login para navegar.
+- Dos clases de fix de seguridad encontrados y corregidos mientras se
+  construía esto (ver `supabase/README.md` para el detalle):
+  1. RLS de Postgres es a nivel de fila, no de columna: la política que
+     dejaba a cada usuario actualizar su propia fila en `profiles` (o su
+     propio lineup/boost/jugada) no impedía que cambiara columnas sensibles
+     como `role`, `banned_at`, `status` o `verified` — un usuario podía
+     auto-promoverse a admin, o revertir una eliminación de un moderador,
+     con una sola llamada directa a la API. Se corrigió con triggers
+     `before update` que sí distinguen columnas.
+  2. Una política de `select` que oculta contenido `removed` también bloquea
+     — sin excepción — que cualquiera (incluido un admin) escriba ese mismo
+     valor vía `update`, porque Postgres revisa la política de `select`
+     contra la fila resultante. Se corrigió dejando que los admins vean
+     contenido eliminado.
+
 Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
 (hoy siguen siendo mock), colecciones funcionales, búsqueda contra la base
-(hoy es en memoria sobre datos mock), panel admin con moderación real, PWA
-instalable, analytics.
+(hoy es en memoria sobre datos mock), PWA instalable, analytics.
 
 ## Estructura del proyecto
 

@@ -15,6 +15,8 @@ import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { VideoEmbed } from "@/components/ui/video-embed";
 import { LikeButton } from "@/components/ui/like-button";
 import { FavoriteButton } from "@/components/ui/favorite-button";
+import { ReportButton } from "@/components/reports/report-button";
+import { ModerationControls } from "@/components/moderation/moderation-controls";
 import { CommentSection } from "@/components/comments/comment-section";
 import { boostCategoryLabels } from "@/lib/labels/boost-labels";
 
@@ -70,6 +72,12 @@ export default async function BoostDetailPage({ params }: { params: Promise<{ sl
         </Link>
       )}
 
+      {(profile?.role === "admin" || profile?.role === "moderator") && (
+        <div className="mt-4">
+          <ModerationControls contentType="boost" contentId={boost.id} pathToRevalidate={`/boosts/${boost.slug}`} />
+        </div>
+      )}
+
       <div className="mt-6">
         {boost.video ? <VideoEmbed video={boost.video} /> : <MediaPlaceholder label={boost.location} className="h-64 w-full rounded-lg" />}
       </div>
@@ -93,6 +101,7 @@ export default async function BoostDetailPage({ params }: { params: Promise<{ sl
         <Button variant="secondary" size="sm">
           <Share2 size={14} /> Compartir
         </Button>
+        <ReportButton contentType="boost" contentId={boost.id} isLoggedIn={Boolean(profile)} />
       </div>
 
       <div className="mt-8 border-t border-border pt-6">

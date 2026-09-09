@@ -125,7 +125,7 @@ export async function getLineups(filters: LineupFilters = {}): Promise<Lineup[]>
 
   try {
     const supabase = await createServerSupabaseClient();
-    let query = supabase.from("lineups").select(LINEUP_SELECT);
+    let query = supabase.from("lineups").select(LINEUP_SELECT).neq("status", "removed");
 
     if (filters.mapSlug) {
       const map = await getMapBySlug(filters.mapSlug);
@@ -154,7 +154,7 @@ export async function getLineupsByIds(ids: string[]): Promise<Lineup[]> {
 
   try {
     const supabase = await createServerSupabaseClient();
-    const { data, error } = await supabase.from("lineups").select(LINEUP_SELECT).in("id", ids);
+    const { data, error } = await supabase.from("lineups").select(LINEUP_SELECT).neq("status", "removed").in("id", ids);
     if (error) throw error;
     return (data as unknown as LineupJoinRow[]).map((row) => toLineup(row));
   } catch {
@@ -171,6 +171,7 @@ export async function getLineupsByAuthor(userId: string): Promise<Lineup[]> {
       .from("lineups")
       .select(LINEUP_SELECT)
       .eq("author_id", userId)
+      .neq("status", "removed")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return (data as unknown as LineupJoinRow[]).map((row) => toLineup(row));
@@ -188,6 +189,7 @@ export async function getLineupBySlug(slug: string): Promise<Lineup | null> {
       .from("lineups")
       .select(LINEUP_SELECT)
       .eq("slug", slug)
+      .neq("status", "removed")
       .maybeSingle();
     if (error) throw error;
     if (!data) return null;
