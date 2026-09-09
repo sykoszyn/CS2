@@ -5,7 +5,7 @@ import { feedItems } from "@/lib/mock/feed";
 
 export const metadata: Metadata = {
   title: "Feed de la comunidad",
-  description: "Últimos lineups, jugadas, guías y boosts publicados por la comunidad de CS2 Academy.",
+  description: "Últimos lineups, jugadas, guías y boosts publicados por la comunidad de SmokeAR.",
 };
 
 export default function FeedPage() {

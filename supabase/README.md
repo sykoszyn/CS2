@@ -1,4 +1,4 @@
-# Supabase — CS2 Academy
+# Supabase — SmokeAR
 
 ## 1. Crear el proyecto
 
@@ -15,12 +15,15 @@ lista.
 
 En **Authentication → URL Configuration**:
 
-- **Site URL**: `http://localhost:3000` mientras estás en desarrollo local
-  (actualizalo a tu dominio real de Vercel cuando despliegues).
-- **Redirect URLs**: agregá, uno por línea:
+- **Site URL**: `https://smokear.vercel.app`
+- **Redirect URLs**: agregá las cuatro, una por línea:
+  - `https://smokear.vercel.app/auth/callback`
+  - `https://smokear.vercel.app/auth/steam/callback`
   - `http://localhost:3000/auth/callback`
   - `http://localhost:3000/auth/steam/callback`
-  - y cuando tengas dominio de producción, las mismas dos rutas con esa URL.
+
+Las de `localhost` son para cuando corrés `npm run dev` en tu máquina — no se
+pisan con las de producción, Supabase acepta múltiples URLs en la lista.
 
 La app ya manda `emailRedirectTo`/`redirectTo` apuntando a `/auth/callback`
 en cada flujo (signup, login con Google, magic link de Steam) — pero
@@ -86,7 +89,7 @@ SUPABASE_SERVICE_ROLE_KEY=   # solo servidor, nunca en el bundle de cliente
   (`/auth/steam` → Steam → `/auth/steam/callback`), verifica la respuesta
   contra Steam (`check_authentication`, nunca confía en el `claimed_id` sin
   verificar) y crea/reconoce al usuario con un email sintético no-entregable
-  (`steam-<id>@steam.users.cs2academy.internal`) usando la Admin API
+  (`steam-<id>@steam.users.smokear.internal`) usando la Admin API
   (`generateLink` + `verifyOtp`) para abrir la sesión sin contraseña. Opcional:
   `STEAM_WEB_API_KEY` (https://steamcommunity.com/dev/apikey) para traer el
   nombre y avatar de Steam en el primer login.

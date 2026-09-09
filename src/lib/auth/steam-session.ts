@@ -3,7 +3,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { fetchSteamPlayerSummary } from "@/lib/auth/steam";
 
 function syntheticSteamEmail(steamId: string): string {
-  return `steam-${steamId}@steam.users.cs2academy.internal`;
+  return `steam-${steamId}@steam.users.smokear.internal`;
 }
 
 /**

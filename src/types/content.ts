@@ -1,5 +1,5 @@
 /**
- * Domain types for CS2 Academy.
+ * Domain types for SmokeAR.
  * These mirror the Supabase schema (see supabase/migrations/0001_init.sql)
  * but are hand-written so the app compiles before the DB is provisioned.
  * Once Supabase codegen is wired up, `types/database.ts` becomes the

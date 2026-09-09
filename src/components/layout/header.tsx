@@ -10,7 +10,7 @@ export function Header({ profile }: { profile: ProfileRow | null }) {
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/80 px-4 backdrop-blur lg:px-6">
       <Link href="/" className="flex items-center gap-2 lg:hidden">
         <span className="flex h-8 w-8 items-center justify-center rounded-md bg-brand font-display text-sm font-bold text-brand-foreground">
-          C2
+          S
         </span>
       </Link>
 

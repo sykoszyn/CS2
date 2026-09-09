@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { primaryNav } from "@/lib/site-config";
+import { primaryNav, siteConfig } from "@/lib/site-config";
 import { iconMap } from "@/components/layout/icon-map";
 import { cn } from "@/lib/utils/cn";
 import { Heart, Bookmark, Settings } from "lucide-react";
@@ -16,9 +16,9 @@ export function Sidebar({ profile }: { profile: ProfileRow | null }) {
     <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-background-elevated/40 lg:flex">
       <div className="flex h-16 items-center gap-2 px-5">
         <span className="flex h-8 w-8 items-center justify-center rounded-md bg-brand font-display text-sm font-bold text-brand-foreground">
-          C2
+          S
         </span>
-        <span className="font-display text-lg font-bold tracking-wide">CS2 Academy</span>
+        <span className="font-display text-lg font-bold tracking-wide">{siteConfig.name}</span>
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-2 scrollbar-thin">

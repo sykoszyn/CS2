@@ -1,5 +1,5 @@
 -- =============================================================================
--- CS2 Academy — demo seed data
+-- SmokeAR — demo seed data
 -- Everything here is marked is_demo = true and verified = false: it exists so
 -- the app has something to render on day one, not as an authoritative source.
 -- Run this AFTER 0001_init.sql. Safe to re-run (guarded by slug lookups).

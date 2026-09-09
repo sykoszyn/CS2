@@ -1,5 +1,5 @@
 -- =============================================================================
--- CS2 Academy — initial schema
+-- SmokeAR — initial schema
 -- Run against a Supabase Postgres project (SQL Editor or `supabase db push`).
 -- Design notes:
 --   * `profiles` extends `auth.users` (1:1, id shared) instead of duplicating it.

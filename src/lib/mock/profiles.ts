@@ -4,7 +4,7 @@ export const profiles: Record<string, PublicProfile> = {
   demo_coach: {
     username: "demo_coach",
     displayName: "Demo Coach",
-    bio: "Cuenta de demostración usada para poblar contenido de ejemplo en CS2 Academy.",
+    bio: "Cuenta de demostración usada para poblar contenido de ejemplo en SmokeAR.",
     level: 12,
     xp: 4200,
     stats: {
@@ -18,7 +18,7 @@ export const profiles: Record<string, PublicProfile> = {
   demo_player: {
     username: "demo_player",
     displayName: "Demo Player",
-    bio: "Cuenta de demostración usada para poblar contenido de ejemplo en CS2 Academy.",
+    bio: "Cuenta de demostración usada para poblar contenido de ejemplo en SmokeAR.",
     level: 8,
     xp: 2100,
     stats: {
