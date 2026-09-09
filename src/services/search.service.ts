@@ -1,3 +1,5 @@
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { maps } from "@/lib/mock/maps";
 import { lineups } from "@/lib/mock/lineups";
 import { boosts } from "@/lib/mock/boosts";
@@ -13,13 +15,15 @@ export interface SearchResult {
   href: string;
 }
 
-/**
- * Phase-1 in-memory search over mock content. This is the seam that gets
- * swapped for a Postgres full-text (`tsvector`) query against Supabase in
- * a later phase — callers only depend on `search()`, not on where the data
- * comes from.
- */
-export function search(query: string, limit = 8): SearchResult[] {
+const HREF_PREFIX: Record<SearchResultType, string> = {
+  map: "/maps",
+  lineup: "/lineups",
+  boost: "/boosts",
+  play: "/plays",
+  guide: "/guides",
+};
+
+function searchMock(query: string, limit: number): SearchResult[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
 
@@ -72,4 +76,32 @@ export function search(query: string, limit = 8): SearchResult[] {
   }
 
   return results.slice(0, limit);
+}
+
+/**
+ * Full-text search against `search_content()` (Postgres `tsvector`,
+ * `supabase/migrations/0007_search.sql`) across maps/lineups/boosts/plays/guides,
+ * ranked by relevance. Falls back to the in-memory mock search when Supabase
+ * isn't configured or the query fails, same graceful-degradation pattern as
+ * every other service in the app.
+ */
+export async function search(query: string, limit = 8): Promise<SearchResult[]> {
+  const q = query.trim();
+  if (!q) return [];
+  if (!isSupabaseConfigured()) return searchMock(q, limit);
+
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data, error } = await supabase.rpc("search_content", { query: q, result_limit: limit });
+    if (error) throw error;
+
+    return (data ?? []).map((row) => ({
+      type: row.content_type as SearchResultType,
+      title: row.title,
+      subtitle: row.subtitle,
+      href: `${HREF_PREFIX[row.content_type as SearchResultType]}/${row.slug}`,
+    }));
+  } catch {
+    return searchMock(q, limit);
+  }
 }

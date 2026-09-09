@@ -357,6 +357,15 @@ export interface Database {
         Args: { payload: Record<string, unknown> };
         Returns: string;
       };
+      search_content: {
+        Args: { query: string; result_limit?: number };
+        Returns: {
+          content_type: string;
+          title: string;
+          subtitle: string;
+          slug: string;
+        }[];
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

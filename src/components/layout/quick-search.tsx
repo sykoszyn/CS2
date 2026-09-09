@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import { search, type SearchResult } from "@/services/search.service";
+import { quickSearchAction } from "@/lib/search/actions";
+import type { SearchResult } from "@/services/search.service";
 import { cn } from "@/lib/utils/cn";
 
 const typeLabel: Record<SearchResult["type"], string> = {
@@ -48,13 +49,30 @@ export function QuickSearchTrigger() {
 
 function QuickSearchModal({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
+  const [fetchedResults, setFetchedResults] = useState<SearchResult[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const requestId = useRef(0);
   const router = useRouter();
-  const results = useMemo(() => search(query), [query]);
+  const results = query.trim() ? fetchedResults : [];
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) return;
+
+    const currentRequest = ++requestId.current;
+    const timeout = setTimeout(() => {
+      quickSearchAction(q).then((found) => {
+        // Ignore stale responses from a previous, since-superseded keystroke.
+        if (currentRequest === requestId.current) setFetchedResults(found);
+      });
+    }, 200);
+
+    return () => clearTimeout(timeout);
+  }, [query]);
 
   function goTo(href: string) {
     onClose();

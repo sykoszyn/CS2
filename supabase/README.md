@@ -86,6 +86,19 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
    simulación de RLS antes de escribirlo acá: un moderador no puede
    auto-promoverse ni banear a otros, un admin real sí puede, y una cuenta
    suspendida pierde la posibilidad de publicar pero no de leer.
+7. `0007_search.sql` — búsqueda de texto completo. Agrega una columna
+   `search_vector tsvector generated always as (...) stored` (Postgres la
+   mantiene sola en cada insert/update) más un índice GIN en `maps`,
+   `lineups`, `boosts`, `plays` y `guides`, y un RPC `search_content(query,
+   result_limit)` que las une con `websearch_to_tsquery('spanish', ...)` y
+   ordena por `ts_rank`. `security invoker`: corre con los permisos de
+   quien llama, así que las políticas de RLS ya existentes (contenido
+   `removed` invisible salvo para admins, etc.) deciden qué aparece en los
+   resultados sin ninguna lógica nueva que mantener sincronizada — los
+   `and status <> 'removed'`/`and active` explícitos dentro de la función
+   son redundantes con RLS a propósito (mismo criterio de "defensa en
+   profundidad" que los filtros que se agregaron en la capa de servicios
+   cuando los admins pasaron a poder ver contenido eliminado).
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.

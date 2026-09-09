@@ -180,9 +180,25 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   hardware necesario (Android SDK, o una Mac con Xcode para iOS), que este
   entorno no puede proveer.
 
-Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
-(hoy siguen siendo mock), colecciones funcionales, búsqueda contra la base
-(hoy es en memoria sobre datos mock).
+**Búsqueda real** — completa:
+
+- Búsqueda de texto completo de Postgres (`tsvector` + `websearch_to_tsquery`,
+  `supabase/migrations/0007_search.sql`) sobre mapas, lineups, boosts,
+  jugadas y guías, ordenada por relevancia (`ts_rank`) — reemplaza la
+  búsqueda en memoria sobre datos mock que existía desde la Fase 1.
+- Un único RPC (`search_content`, `security invoker`) unifica los cinco
+  tipos de contenido; al correr con los permisos de quien llama, las
+  políticas RLS existentes deciden qué es visible sin lógica duplicada —
+  contenido eliminado o de una cuenta suspendida no aparece en resultados
+  por la misma razón que no aparece en ningún otro lado.
+- El panel de búsqueda rápida (Ctrl/Cmd+K) ahora llama a la base con
+  debounce (200ms) vía Server Action en vez de filtrar un array en el
+  cliente; `/search` hace lo mismo del lado del servidor.
+- Sigue cayendo a la búsqueda en memoria si Supabase no está configurado,
+  mismo patrón de fallback que el resto de los servicios.
+
+Pendiente (fuera de las fases numeradas, ver brief): guías conectadas a la
+base de datos (hoy siguen siendo mock), colecciones funcionales.
 
 ## Estructura del proyecto
 

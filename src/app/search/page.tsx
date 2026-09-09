@@ -23,7 +23,7 @@ export default async function SearchPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q } = await searchParams;
-  const results = q ? search(q, 30) : [];
+  const results = q ? await search(q, 30) : [];
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 lg:px-6">
