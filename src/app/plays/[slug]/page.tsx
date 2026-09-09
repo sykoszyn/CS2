@@ -1,26 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
-import { plays } from "@/lib/mock/plays";
-import { getMapBySlug } from "@/lib/mock/maps";
+import { getPlayBySlug } from "@/services/plays.service";
+import { getMapBySlug } from "@/services/maps.service";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VideoEmbed } from "@/components/ui/video-embed";
+import { playCategoryLabels } from "@/lib/labels/play-labels";
 
-const categoryLabel: Record<string, string> = {
-  clutch: "Clutch",
-  ace: "Ace",
-  entry: "Entry",
-  retake: "Retake",
-  "ninja-defuse": "Ninja Defuse",
-  wallbang: "Wallbang",
-  outplay: "Outplay",
-  pro: "Pro",
-};
-
-export function generateStaticParams() {
-  return plays.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -28,7 +16,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const play = plays.find((p) => p.slug === slug);
+  const play = await getPlayBySlug(slug);
   if (!play) return {};
   return {
     title: play.title,
@@ -39,10 +27,10 @@ export async function generateMetadata({
 
 export default async function PlayDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const play = plays.find((p) => p.slug === slug);
+  const play = await getPlayBySlug(slug);
   if (!play) notFound();
 
-  const map = getMapBySlug(play.mapSlug);
+  const map = await getMapBySlug(play.mapSlug);
 
   return (
     <div className="px-4 py-8 lg:px-6">
@@ -55,9 +43,9 @@ export default async function PlayDetailPage({ params }: { params: Promise<{ slu
       </div>
       <h1 className="mt-1 font-display text-2xl font-bold">{play.title}</h1>
       <div className="mt-2 flex items-center gap-2">
-        <Badge variant="brand">{categoryLabel[play.category]}</Badge>
+        <Badge variant="brand">{playCategoryLabels[play.category]}</Badge>
         <a href={`/profile/${play.authorUsername}`} className="text-sm text-foreground-muted hover:text-brand">
-          por {play.authorUsername}
+          por @{play.authorUsername}
         </a>
       </div>
 

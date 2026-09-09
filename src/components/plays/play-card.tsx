@@ -4,17 +4,7 @@ import type { Play } from "@/types/content";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-
-const categoryLabel: Record<Play["category"], string> = {
-  clutch: "Clutch",
-  ace: "Ace",
-  entry: "Entry",
-  retake: "Retake",
-  "ninja-defuse": "Ninja Defuse",
-  wallbang: "Wallbang",
-  outplay: "Outplay",
-  pro: "Pro",
-};
+import { playCategoryLabels } from "@/lib/labels/play-labels";
 
 export function PlayCard({ play, index = 0 }: { play: Play; index?: number }) {
   return (
@@ -27,7 +17,7 @@ export function PlayCard({ play, index = 0 }: { play: Play; index?: number }) {
           </span>
         </div>
         <div className="flex flex-1 flex-col gap-2 p-3">
-          <Badge variant="brand" className="w-fit">{categoryLabel[play.category]}</Badge>
+          <Badge variant="brand" className="w-fit">{playCategoryLabels[play.category]}</Badge>
           <p className="font-display text-sm font-semibold leading-snug group-hover:text-brand">
             {play.title}
           </p>

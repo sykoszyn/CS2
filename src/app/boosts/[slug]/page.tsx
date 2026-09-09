@@ -1,23 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Users } from "lucide-react";
-import { boosts } from "@/lib/mock/boosts";
-import { getMapBySlug } from "@/lib/mock/maps";
+import { getBoostBySlug } from "@/services/boosts.service";
+import { getMapBySlug } from "@/services/maps.service";
 import { Badge } from "@/components/ui/badge";
 import { DifficultyDots } from "@/components/ui/difficulty-dots";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { VideoEmbed } from "@/components/ui/video-embed";
+import { boostCategoryLabels } from "@/lib/labels/boost-labels";
 
-const categoryLabel: Record<string, string> = {
-  common: "Común",
-  competitive: "Competitivo",
-  exotic: "Exótico",
-  secret: "Secreto",
-};
-
-export function generateStaticParams() {
-  return boosts.map((b) => ({ slug: b.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -25,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const boost = boosts.find((b) => b.slug === slug);
+  const boost = await getBoostBySlug(slug);
   if (!boost) return {};
   return {
     title: boost.name,
@@ -36,10 +29,10 @@ export async function generateMetadata({
 
 export default async function BoostDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const boost = boosts.find((b) => b.slug === slug);
+  const boost = await getBoostBySlug(slug);
   if (!boost) notFound();
 
-  const map = getMapBySlug(boost.mapSlug);
+  const map = await getMapBySlug(boost.mapSlug);
 
   return (
     <div className="px-4 py-8 lg:px-6">
@@ -52,12 +45,17 @@ export default async function BoostDetailPage({ params }: { params: Promise<{ sl
       </div>
       <h1 className="mt-1 font-display text-2xl font-bold">{boost.name}</h1>
       <div className="mt-2 flex flex-wrap items-center gap-2">
-        <Badge variant="brand">{categoryLabel[boost.category]}</Badge>
+        <Badge variant="brand">{boostCategoryLabels[boost.category]}</Badge>
         <Badge className="gap-1">
           <Users size={12} /> {boost.playersRequired} jugadores
         </Badge>
         <DifficultyDots value={boost.difficulty} />
       </div>
+      {boost.authorUsername && (
+        <Link href={`/profile/${boost.authorUsername}`} className="mt-2 inline-block text-sm text-foreground-muted hover:text-brand">
+          por @{boost.authorUsername}
+        </Link>
+      )}
 
       <div className="mt-6">
         {boost.video ? <VideoEmbed video={boost.video} /> : <MediaPlaceholder label={boost.location} className="h-64 w-full rounded-lg" />}

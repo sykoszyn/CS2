@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMapBySlug, getMapZones } from "@/services/maps.service";
 import { getLineupsByMap } from "@/services/lineups.service";
-import { getBoostsByMap } from "@/lib/mock/boosts";
-import { getPlaysByMap } from "@/lib/mock/plays";
+import { getBoostsByMap } from "@/services/boosts.service";
+import { getPlaysByMap } from "@/services/plays.service";
 import { guides } from "@/lib/mock/guides";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -39,8 +39,8 @@ export default async function MapDetailPage({ params }: { params: Promise<{ slug
 
   const zones = await getMapZones(map);
   const mapLineups = await getLineupsByMap(slug);
-  const mapBoosts = getBoostsByMap(slug);
-  const mapPlays = getPlaysByMap(slug);
+  const mapBoosts = await getBoostsByMap(slug);
+  const mapPlays = await getPlaysByMap(slug);
   const mapGuides = guides.filter((g) => g.mapSlug === slug);
 
   return (

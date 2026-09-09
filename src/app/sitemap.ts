@@ -1,13 +1,18 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site-config";
 import { guides } from "@/lib/mock/guides";
-import { boosts } from "@/lib/mock/boosts";
-import { plays } from "@/lib/mock/plays";
 import { getMaps } from "@/services/maps.service";
 import { getLineups } from "@/services/lineups.service";
+import { getBoosts } from "@/services/boosts.service";
+import { getPlays } from "@/services/plays.service";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [maps, lineups] = await Promise.all([getMaps(), getLineups()]);
+  const [maps, lineups, boosts, plays] = await Promise.all([
+    getMaps(),
+    getLineups(),
+    getBoosts(),
+    getPlays(),
+  ]);
 
   const staticRoutes = ["", "/maps", "/lineups", "/guides", "/boosts", "/plays", "/feed", "/search"].map(
     (path) => ({

@@ -40,8 +40,18 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
 - Sistema de rating: estrellas + "¿funcionó?", agregado en tiempo real desde
   la tabla `ratings`.
 
-Pendiente (fases siguientes, ver brief): boosts/jugadas/guías conectados a
-la base de datos (hoy siguen siendo mock), likes/favoritos/colecciones
+**FASE 4** (Videos, Boosts, Jugadas) — completa:
+
+- Boosts y jugadas leen de Supabase (`services/boosts.service.ts`,
+  `services/plays.service.ts`), mismo patrón de fallback que mapas/lineups.
+- Usuarios registrados pueden subir boosts (`/boosts/new`) y jugadas
+  (`/plays/new`) — las jugadas exigen video (son evidencia de la jugada),
+  los boosts lo dejan opcional.
+- El video sigue siendo siempre un embed (YouTube hoy) — nunca se aloja
+  archivo de video propio, tal como se definió en la Fase 1.
+
+Pendiente (fases siguientes, ver brief): guías conectadas a la base de datos
+(hoy siguen siendo mock), likes/favoritos/colecciones/comentarios
 funcionales, búsqueda contra la base (hoy es en memoria sobre datos mock),
 gamificación, panel admin con moderación real, PWA instalable, analytics.
 
@@ -58,7 +68,8 @@ src/
   lib/
     supabase/     Clientes de Supabase (browser, server, admin, proxy).
     auth/         Server actions y helpers de autenticación.
-    lineups/      Server actions de lineups (rating, creación).
+    lineups/ boosts/ plays/
+                   Server actions de creación (y rating, en lineups).
     labels/       Mapas enum -> etiqueta en español, compartidos entre
                    cards, filtros y formularios.
     mock/         Datos de demostración usados hasta que la DB esté poblada.

@@ -5,10 +5,10 @@ import { MapCard } from "@/components/maps/map-card";
 import { LineupCard } from "@/components/lineups/lineup-card";
 import { PlayCard } from "@/components/plays/play-card";
 import { GuideCard } from "@/components/guides/guide-card";
-import { plays } from "@/lib/mock/plays";
 import { guides } from "@/lib/mock/guides";
 import { getMaps } from "@/services/maps.service";
 import { getLineups } from "@/services/lineups.service";
+import { getPlays } from "@/services/plays.service";
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +19,11 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [maps, allLineups] = await Promise.all([getMaps(), getLineups()]);
+  const [maps, allLineups, allPlays] = await Promise.all([getMaps(), getLineups(), getPlays()]);
   const popularLineups = [...allLineups].sort((a, b) => b.usageCount - a.usageCount).slice(0, 6);
+  const featuredPlays = [...allPlays]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 6);
 
   return (
     <div>
@@ -72,7 +75,7 @@ export default async function HomePage() {
 
       <Section title="Jugadas destacadas" subtitle="Clutches, aces y outplays de la comunidad" href="/plays">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {plays.map((play, i) => (
+          {featuredPlays.map((play, i) => (
             <PlayCard key={play.id} play={play} index={i} />
           ))}
         </div>

@@ -92,6 +92,7 @@ export interface Boost {
   side: Side;
   difficulty: Difficulty;
   description: string;
+  authorUsername?: string;
   video?: Video;
   imageUrl: string;
   isDemo?: boolean;

@@ -5,13 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { DifficultyDots } from "@/components/ui/difficulty-dots";
-
-const categoryLabel: Record<Boost["category"], string> = {
-  common: "Común",
-  competitive: "Competitivo",
-  exotic: "Exótico",
-  secret: "Secreto",
-};
+import { boostCategoryLabels } from "@/lib/labels/boost-labels";
 
 export function BoostCard({ boost, index = 0 }: { boost: Boost; index?: number }) {
   return (
@@ -23,7 +17,7 @@ export function BoostCard({ boost, index = 0 }: { boost: Boost; index?: number }
             {boost.name}
           </p>
           <div className="flex flex-wrap items-center gap-1.5">
-            <Badge variant="brand">{categoryLabel[boost.category]}</Badge>
+            <Badge variant="brand">{boostCategoryLabels[boost.category]}</Badge>
             <Badge className="gap-1">
               <Users size={12} /> {boost.playersRequired}
             </Badge>
