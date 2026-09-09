@@ -8,21 +8,23 @@
 
 ## 2. Ejecutar las migraciones
 
-En el **SQL Editor** de Supabase, ejecutar en este orden:
+Los tres archivos viven en `supabase/migrations/` y se corren en orden numérico:
 
-1. `migrations/0001_init.sql` — esquema completo: tablas, enums, índices, triggers y
+1. `0001_init.sql` — esquema completo: tablas, enums, índices, triggers y
    políticas de Row Level Security.
-2. `seed/0002_seed.sql` — datos de demostración (mapas, algunos lineups, boosts,
+2. `0002_seed.sql` — datos de demostración (mapas, algunos lineups, boosts,
    jugadas y una guía), todos marcados `is_demo = true` y `verified = false`.
-3. `migrations/0003_steam_auth.sql` — columna `steam_id` en `profiles`, usada para
+3. `0003_steam_auth.sql` — columna `steam_id` en `profiles`, usada para
    reconocer a un jugador que vuelve a entrar con Steam.
 
-Si preferís la CLI de Supabase:
+En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
+contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.
+
+Si preferís la CLI de Supabase, un solo comando aplica los tres:
 
 ```bash
 supabase link --project-ref <project-ref>
 supabase db push
-psql "$(supabase status -o env | grep DB_URL | cut -d= -f2)" -f supabase/seed/0002_seed.sql
 ```
 
 ## 3. Variables de entorno

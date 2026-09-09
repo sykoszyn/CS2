@@ -17,7 +17,7 @@ Completado en esta fase:
   en lineups) y estados vacíos/loading/no-encontrado.
 - Esquema SQL completo para Supabase (`supabase/migrations/0001_init.sql`) con
   Row Level Security en todas las tablas.
-- Datos de demostración (`supabase/seed/0002_seed.sql`), todos marcados
+- Datos de demostración (`supabase/migrations/0002_seed.sql`), todos marcados
   `is_demo` y sin verificación falsa.
 - Clientes de Supabase (browser/server/admin) y tipos de base de datos en
   `src/lib/supabase` y `src/types/database.ts`.
