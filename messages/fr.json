@@ -1,0 +1,654 @@
+{
+  "layout": {
+    "tagline": "Lineups communautaires pour CS2",
+    "description": "Le hub d'apprentissage de Counter-Strike 2 : lineups, calls, boosts, plays et stratégies créés par la communauté."
+  },
+  "nav": {
+    "home": "Accueil",
+    "maps": "Cartes",
+    "lineups": "Lineups",
+    "guides": "Guides",
+    "boosts": "Boosts",
+    "plays": "Plays",
+    "feed": "Fil",
+    "search": "Rechercher",
+    "profile": "Profil",
+    "favorites": "Favoris",
+    "collections": "Collections",
+    "admin": "Admin"
+  },
+  "footer": {
+    "madeBy": "Fait par la communauté CS2.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions"
+  },
+  "header": {
+    "searchAriaLabel": "Rechercher",
+    "login": "Se connecter",
+    "createAccount": "Créer un compte"
+  },
+  "quickSearch": {
+    "trigger": "Rechercher lineups, cartes, calls...",
+    "shortcut": "Ctrl K",
+    "placeholder": "smoke window, mirage, boost nuke...",
+    "closeAriaLabel": "Fermer la recherche",
+    "noResults": "Aucun résultat pour « {query} ».",
+    "hint": "Essayez « mirage window », « boost nuke » ou « molotov banana ».",
+    "types": {
+      "map": "Carte",
+      "lineup": "Lineup",
+      "boost": "Boost",
+      "play": "Play",
+      "guide": "Guide"
+    }
+  },
+  "section": {
+    "viewAll": "Tout voir"
+  },
+  "userMenu": {
+    "myProfile": "Mon profil",
+    "favorites": "Favoris",
+    "collections": "Collections",
+    "admin": "Admin",
+    "settings": "Paramètres",
+    "signOut": "Se déconnecter"
+  },
+  "auth": {
+    "usernamePlaceholder": "Nom d'utilisateur",
+    "usernameTitle": "Minuscules, chiffres et tiret bas uniquement",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mot de passe",
+    "orContinueWith": "ou continuer avec",
+    "google": "Google",
+    "steam": "Steam",
+    "pending": "Un instant...",
+    "login": "Se connecter",
+    "register": "Créer un compte",
+    "errors": {
+      "notConfigured": "L'authentification n'est pas encore configurée dans cet environnement.",
+      "oauth": "Impossible de vous connecter avec Google. Réessayez.",
+      "steam": "Impossible de vérifier votre compte Steam. Réessayez.",
+      "auth": "Le lien de confirmation est invalide ou a expiré.",
+      "generic": "Une erreur est survenue lors de la connexion.",
+      "invalidCredentials": "Email ou mot de passe incorrect.",
+      "userExists": "Un compte avec cet email existe déjà.",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
+      "emailNotConfirmed": "Vous n'avez pas encore confirmé votre email. Vérifiez votre boîte de réception.",
+      "invalidEmail": "Cet email n'est pas valide.",
+      "actionGeneric": "Une erreur est survenue. Réessayez.",
+      "notConfiguredFull": "L'authentification n'est pas encore configurée dans cet environnement (variables Supabase manquantes).",
+      "usernameFormat": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères : minuscules, chiffres ou _.",
+      "checkEmail": "Nous vous avons envoyé un email pour confirmer votre compte. Vérifiez votre boîte de réception.",
+      "loginRequired": "Connectez-vous.",
+      "deleteAccountFailed": "Impossible de supprimer votre compte. Réessayez dans quelques minutes."
+    }
+  },
+  "labels": {
+    "grenadeType": {
+      "smoke": "Smoke",
+      "flash": "Flash",
+      "molotov": "Molotov",
+      "he": "HE",
+      "decoy": "Decoy"
+    },
+    "side": {
+      "ct": "CT",
+      "t": "T",
+      "both": "Les deux"
+    },
+    "situation": {
+      "attack": "Attaque",
+      "defense": "Défense",
+      "retake": "Retake",
+      "execute": "Execute",
+      "anti-eco": "Anti-eco",
+      "default": "Par défaut"
+    },
+    "distance": {
+      "close": "Proche",
+      "medium": "Moyenne",
+      "long": "Longue"
+    },
+    "clickType": {
+      "left": "Clic gauche",
+      "right": "Clic droit",
+      "hold": "Maintenir"
+    },
+    "boostCategory": {
+      "common": "Commun",
+      "competitive": "Compétitif",
+      "exotic": "Exotique",
+      "secret": "Secret"
+    },
+    "playCategory": {
+      "clutch": "Clutch",
+      "ace": "Ace",
+      "entry": "Entry",
+      "retake": "Retake",
+      "ninja-defuse": "Ninja Defuse",
+      "wallbang": "Wallbang",
+      "outplay": "Outplay",
+      "pro": "Pro"
+    },
+    "guideLevel": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé"
+    },
+    "reportReason": {
+      "spam": "Spam",
+      "incorrect": "Ne fonctionne pas / information incorrecte",
+      "offensive": "Contenu offensant",
+      "copyright": "Droits d'auteur",
+      "false_info": "Fausse information",
+      "duplicate": "Contenu en double",
+      "other": "Autre"
+    }
+  },
+  "ui": {
+    "ratingStarsAriaLabel": "{value} sur 5 étoiles",
+    "difficultyDotsAriaLabel": "Difficulté {value} sur {max}",
+    "verifiedTitle": "Vérifié par l'équipe SmokeAR",
+    "verifiedLabel": "VÉRIFIÉ",
+    "videoTitle": "Vidéo",
+    "videoExternalLink": "Voir la vidéo externe →",
+    "favoriteSaved": "Enregistré",
+    "favoriteSave": "Enregistrer"
+  },
+  "home": {
+    "metaTitle": "Lineups communautaires CS2",
+    "metaDescription": "Lineups, calls, boosts, plays et stratégies CS2 créés par la communauté. Aucun compte requis.",
+    "heroPrefix": "Lineups",
+    "heroHighlight": "communautaires",
+    "heroSubtitle": "Lineups, stratégies, calls, boosts et plays créés par la communauté. Gratuit, sans compte obligatoire.",
+    "exploreLineups": "Explorer les lineups",
+    "exploreMaps": "Explorer les cartes",
+    "createAccount": "Créer un compte",
+    "sections": {
+      "maps": { "title": "Cartes", "subtitle": "Choisissez une carte pour voir ses calls, lineups et boosts" },
+      "popularLineups": { "title": "Lineups populaires", "subtitle": "Les utilities les plus utilisées par la communauté" },
+      "featuredPlays": { "title": "Plays en vedette", "subtitle": "Clutches, aces et outplays de la communauté" },
+      "guides": { "title": "Guides", "subtitle": "Apprenez une carte de zéro ou progressez" }
+    }
+  },
+  "maps": {
+    "list": {
+      "metaTitle": "Cartes CS2",
+      "metaDescription": "Toutes les cartes compétitives de Counter-Strike 2 : calls, lineups, boosts et guides.",
+      "title": "Cartes",
+      "subtitle": "Choisissez une carte pour voir ses callouts, lineups, boosts et guides."
+    },
+    "detail": {
+      "metaTitleSuffix": "Calls, lineups et boosts",
+      "site": "Site {site}",
+      "tabs": { "calls": "Calls", "lineups": "Lineups ({count})", "boosts": "Boosts ({count})", "plays": "Plays ({count})", "guides": "Guides ({count})" },
+      "emptyCalls": { "title": "Aucun call chargé pour cette carte pour l'instant", "description": "Cette carte est prête dans la base de données ; les callouts seront ajoutés prochainement." },
+      "emptyLineups": "Aucun lineup pour cette carte pour l'instant",
+      "emptyBoosts": "Aucun boost pour cette carte pour l'instant",
+      "emptyPlays": "Aucun play pour cette carte pour l'instant",
+      "emptyGuides": "Aucun guide pour cette carte pour l'instant"
+    },
+    "zoneViewer": {
+      "radarPending": "Radar de la carte (image en attente)",
+      "alsoKnownAs": "Aussi connu comme : ",
+      "tapHint": "Touchez un point de la carte pour voir son call.",
+      "allCalls": "Tous les calls"
+    }
+  },
+  "lineups": {
+    "list": {
+      "metaTitle": "Lineups CS2",
+      "metaDescription": "Smokes, flashes, molotovs et grenades HE pour toutes les cartes compétitives de Counter-Strike 2, filtrés par carte, côté et grenade.",
+      "title": "Lineups",
+      "subtitle": "Smokes, flashes, molotovs et grenades HE pour chaque carte et situation.",
+      "upload": "Publier un lineup",
+      "emptyTitle": "Aucun lineup trouvé avec ces filtres",
+      "emptyDescription": "Essayez de changer la carte, le côté ou le type de grenade."
+    },
+    "filters": {
+      "allMaps": "Toutes les cartes",
+      "bothSides": "Les deux côtés",
+      "anyGrenade": "Toute grenade"
+    },
+    "card": {
+      "workedPercent": "{percent}% de réussite"
+    },
+    "detail": {
+      "metaTitle": "{name} — CS2",
+      "metaDescription": "Comment faire {name} : guide étape par étape avec un lineup {grenadeType} pour {targetZone} sur {mapSlug}.",
+      "by": "par @{username}",
+      "share": "Partager",
+      "rating": "Note",
+      "worked": "Réussite",
+      "noData": "Aucune donnée",
+      "difficulty": "Difficulté",
+      "uses": "Utilisations",
+      "stepsTitle": "Instructions étape par étape",
+      "noSteps": "Ce lineup n'a pas encore d'étapes",
+      "loginToRate": "Connectez-vous pour noter ce lineup",
+      "login": "Se connecter"
+    },
+    "stepViewer": {
+      "stepOf": "Étape {current} / {total}",
+      "jumpthrow": "Jumpthrow",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "goToStep": "Aller à l'étape {step}"
+    },
+    "ratingForm": {
+      "title": "Notez ce lineup",
+      "stars": "Étoiles",
+      "starsAriaLabel": "{count} étoiles",
+      "worked": "Ça a marché ?",
+      "yes": "Oui",
+      "no": "Non",
+      "saving": "Enregistrement...",
+      "submit": "Noter"
+    },
+    "form": {
+      "name": "Nom du lineup",
+      "namePlaceholder": "Mirage Window Smoke depuis T Spawn",
+      "map": "Carte",
+      "grenade": "Grenade",
+      "side": "Côté",
+      "situation": "Situation",
+      "throwZone": "Point de lancer",
+      "throwZonePlaceholder": "T Spawn",
+      "targetZone": "Cible",
+      "targetZonePlaceholder": "Window",
+      "distance": "Distance",
+      "difficulty": "Difficulté",
+      "video": "Vidéo (YouTube, facultatif)",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=...",
+      "tags": "Tags (séparés par des virgules)",
+      "tagsPlaceholder": "mirage, smoke, execute",
+      "steps": "Étapes",
+      "addStep": "Ajouter une étape",
+      "stepN": "Étape {n}",
+      "removeStepAriaLabel": "Supprimer l'étape",
+      "stepTitle": "Titre",
+      "stepTitlePlaceholder": "Position",
+      "click": "Clic",
+      "unspecified": "Non spécifié",
+      "instruction": "Instruction",
+      "instructionPlaceholder": "Placez-vous à la sortie de T Spawn...",
+      "jumpthrow": "Nécessite un jumpthrow",
+      "publishing": "Publication...",
+      "publish": "Publier le lineup"
+    },
+    "new": {
+      "metaTitle": "Publier un lineup",
+      "suspendedTitle": "Votre compte est suspendu",
+      "suspendedDescription": "Vous ne pouvez pas publier de contenu tant que votre compte est suspendu.",
+      "title": "Publier un lineup",
+      "subtitle": "Partagez une smoke, un flash, un molotov ou une HE avec la communauté. Soyez précis : d'autres joueurs vont s'entraîner avec vos instructions."
+    }
+  },
+  "boosts": {
+    "list": {
+      "metaTitle": "Boosts CS2",
+      "metaDescription": "Boosts communs, compétitifs, exotiques et secrets pour toutes les cartes de Counter-Strike 2.",
+      "title": "Boosts",
+      "subtitle": "Positions de boost à 2 ou 3 joueurs : communes, compétitives et exotiques.",
+      "upload": "Publier un boost",
+      "emptyTitle": "Aucun boost publié pour l'instant"
+    },
+    "detail": {
+      "breadcrumb": "Boosts",
+      "playersRequired": "{count} joueurs",
+      "by": "par @{username}",
+      "share": "Partager"
+    },
+    "form": {
+      "name": "Nom du boost",
+      "namePlaceholder": "Nuke Vent Boost",
+      "map": "Carte",
+      "location": "Emplacement",
+      "locationPlaceholder": "Outside Vent",
+      "playersRequired": "Joueurs nécessaires",
+      "playersOption": "{count} joueurs",
+      "category": "Catégorie",
+      "side": "Côté",
+      "difficulty": "Difficulté",
+      "description": "Description",
+      "descriptionPlaceholder": "Expliquez comment le mettre en place et à quoi il sert",
+      "image": "Image (URL, facultatif)",
+      "imagePlaceholder": "https://...",
+      "video": "Vidéo (YouTube, facultatif)",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=...",
+      "publishing": "Publication...",
+      "publish": "Publier le boost"
+    },
+    "new": {
+      "metaTitle": "Publier un boost",
+      "suspendedTitle": "Votre compte est suspendu",
+      "suspendedDescription": "Vous ne pouvez pas publier de contenu tant que votre compte est suspendu.",
+      "title": "Publier un boost",
+      "subtitle": "Partagez une position de boost avec la communauté : où se placer, combien de joueurs il faut, et à quoi ça sert."
+    }
+  },
+  "plays": {
+    "list": {
+      "metaTitle": "Plays CS2",
+      "metaDescription": "Clutches, aces, wallbangs et plays pro publiés par la communauté Counter-Strike 2.",
+      "title": "Plays",
+      "subtitle": "Clutches, aces, wallbangs, ninja defuses et plays pro.",
+      "upload": "Publier un play",
+      "emptyTitle": "Aucun play publié pour l'instant"
+    },
+    "detail": {
+      "breadcrumb": "Plays",
+      "by": "par @{username}",
+      "share": "Partager"
+    },
+    "form": {
+      "title": "Titre",
+      "titlePlaceholder": "Ace en retake du site B",
+      "map": "Carte",
+      "category": "Catégorie",
+      "description": "Description",
+      "descriptionPlaceholder": "Racontez comment le play s'est déroulé",
+      "video": "Vidéo (YouTube)",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=...",
+      "publishing": "Publication...",
+      "publish": "Publier le play"
+    },
+    "new": {
+      "metaTitle": "Publier un play",
+      "suspendedTitle": "Votre compte est suspendu",
+      "suspendedDescription": "Vous ne pouvez pas publier de contenu tant que votre compte est suspendu.",
+      "title": "Publier un play",
+      "subtitle": "Clutches, aces, wallbangs, ninja defuses — partagez la vidéo avec la communauté."
+    }
+  },
+  "guides": {
+    "list": {
+      "metaTitle": "Guides CS2",
+      "metaDescription": "Guides pour débutants et avancés : apprenez les cartes, stratégies et tactiques de Counter-Strike 2.",
+      "title": "Guides",
+      "subtitle": "De « Mirage de zéro » aux stratégies avancées de niveau compétitif.",
+      "emptyTitle": "Aucun guide publié pour l'instant"
+    }
+  },
+  "feed": {
+    "metaTitle": "Fil de la communauté",
+    "metaDescription": "Derniers lineups, plays, guides et boosts publiés par la communauté SmokeAR.",
+    "title": "Fil",
+    "subtitle": "Les dernières publications de la communauté.",
+    "emptyTitle": "Aucune activité dans le fil pour l'instant",
+    "item": {
+      "types": { "lineup": "Lineup", "play": "Play", "guide": "Guide", "boost": "Boost" },
+      "viewContent": "Voir le contenu →",
+      "comment": "Commenter",
+      "share": "Partager",
+      "shareAriaLabel": "Partager"
+    }
+  },
+  "search": {
+    "metaTitle": "Rechercher",
+    "metaDescription": "Recherchez des lineups, cartes, calls, boosts, plays et guides de Counter-Strike 2.",
+    "title": "Rechercher",
+    "placeholder": "smoke window, mirage, boost nuke...",
+    "hint": "Essayez quelque chose comme « mirage window », « flash b » ou « boost nuke ».",
+    "noResultsTitle": "Aucun résultat pour « {query} »",
+    "noResultsDescription": "Essayez une autre carte, grenade ou call.",
+    "types": { "map": "Carte", "lineup": "Lineup", "boost": "Boost", "play": "Play", "guide": "Guide" }
+  },
+  "profile": {
+    "loggedOut": {
+      "title": "Connectez-vous pour voir votre profil",
+      "description": "Créez un compte gratuit pour enregistrer des favoris, des collections et publier votre propre contenu.",
+      "login": "Se connecter",
+      "createAccount": "Créer un compte"
+    },
+    "level": "Niveau {level}",
+    "mockStats": { "lineups": "Lineups", "plays": "Plays", "guides": "Guides", "likes": "Likes", "verified": "Vérifiés" },
+    "stats": { "xp": "XP", "lineups": "Lineups", "plays": "Plays", "boosts": "Boosts", "likesReceived": "Likes reçus" },
+    "joined": "Membre depuis",
+    "achievements": "Succès",
+    "tabs": { "lineups": "Lineups ({count})", "plays": "Plays ({count})", "boosts": "Boosts ({count})" },
+    "emptyLineups": "N'a pas encore publié de lineups",
+    "emptyPlays": "N'a pas encore publié de plays",
+    "emptyBoosts": "N'a pas encore publié de boosts",
+    "noContent": "N'a pas encore publié de contenu."
+  },
+  "settings": {
+    "metaTitle": "Paramètres",
+    "title": "Paramètres",
+    "account": "Compte",
+    "deleteAccount": {
+      "title": "Supprimer le compte",
+      "description": "Ceci supprime définitivement votre compte et vos données personnelles (likes, favoris, commentaires, notes). Les lineups, boosts et plays que vous avez publiés restent sur la plateforme sans votre nom, comme tout autre contenu de la communauté. Cette action est irréversible.",
+      "confirmPrompt": "Pour confirmer, tapez votre nom d'utilisateur ({username}).",
+      "deleting": "Suppression...",
+      "submit": "Supprimer définitivement mon compte"
+    }
+  },
+  "favorites": {
+    "metaTitle": "Favoris",
+    "loggedOut": {
+      "title": "Enregistrez vos lineups, boosts et guides préférés",
+      "description": "Créez un compte gratuit pour accéder à vos favoris depuis n'importe quel appareil.",
+      "login": "Se connecter",
+      "createAccount": "Créer un compte"
+    },
+    "title": "Favoris",
+    "subtitle": "Tout ce que vous avez enregistré, au même endroit.",
+    "emptyTitle": "Vous n'avez encore rien enregistré",
+    "emptyDescription": "Quand vous trouvez un lineup, boost ou play utile, appuyez sur « Enregistrer » pour le voir ici.",
+    "sections": { "lineups": "Lineups ({count})", "boosts": "Boosts ({count})", "plays": "Plays ({count})" }
+  },
+  "collections": {
+    "metaTitle": "Collections",
+    "loggedOut": {
+      "title": "Organisez du contenu dans vos propres collections",
+      "description": "Par exemple : « Utility côté T », « Échauffement Faceit » ou « Retakes ». Nécessite un compte gratuit.",
+      "login": "Se connecter",
+      "createAccount": "Créer un compte"
+    },
+    "title": "Collections",
+    "emptyTitle": "Vous n'avez encore créé aucune collection",
+    "emptyDescription": "Regroupez du contenu dans vos propres listes, comme « Utility côté T » ou « Retakes »."
+  },
+  "admin": {
+    "metaTitle": "Admin",
+    "noPermissionTitle": "Vous n'avez pas la permission de voir cette page",
+    "noPermissionDescription": "Le panneau d'administration est réservé aux admins et modérateurs.",
+    "title": "Panneau d'administration",
+    "subtitle": "Modération de contenu, gestion des utilisateurs et statistiques de la plateforme.",
+    "tabs": {
+      "dashboard": "Tableau de bord",
+      "reports": "Signalements ({count})",
+      "verify": "Vérifier les lineups ({count})",
+      "users": "Utilisateurs"
+    },
+    "stats": {
+      "maps": "Cartes", "lineups": "Lineups", "boosts": "Boosts", "plays": "Plays", "guides": "Guides",
+      "users": "Utilisateurs", "pendingReports": "Signalements en attente", "unverifiedLineups": "Lineups non vérifiés"
+    },
+    "reports": {
+      "contentDeleted": "Contenu déjà supprimé",
+      "reportedBy": "Signalé par @{username}",
+      "emptyTitle": "Aucun signalement en attente",
+      "emptyDescription": "Les signalements de spam, droits d'auteur ou contenu incorrect apparaîtront ici."
+    },
+    "verify": {
+      "by": "par @{username}",
+      "emptyTitle": "Aucun lineup en attente de vérification",
+      "emptyDescription": "Les nouveaux lineups apparaissent ici jusqu'à ce qu'un admin ou modérateur les vérifie."
+    },
+    "users": {
+      "level": "Niveau {level}",
+      "suspended": "Suspendu",
+      "yourAccount": "Votre compte",
+      "roles": { "user": "Utilisateur", "moderator": "Modérateur", "admin": "Admin" },
+      "confirmBan": "Suspendre ce compte ?",
+      "unban": "Réactiver",
+      "ban": "Suspendre"
+    }
+  },
+  "reportActions": {
+    "confirmRemove": "Supprimer le contenu signalé ?",
+    "removeContent": "Supprimer le contenu",
+    "dismiss": "Rejeter le signalement"
+  },
+  "moderation": {
+    "confirmRemove": "Supprimer ce contenu ? Il ne sera plus visible pour personne.",
+    "label": "Modération",
+    "verify": "Vérifier",
+    "unverify": "Annuler la vérification",
+    "remove": "Supprimer"
+  },
+  "reportButton": {
+    "thanks": "Merci, nous allons examiner votre signalement.",
+    "trigger": "Signaler",
+    "formTitle": "Signaler ce contenu",
+    "detailsPlaceholder": "Détails (facultatif)",
+    "sending": "Envoi...",
+    "submit": "Envoyer le signalement",
+    "cancel": "Annuler"
+  },
+  "login": {
+    "metaTitle": "Se connecter",
+    "title": "Se connecter",
+    "subtitle": "Le contenu de SmokeAR est public — un compte n'est nécessaire que pour enregistrer, publier ou commenter.",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "createFree": "Créez-en un gratuitement"
+  },
+  "register": {
+    "metaTitle": "Créer un compte",
+    "title": "Créer un compte",
+    "subtitle": "Gratuit. Enregistrez des lineups, publiez du contenu et suivez d'autres créateurs.",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "signIn": "Connectez-vous"
+  },
+  "comments": {
+    "title": "Commentaires ({count})",
+    "placeholder": "Écrivez un commentaire...",
+    "publishing": "Publication...",
+    "submit": "Commenter",
+    "loginToComment": "Connectez-vous pour commenter",
+    "empty": "Aucun commentaire pour l'instant. Soyez le premier.",
+    "deleteAriaLabel": "Supprimer le commentaire"
+  },
+  "errors": {
+    "notConfigured": "La base de données n'est pas encore configurée.",
+    "loginRequired": "Connectez-vous.",
+    "notFoundOrRemoved": "Nous n'avons pas trouvé ce contenu, ou il a été supprimé.",
+    "likes": {
+      "loginRequired": "Connectez-vous pour aimer ce contenu.",
+      "failed": "Impossible de mettre à jour le like."
+    },
+    "favorites": {
+      "loginRequired": "Connectez-vous pour enregistrer du contenu.",
+      "failed": "Impossible de mettre à jour vos favoris."
+    },
+    "comments": {
+      "empty": "Écrivez quelque chose avant de commenter.",
+      "tooLong": "Le commentaire est trop long.",
+      "loginRequired": "Connectez-vous pour commenter.",
+      "postFailed": "Impossible de publier votre commentaire.",
+      "deleteFailed": "Impossible de supprimer le commentaire."
+    },
+    "lineups": {
+      "ratingRange": "Choisissez une note de 1 à 5 étoiles.",
+      "workedRequired": "Indiquez si le lineup a fonctionné ou non.",
+      "loginToRate": "Connectez-vous pour noter ce lineup.",
+      "ratingFailed": "Impossible d'enregistrer votre note. Réessayez.",
+      "ratingThanks": "Merci pour votre note !",
+      "nameRequired": "Le lineup a besoin d'un nom.",
+      "stepRequired": "Ajoutez au moins une étape.",
+      "stepsIncomplete": "Chaque étape a besoin d'un titre et d'une instruction.",
+      "loginToCreate": "Connectez-vous pour publier un lineup.",
+      "createFailed": "Impossible de créer le lineup. Vérifiez les données et réessayez."
+    },
+    "boosts": {
+      "nameRequired": "Le boost a besoin d'un nom.",
+      "locationRequired": "Indiquez l'emplacement du boost.",
+      "loginToCreate": "Connectez-vous pour publier un boost.",
+      "videoFailed": "Impossible d'enregistrer la vidéo. Vérifiez le lien.",
+      "createFailed": "Impossible de créer le boost. Vérifiez les données et réessayez."
+    },
+    "plays": {
+      "titleRequired": "Le play a besoin d'un titre.",
+      "videoRequired": "Les plays ont besoin d'une vidéo comme preuve.",
+      "loginToCreate": "Connectez-vous pour publier un play.",
+      "videoFailed": "Impossible d'enregistrer la vidéo. Vérifiez le lien.",
+      "createFailed": "Impossible de publier le play. Réessayez."
+    },
+    "reports": {
+      "loginToReport": "Connectez-vous pour signaler du contenu.",
+      "submitFailed": "Impossible d'envoyer votre signalement. Votre compte est peut-être suspendu.",
+      "unsupportedType": "Type de contenu non pris en charge.",
+      "removeFailed": "Impossible de supprimer le contenu signalé.",
+      "resolveFailed": "Impossible de résoudre le signalement."
+    },
+    "admin": {
+      "cannotBanSelf": "Vous ne pouvez pas suspendre votre propre compte.",
+      "banFailed": "Impossible de mettre à jour le statut du compte.",
+      "cannotChangeOwnRole": "Vous ne pouvez pas changer votre propre rôle.",
+      "roleChangeFailed": "Impossible de changer le rôle de ce compte.",
+      "verifyFailed": "Impossible de mettre à jour la vérification du lineup.",
+      "unsupportedType": "Type de contenu non pris en charge.",
+      "removeFailed": "Impossible de supprimer le contenu."
+    }
+  },
+  "privacy": {
+    "metaTitle": "Politique de confidentialité",
+    "title": "Politique de confidentialité",
+    "lastUpdated": "Dernière mise à jour : 2026.",
+    "intro": "Ce document est une première ébauche pensée pour accompagner le lancement de {siteName} sur les stores d'applications, et ne remplace pas un examen juridique. Avant de publier l'application, remplacez le contact de support ci-dessous par un vrai contact que vous pouvez surveiller.",
+    "dataTitle": "Quelles données nous collectons",
+    "dataAccount": "email (ou un email synthétique si vous vous connectez avec Steam), nom d'utilisateur, nom affiché, photo de profil et bio si vous la remplissez.",
+    "dataAccountLabel": "Compte :",
+    "dataOAuth": "si vous vous connectez avec Google ou Steam, nous recevons l'identifiant de ce compte, votre nom et votre photo de profil publique — jamais votre mot de passe.",
+    "dataOAuthLabel": "Connexion tierce :",
+    "dataContent": "lineups, boosts, plays, guides, commentaires, notes et signalements que vous publiez.",
+    "dataContentLabel": "Contenu :",
+    "dataUsage": "métriques de performance et de navigation agrégées et anonymes (Vercel Analytics / Speed Insights), sans cookies de suivi publicitaire ni vente de données à des tiers.",
+    "dataUsageLabel": "Utilisation du site :",
+    "purposeTitle": "À quoi elles servent",
+    "purposeBody": "Pour gérer votre compte et votre session (cookies d'authentification strictement nécessaires), afficher votre contenu et profil public, calculer XP/niveau/succès, modérer la plateforme (signalements, suspensions), et comprendre quelles pages fonctionnent le mieux pour prioriser les améliorations.",
+    "sharingTitle": "Avec qui nous les partageons",
+    "sharingBody": "Avec nos fournisseurs d'infrastructure — Supabase (base de données et authentification) et Vercel (hébergement et analytique) — uniquement pour faire fonctionner le service. Nous ne vendons pas de données personnelles à des tiers et ne les utilisons pas à des fins publicitaires.",
+    "rightsTitle": "Vos droits",
+    "rightsBodyBefore": "Vous pouvez modifier votre profil à tout moment, et supprimer définitivement votre compte et vos données personnelles (likes, favoris, commentaires, notes) depuis",
+    "rightsLink": "Paramètres",
+    "rightsBodyAfter": ". Le contenu que vous avez publié (lineups, boosts, plays, guides) reste sur la plateforme sans votre nom, comme tout autre contenu de la communauté.",
+    "contactTitle": "Contact",
+    "contactBody": "Des questions sur cette politique ou vos données : remplacez ceci par un vrai email de support avant de publier sur les stores d'applications."
+  },
+  "terms": {
+    "metaTitle": "Conditions d'utilisation",
+    "title": "Conditions d'utilisation",
+    "lastUpdated": "Dernière mise à jour : 2026.",
+    "intro": "Ce document est une première ébauche pensée pour accompagner le lancement de {siteName} sur les stores d'applications, et ne remplace pas un examen juridique.",
+    "serviceTitle": "Le service",
+    "serviceBody": "{siteName} est un hub d'apprentissage de Counter-Strike 2 fait par la communauté. Usage public sans compte obligatoire ; le compte est optionnel pour publier, noter, commenter et enregistrer du contenu.",
+    "contentTitle": "Contenu des utilisateurs",
+    "contentBody": "Vous êtes responsable du contenu que vous publiez (lineups, boosts, plays, guides, commentaires). Ne publiez pas de contenu offensant, protégé par des droits d'auteur, du spam ou de fausses informations — un modérateur ou admin peut le supprimer ou suspendre votre compte si vous le faites. Tout utilisateur peut signaler un contenu qui enfreint cette règle depuis sa page de détail.",
+    "accountsTitle": "Comptes",
+    "accountsBodyBefore": "Vous êtes responsable de la sécurité de votre session. Vous pouvez supprimer votre compte à tout moment depuis Paramètres ; consultez la",
+    "accountsLink": "Politique de confidentialité",
+    "accountsBodyAfter": "pour le détail de ce qu'il advient de vos données et de votre contenu.",
+    "availabilityTitle": "Disponibilité",
+    "availabilityBody": "Le service est fourni « tel quel », sans garantie de disponibilité continue. Le contenu est généré par la communauté et peut contenir des erreurs — testez tout lineup ou stratégie à votre propre jugement."
+  },
+  "notFound": {
+    "title": "Nous n'avons pas trouvé cette page",
+    "description": "Le contenu que vous cherchez n'existe pas ou a été supprimé.",
+    "cta": "Retour à l'accueil"
+  },
+  "offline": {
+    "metaTitle": "Hors ligne",
+    "title": "Vous êtes hors ligne",
+    "description": "Impossible de charger cette page. Vérifiez votre connexion internet et réessayez."
+  },
+  "languageSwitcher": {
+    "label": "Langue",
+    "es": "Español",
+    "en": "English",
+    "fr": "Français",
+    "pt": "Português"
+  }
+}

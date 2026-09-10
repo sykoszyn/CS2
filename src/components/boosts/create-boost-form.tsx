@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useTransition, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { createBoostAction, type CreateBoostInput } from "@/lib/boosts/actions";
 import type { GameMap } from "@/types/content";
-import { boostCategoryOptions } from "@/lib/labels/boost-labels";
-import { sideOptions } from "@/lib/labels/lineup-labels";
+import { boostCategoryValues } from "@/lib/labels/boost-labels";
+import { sideValues } from "@/lib/labels/lineup-labels";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
@@ -16,12 +17,15 @@ const labelClass = "mb-1.5 block text-xs font-medium text-foreground-muted";
 export function CreateBoostForm({ maps }: { maps: GameMap[] }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("boosts.form");
+  const tCategory = useTranslations("labels.boostCategory");
+  const tSide = useTranslations("labels.side");
 
   const [name, setName] = useState("");
   const [mapId, setMapId] = useState(maps[0]?.id ?? "");
   const [location, setLocation] = useState("");
   const [playersRequired, setPlayersRequired] = useState<2 | 3>(2);
-  const [category, setCategory] = useState(boostCategoryOptions[0].value);
+  const [category, setCategory] = useState(boostCategoryValues[0]);
   const [side, setSide] = useState<"t" | "ct" | "both">("t");
   const [difficulty, setDifficulty] = useState(2);
   const [description, setDescription] = useState("");
@@ -56,12 +60,12 @@ export function CreateBoostForm({ maps }: { maps: GameMap[] }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <label className={labelClass}>Nombre del boost</label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nuke Vent Boost" required />
+          <label className={labelClass}>{t("name")}</label>
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("namePlaceholder")} required />
         </div>
 
         <div>
-          <label className={labelClass}>Mapa</label>
+          <label className={labelClass}>{t("map")}</label>
           <select className={selectClass} value={mapId} onChange={(e) => setMapId(e.target.value)} required>
             {maps.map((m) => (
               <option key={m.id} value={m.id}>
@@ -72,12 +76,12 @@ export function CreateBoostForm({ maps }: { maps: GameMap[] }) {
         </div>
 
         <div>
-          <label className={labelClass}>Ubicación</label>
-          <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Outside Vent" required />
+          <label className={labelClass}>{t("location")}</label>
+          <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder={t("locationPlaceholder")} required />
         </div>
 
         <div>
-          <label className={labelClass}>Jugadores necesarios</label>
+          <label className={labelClass}>{t("playersRequired")}</label>
           <div className="flex gap-2">
             {[2, 3].map((n) => (
               <button
@@ -91,40 +95,40 @@ export function CreateBoostForm({ maps }: { maps: GameMap[] }) {
                     : "border-border text-foreground-muted hover:text-foreground",
                 )}
               >
-                {n} jugadores
+                {t("playersOption", { count: n })}
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <label className={labelClass}>Categoría</label>
+          <label className={labelClass}>{t("category")}</label>
           <select
             className={selectClass}
             value={category}
             onChange={(e) => setCategory(e.target.value as typeof category)}
           >
-            {boostCategoryOptions.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
+            {boostCategoryValues.map((c) => (
+              <option key={c} value={c}>
+                {tCategory(c)}
               </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className={labelClass}>Lado</label>
+          <label className={labelClass}>{t("side")}</label>
           <select className={selectClass} value={side} onChange={(e) => setSide(e.target.value as typeof side)}>
-            {sideOptions.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
+            {sideValues.map((s) => (
+              <option key={s} value={s}>
+                {tSide(s)}
               </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className={labelClass}>Dificultad</label>
+          <label className={labelClass}>{t("difficulty")}</label>
           <div className="flex gap-1.5">
             {[1, 2, 3, 4, 5].map((n) => (
               <button
@@ -145,25 +149,25 @@ export function CreateBoostForm({ maps }: { maps: GameMap[] }) {
         </div>
 
         <div className="sm:col-span-2">
-          <label className={labelClass}>Descripción</label>
+          <label className={labelClass}>{t("description")}</label>
           <Input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Explicá cómo armarlo y para qué sirve"
+            placeholder={t("descriptionPlaceholder")}
           />
         </div>
 
         <div>
-          <label className={labelClass}>Imagen (URL, opcional)</label>
-          <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." />
+          <label className={labelClass}>{t("image")}</label>
+          <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder={t("imagePlaceholder")} />
         </div>
 
         <div>
-          <label className={labelClass}>Video (YouTube, opcional)</label>
+          <label className={labelClass}>{t("video")}</label>
           <Input
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
-            placeholder="https://www.youtube.com/watch?v=..."
+            placeholder={t("videoPlaceholder")}
           />
         </div>
       </div>
@@ -171,7 +175,7 @@ export function CreateBoostForm({ maps }: { maps: GameMap[] }) {
       {error && <p className="rounded-md border border-danger/30 bg-danger/10 p-3 text-sm text-danger">{error}</p>}
 
       <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-        {pending ? "Publicando..." : "Publicar boost"}
+        {pending ? t("publishing") : t("publish")}
       </Button>
     </form>
   );

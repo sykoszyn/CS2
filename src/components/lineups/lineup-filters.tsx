@@ -1,14 +1,19 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import type { GameMap } from "@/types/content";
-import { grenadeTypeOptions, sideOptions } from "@/lib/labels/lineup-labels";
+import { sideValues, grenadeTypeValues } from "@/lib/labels/lineup-labels";
 
-const filterableSides = sideOptions.filter((s) => s.value !== "both");
+const filterableSides = sideValues.filter((s) => s !== "both");
 
 export function LineupFilters({ maps }: { maps: GameMap[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("lineups.filters");
+  const tSide = useTranslations("labels.side");
+  const tGrenade = useTranslations("labels.grenadeType");
 
   function setParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -27,7 +32,7 @@ export function LineupFilters({ maps }: { maps: GameMap[] }) {
         value={searchParams.get("map") ?? ""}
         onChange={(e) => setParam("map", e.target.value)}
       >
-        <option value="">Todos los mapas</option>
+        <option value="">{t("allMaps")}</option>
         {maps.map((m) => (
           <option key={m.slug} value={m.slug}>
             {m.name}
@@ -40,10 +45,10 @@ export function LineupFilters({ maps }: { maps: GameMap[] }) {
         value={searchParams.get("side") ?? ""}
         onChange={(e) => setParam("side", e.target.value)}
       >
-        <option value="">Ambos lados</option>
+        <option value="">{t("bothSides")}</option>
         {filterableSides.map((s) => (
-          <option key={s.value} value={s.value}>
-            {s.label}
+          <option key={s} value={s}>
+            {tSide(s)}
           </option>
         ))}
       </select>
@@ -53,10 +58,10 @@ export function LineupFilters({ maps }: { maps: GameMap[] }) {
         value={searchParams.get("grenade") ?? ""}
         onChange={(e) => setParam("grenade", e.target.value)}
       >
-        <option value="">Toda granada</option>
-        {grenadeTypeOptions.map((g) => (
-          <option key={g.value} value={g.value}>
-            {g.label}
+        <option value="">{t("anyGrenade")}</option>
+        {grenadeTypeValues.map((g) => (
+          <option key={g} value={g}>
+            {tGrenade(g)}
           </option>
         ))}
       </select>

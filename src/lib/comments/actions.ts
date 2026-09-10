@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import type { ContentTypeEnum } from "@/types/database";
@@ -14,16 +15,17 @@ export async function postCommentAction(
   body: string,
   pathToRevalidate: string,
 ): Promise<ToggleResult> {
+  const t = await getTranslations("errors");
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: t("notConfigured") };
   }
 
   const trimmed = body.trim();
   if (!trimmed) {
-    return { status: "error", message: "Escribí algo antes de comentar." };
+    return { status: "error", message: t("comments.empty") };
   }
   if (trimmed.length > MAX_COMMENT_LENGTH) {
-    return { status: "error", message: "El comentario es demasiado largo." };
+    return { status: "error", message: t("comments.tooLong") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -32,7 +34,7 @@ export async function postCommentAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión para comentar." };
+    return { status: "error", message: t("comments.loginRequired") };
   }
 
   const { error } = await supabase
@@ -40,7 +42,7 @@ export async function postCommentAction(
     .insert({ user_id: user.id, content_type: contentType, content_id: contentId, body: trimmed });
 
   if (error) {
-    return { status: "error", message: "No pudimos publicar tu comentario." };
+    return { status: "error", message: t("comments.postFailed") };
   }
 
   revalidatePath(pathToRevalidate);
@@ -48,8 +50,9 @@ export async function postCommentAction(
 }
 
 export async function deleteCommentAction(commentId: string, pathToRevalidate: string): Promise<ToggleResult> {
+  const t = await getTranslations("errors");
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: t("notConfigured") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -58,7 +61,7 @@ export async function deleteCommentAction(commentId: string, pathToRevalidate: s
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión." };
+    return { status: "error", message: t("loginRequired") };
   }
 
   const { error } = await supabase
@@ -68,7 +71,7 @@ export async function deleteCommentAction(commentId: string, pathToRevalidate: s
     .eq("user_id", user.id);
 
   if (error) {
-    return { status: "error", message: "No pudimos eliminar el comentario." };
+    return { status: "error", message: t("comments.deleteFailed") };
   }
 
   revalidatePath(pathToRevalidate);

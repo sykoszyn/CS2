@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Check, X } from "lucide-react";
 import { resolveReportAction } from "@/lib/reports/actions";
 import { Button } from "@/components/ui/button";
@@ -21,9 +22,10 @@ export function ReportActions({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  const t = useTranslations("reportActions");
 
   function resolve(action: "approve" | "reject") {
-    if (action === "approve" && !confirm("¿Eliminar el contenido reportado?")) return;
+    if (action === "approve" && !confirm(t("confirmRemove"))) return;
     setError(null);
     startTransition(async () => {
       const result = await resolveReportAction(reportId, action, contentType, contentId);
@@ -36,10 +38,10 @@ export function ReportActions({
     <div className="flex flex-col items-end gap-1">
       <div className="flex gap-2">
         <Button size="sm" variant="danger" onClick={() => resolve("approve")} disabled={pending || !hasTarget}>
-          <Check size={14} /> Eliminar contenido
+          <Check size={14} /> {t("removeContent")}
         </Button>
         <Button size="sm" variant="secondary" onClick={() => resolve("reject")} disabled={pending}>
-          <X size={14} /> Descartar reporte
+          <X size={14} /> {t("dismiss")}
         </Button>
       </div>
       {error && <p className="text-xs text-danger">{error}</p>}

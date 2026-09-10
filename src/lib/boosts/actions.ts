@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { slugify } from "@/lib/utils/slugify";
@@ -24,14 +25,19 @@ export interface CreateBoostInput {
 export async function createBoostAction(
   input: CreateBoostInput,
 ): Promise<{ status: "error"; message: string }> {
+  const [t, tCommon, locale] = await Promise.all([
+    getTranslations("errors.boosts"),
+    getTranslations("errors"),
+    getLocale(),
+  ]);
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
   if (!input.name.trim()) {
-    return { status: "error", message: "El boost necesita un nombre." };
+    return { status: "error", message: t("nameRequired") };
   }
   if (!input.location.trim()) {
-    return { status: "error", message: "Indicá la ubicación del boost." };
+    return { status: "error", message: t("locationRequired") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -40,7 +46,7 @@ export async function createBoostAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión para subir un boost." };
+    return { status: "error", message: t("loginToCreate") };
   }
 
   let videoId: string | null = null;
@@ -52,7 +58,7 @@ export async function createBoostAction(
       .single();
 
     if (videoError || !video) {
-      return { status: "error", message: "No pudimos guardar el video. Revisá el link." };
+      return { status: "error", message: t("videoFailed") };
     }
     videoId = video.id;
   }
@@ -75,9 +81,10 @@ export async function createBoostAction(
   });
 
   if (error) {
-    return { status: "error", message: "No pudimos crear el boost. Revisá los datos e intentá de nuevo." };
+    return { status: "error", message: t("createFailed") };
   }
 
   revalidatePath("/boosts");
-  redirect(`/boosts/${slug}`);
+  redirect({ href: `/boosts/${slug}`, locale });
+  return undefined as never;
 }

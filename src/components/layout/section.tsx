@@ -1,6 +1,7 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 
 export function Section({
   title,
@@ -13,6 +14,8 @@ export function Section({
   href?: string;
   children: ReactNode;
 }) {
+  const t = useTranslations("section");
+
   return (
     <section className="px-4 py-8 lg:px-6">
       <div className="mb-4 flex items-end justify-between">
@@ -22,7 +25,7 @@ export function Section({
         </div>
         {href && (
           <Link href={href} className="flex items-center gap-1 text-sm font-medium text-brand hover:underline">
-            Ver todo <ChevronRight size={14} />
+            {t("viewAll")} <ChevronRight size={14} />
           </Link>
         )}
       </div>

@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 import { Star } from "lucide-react";
 import { submitRatingAction } from "@/lib/lineups/actions";
 import { initialRatingActionState } from "@/lib/lineups/rating-action-state";
@@ -22,6 +23,7 @@ export function RatingForm({
   const [state, formAction] = useActionState(submitRatingAction, initialRatingActionState);
   const [stars, setStars] = useState(initialStars ?? 0);
   const [worked, setWorked] = useState<boolean | null>(initialWorked ?? null);
+  const t = useTranslations("lineups.ratingForm");
 
   return (
     <form action={formAction} className="rounded-lg border border-border bg-background-card p-4">
@@ -30,14 +32,14 @@ export function RatingForm({
       <input type="hidden" name="stars" value={stars} />
       <input type="hidden" name="worked" value={worked === null ? "" : String(worked)} />
 
-      <p className="font-display text-sm font-semibold">Calificá este lineup</p>
+      <p className="font-display text-sm font-semibold">{t("title")}</p>
 
       <div className="mt-3 flex items-center gap-4">
         <div>
-          <p className="mb-1 text-xs text-foreground-subtle">Estrellas</p>
+          <p className="mb-1 text-xs text-foreground-subtle">{t("stars")}</p>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((n) => (
-              <button key={n} type="button" onClick={() => setStars(n)} aria-label={`${n} estrellas`}>
+              <button key={n} type="button" onClick={() => setStars(n)} aria-label={t("starsAriaLabel", { count: n })}>
                 <Star
                   size={20}
                   className={n <= stars ? "fill-warning text-warning" : "fill-transparent text-border-strong"}
@@ -48,7 +50,7 @@ export function RatingForm({
         </div>
 
         <div>
-          <p className="mb-1 text-xs text-foreground-subtle">¿Funcionó?</p>
+          <p className="mb-1 text-xs text-foreground-subtle">{t("worked")}</p>
           <div className="flex gap-1.5">
             <button
               type="button"
@@ -60,7 +62,7 @@ export function RatingForm({
                   : "border-border text-foreground-muted",
               )}
             >
-              Sí
+              {t("yes")}
             </button>
             <button
               type="button"
@@ -70,7 +72,7 @@ export function RatingForm({
                 worked === false ? "border-danger bg-danger/10 text-danger" : "border-border text-foreground-muted",
               )}
             >
-              No
+              {t("no")}
             </button>
           </div>
         </div>
@@ -91,10 +93,11 @@ export function RatingForm({
 
 function SubmitButton({ disabled }: { disabled: boolean }) {
   const { pending } = useFormStatus();
+  const t = useTranslations("lineups.ratingForm");
 
   return (
     <Button type="submit" size="sm" disabled={disabled || pending}>
-      {pending ? "Guardando..." : "Calificar"}
+      {pending ? t("saving") : t("submit")}
     </Button>
   );
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import type { ContentTypeEnum } from "@/types/database";
@@ -13,8 +14,9 @@ export async function toggleLikeAction(
   currentlyLiked: boolean,
   pathToRevalidate: string,
 ): Promise<ToggleResult> {
+  const t = await getTranslations("errors");
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: t("notConfigured") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -23,7 +25,7 @@ export async function toggleLikeAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión para dar like." };
+    return { status: "error", message: t("likes.loginRequired") };
   }
 
   const { error } = currentlyLiked
@@ -36,7 +38,7 @@ export async function toggleLikeAction(
     : await supabase.from("likes").insert({ user_id: user.id, content_type: contentType, content_id: contentId });
 
   if (error) {
-    return { status: "error", message: "No pudimos actualizar el like." };
+    return { status: "error", message: t("likes.failed") };
   }
 
   revalidatePath(pathToRevalidate);

@@ -362,8 +362,8 @@ export interface Database {
         Returns: {
           content_type: string;
           title: string;
-          subtitle: string;
           slug: string;
+          map_slug: string | null;
         }[];
       };
     };

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils/cn";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60",
   {
     variants: {
@@ -33,12 +33,21 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   href?: string;
+  /** Routes that must never get a locale prefix (e.g. /auth/steam) — renders a plain <a> instead of the locale-aware Link. */
+  unlocalized?: boolean;
 }
 
-export function Button({ className, variant, size, href, ...props }: ButtonProps) {
+export function Button({ className, variant, size, href, unlocalized, ...props }: ButtonProps) {
   const classes = cn(buttonVariants({ variant, size }), className);
 
   if (href) {
+    if (unlocalized) {
+      return (
+        <a href={href} className={classes}>
+          {props.children as React.ReactNode}
+        </a>
+      );
+    }
     return (
       <Link href={href} className={classes}>
         {props.children as React.ReactNode}

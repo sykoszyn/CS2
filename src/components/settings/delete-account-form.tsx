@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { deleteAccountAction } from "@/lib/auth/actions";
 import { Button } from "@/components/ui/button";
 
@@ -8,6 +9,7 @@ export function DeleteAccountForm({ username }: { username: string }) {
   const [confirmText, setConfirmText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const t = useTranslations("settings.deleteAccount");
 
   const canDelete = confirmText.trim().toLowerCase() === username.toLowerCase();
 
@@ -21,9 +23,7 @@ export function DeleteAccountForm({ username }: { username: string }) {
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-foreground-muted">
-        Para confirmar, escribí tu nombre de usuario (<span className="font-semibold">{username}</span>).
-      </p>
+      <p className="text-sm text-foreground-muted">{t("confirmPrompt", { username })}</p>
       <input
         value={confirmText}
         onChange={(e) => setConfirmText(e.target.value)}
@@ -32,7 +32,7 @@ export function DeleteAccountForm({ username }: { username: string }) {
       />
       {error && <p className="text-xs text-danger">{error}</p>}
       <Button variant="danger" size="sm" onClick={handleDelete} disabled={!canDelete || pending}>
-        {pending ? "Eliminando..." : "Eliminar mi cuenta permanentemente"}
+        {pending ? t("deleting") : t("submit")}
       </Button>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +15,7 @@ import { initialAuthActionState } from "@/lib/auth/auth-action-state";
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const action = mode === "login" ? signInWithPasswordAction : signUpWithPasswordAction;
   const [state, formAction] = useActionState(action, initialAuthActionState);
+  const t = useTranslations("auth");
 
   return (
     <div className="mt-6 space-y-3">
@@ -21,20 +23,20 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         {mode === "register" && (
           <Input
             name="username"
-            placeholder="Nombre de usuario"
+            placeholder={t("usernamePlaceholder")}
             required
             minLength={3}
             maxLength={20}
             pattern="[a-z0-9_]+"
-            title="Solo minúsculas, números y guión bajo"
+            title={t("usernameTitle")}
             autoComplete="username"
           />
         )}
-        <Input type="email" name="email" placeholder="Email" required autoComplete="email" />
+        <Input type="email" name="email" placeholder={t("emailPlaceholder")} required autoComplete="email" />
         <Input
           type="password"
           name="password"
-          placeholder="Contraseña"
+          placeholder={t("passwordPlaceholder")}
           required
           minLength={6}
           autoComplete={mode === "login" ? "current-password" : "new-password"}
@@ -56,17 +58,17 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       )}
 
       <div className="flex items-center gap-2 py-1 text-xs text-foreground-subtle">
-        <span className="h-px flex-1 bg-border" /> o continuar con <span className="h-px flex-1 bg-border" />
+        <span className="h-px flex-1 bg-border" /> {t("orContinueWith")} <span className="h-px flex-1 bg-border" />
       </div>
 
       <div className="grid grid-cols-2 gap-2">
         <form action={signInWithGoogleAction}>
           <Button type="submit" variant="outline" className="w-full">
-            Google
+            {t("google")}
           </Button>
         </form>
-        <Button href="/auth/steam" variant="outline" className="w-full">
-          Steam
+        <Button href="/auth/steam" unlocalized variant="outline" className="w-full">
+          {t("steam")}
         </Button>
       </div>
     </div>
@@ -75,10 +77,11 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
 
 function SubmitButton({ mode }: { mode: "login" | "register" }) {
   const { pending } = useFormStatus();
+  const t = useTranslations("auth");
 
   return (
     <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? "Un momento..." : mode === "login" ? "Ingresar" : "Crear cuenta"}
+      {pending ? t("pending") : mode === "login" ? t("login") : t("register")}
     </Button>
   );
 }

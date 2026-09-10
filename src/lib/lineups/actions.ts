@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { slugify } from "@/lib/utils/slugify";
@@ -19,8 +20,10 @@ export async function submitRatingAction(
   _prev: RatingActionState,
   formData: FormData,
 ): Promise<RatingActionState> {
+  const t = await getTranslations("errors.lineups");
+  const tCommon = await getTranslations("errors");
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
 
   const lineupId = String(formData.get("lineupId") ?? "");
@@ -29,10 +32,10 @@ export async function submitRatingAction(
   const workedValue = formData.get("worked");
 
   if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
-    return { status: "error", message: "Elegí una calificación de 1 a 5 estrellas." };
+    return { status: "error", message: t("ratingRange") };
   }
   if (workedValue !== "true" && workedValue !== "false") {
-    return { status: "error", message: "Indicá si el lineup funcionó o no." };
+    return { status: "error", message: t("workedRequired") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -41,7 +44,7 @@ export async function submitRatingAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión para calificar este lineup." };
+    return { status: "error", message: t("loginToRate") };
   }
 
   const { error } = await supabase
@@ -52,11 +55,11 @@ export async function submitRatingAction(
     );
 
   if (error) {
-    return { status: "error", message: "No pudimos guardar tu calificación. Intentá de nuevo." };
+    return { status: "error", message: t("ratingFailed") };
   }
 
   revalidatePath(`/lineups/${lineupSlug}`);
-  return { status: "success", message: "¡Gracias por tu calificación!" };
+  return { status: "success", message: t("ratingThanks") };
 }
 
 export interface CreateLineupStepInput {
@@ -86,19 +89,24 @@ export interface CreateLineupInput {
 export async function createLineupAction(
   input: CreateLineupInput,
 ): Promise<{ status: "error"; message: string }> {
+  const [t, tCommon, locale] = await Promise.all([
+    getTranslations("errors.lineups"),
+    getTranslations("errors"),
+    getLocale(),
+  ]);
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
 
   if (!input.name.trim()) {
-    return { status: "error", message: "El lineup necesita un nombre." };
+    return { status: "error", message: t("nameRequired") };
   }
   if (input.steps.length === 0) {
-    return { status: "error", message: "Agregá al menos un paso." };
+    return { status: "error", message: t("stepRequired") };
   }
   for (const step of input.steps) {
     if (!step.title.trim() || !step.instruction.trim()) {
-      return { status: "error", message: "Todos los pasos necesitan título e instrucción." };
+      return { status: "error", message: t("stepsIncomplete") };
     }
   }
 
@@ -108,7 +116,7 @@ export async function createLineupAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión para subir un lineup." };
+    return { status: "error", message: t("loginToCreate") };
   }
 
   const slug = `${slugify(input.name)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -138,10 +146,10 @@ export async function createLineupAction(
   const { data: newLineupId, error } = await supabase.rpc("create_lineup_with_steps", { payload });
 
   if (error || !newLineupId) {
-    return { status: "error", message: "No pudimos crear el lineup. Revisá los datos e intentá de nuevo." };
+    return { status: "error", message: t("createFailed") };
   }
 
-  const tagSlugs = [...new Set(input.tags.map((t) => slugify(t)).filter(Boolean))];
+  const tagSlugs = [...new Set(input.tags.map((tag) => slugify(tag)).filter(Boolean))];
   if (tagSlugs.length > 0) {
     await supabase
       .from("tags")
@@ -164,5 +172,6 @@ export async function createLineupAction(
   }
 
   revalidatePath("/lineups");
-  redirect(`/lineups/${slug}`);
+  redirect({ href: `/lineups/${slug}`, locale });
+  return undefined as never;
 }

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ShieldCheck, Trash2 } from "lucide-react";
 import { removeContentAction, toggleVerifiedAction } from "@/lib/admin/actions";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ export function ModerationControls({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  const t = useTranslations("moderation");
 
   function handleVerifyToggle() {
     setError(null);
@@ -34,7 +36,7 @@ export function ModerationControls({
   }
 
   function handleRemove() {
-    if (!confirm("¿Eliminar este contenido? Va a dejar de ser visible para todos.")) return;
+    if (!confirm(t("confirmRemove"))) return;
     setError(null);
     startTransition(async () => {
       const result = await removeContentAction(contentType, contentId, pathToRevalidate);
@@ -45,14 +47,14 @@ export function ModerationControls({
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-md border border-warning/30 bg-warning/5 px-3 py-2">
-      <span className="text-xs font-semibold uppercase tracking-wide text-foreground-subtle">Moderación</span>
+      <span className="text-xs font-semibold uppercase tracking-wide text-foreground-subtle">{t("label")}</span>
       {verified !== undefined && (
         <Button size="sm" variant="secondary" onClick={handleVerifyToggle} disabled={pending}>
-          <ShieldCheck size={14} /> {verified ? "Quitar verificación" : "Verificar"}
+          <ShieldCheck size={14} /> {verified ? t("unverify") : t("verify")}
         </Button>
       )}
       <Button size="sm" variant="danger" onClick={handleRemove} disabled={pending}>
-        <Trash2 size={14} /> Eliminar
+        <Trash2 size={14} /> {t("remove")}
       </Button>
       {error && <p className="text-xs text-danger">{error}</p>}
     </div>

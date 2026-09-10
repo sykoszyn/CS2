@@ -1,22 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { Search, X } from "lucide-react";
 import { quickSearchAction } from "@/lib/search/actions";
 import type { SearchResult } from "@/services/search.service";
 import { cn } from "@/lib/utils/cn";
 
-const typeLabel: Record<SearchResult["type"], string> = {
-  map: "Mapa",
-  lineup: "Lineup",
-  boost: "Boost",
-  play: "Jugada",
-  guide: "Guía",
-};
-
 export function QuickSearchTrigger() {
   const [open, setOpen] = useState(false);
+  const t = useTranslations("quickSearch");
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -37,9 +31,9 @@ export function QuickSearchTrigger() {
         className="flex h-10 w-full max-w-sm items-center gap-2 rounded-md border border-border bg-background-elevated px-3 text-sm text-foreground-subtle transition-colors hover:border-border-strong"
       >
         <Search size={16} />
-        <span className="flex-1 text-left">Buscar lineups, mapas, calls...</span>
+        <span className="flex-1 text-left">{t("trigger")}</span>
         <kbd className="hidden rounded border border-border-strong px-1.5 py-0.5 text-[10px] sm:inline">
-          Ctrl K
+          {t("shortcut")}
         </kbd>
       </button>
       {open && <QuickSearchModal onClose={() => setOpen(false)} />}
@@ -53,6 +47,7 @@ function QuickSearchModal({ onClose }: { onClose: () => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const requestId = useRef(0);
   const router = useRouter();
+  const t = useTranslations("quickSearch");
   const results = query.trim() ? fetchedResults : [];
 
   useEffect(() => {
@@ -91,16 +86,16 @@ function QuickSearchModal({ onClose }: { onClose: () => void }) {
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="smoke window, mirage, boost nuke..."
+            placeholder={t("placeholder")}
             className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-foreground-subtle"
           />
-          <button onClick={onClose} aria-label="Cerrar búsqueda" className="text-foreground-subtle hover:text-foreground">
+          <button onClick={onClose} aria-label={t("closeAriaLabel")} className="text-foreground-subtle hover:text-foreground">
             <X size={16} />
           </button>
         </div>
         <div className="max-h-80 overflow-y-auto scrollbar-thin">
           {query && results.length === 0 && (
-            <p className="p-4 text-sm text-foreground-muted">Sin resultados para &quot;{query}&quot;.</p>
+            <p className="p-4 text-sm text-foreground-muted">{t("noResults", { query })}</p>
           )}
           {results.map((r) => (
             <button
@@ -111,14 +106,10 @@ function QuickSearchModal({ onClose }: { onClose: () => void }) {
               )}
             >
               <span>{r.title}</span>
-              <span className="text-xs text-foreground-subtle">{typeLabel[r.type]}</span>
+              <span className="text-xs text-foreground-subtle">{t(`types.${r.type}`)}</span>
             </button>
           ))}
-          {!query && (
-            <p className="p-4 text-xs text-foreground-subtle">
-              Probá &quot;mirage window&quot;, &quot;boost nuke&quot; o &quot;molotov banana&quot;.
-            </p>
-          )}
+          {!query && <p className="p-4 text-xs text-foreground-subtle">{t("hint")}</p>}
         </div>
       </div>
     </div>

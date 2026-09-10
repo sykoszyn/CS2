@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { ChevronDown, LogOut, Settings } from "lucide-react";
 import { signOutAction } from "@/lib/auth/actions";
 import type { ProfileRow } from "@/types/database";
 
 export function UserMenu({ profile }: { profile: ProfileRow }) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations("userMenu");
   const isStaff = profile.role === "admin" || profile.role === "moderator";
 
   return (
@@ -32,17 +34,17 @@ export function UserMenu({ profile }: { profile: ProfileRow }) {
             href={`/profile/${profile.username}`}
             className="block px-3 py-2 text-sm hover:bg-background-card"
           >
-            Mi perfil
+            {t("myProfile")}
           </Link>
           <Link href="/favorites" className="block px-3 py-2 text-sm hover:bg-background-card">
-            Favoritos
+            {t("favorites")}
           </Link>
           <Link href="/collections" className="block px-3 py-2 text-sm hover:bg-background-card">
-            Colecciones
+            {t("collections")}
           </Link>
           {isStaff && (
             <Link href="/admin" className="block px-3 py-2 text-sm hover:bg-background-card">
-              Admin
+              {t("admin")}
             </Link>
           )}
           <Link
@@ -50,7 +52,7 @@ export function UserMenu({ profile }: { profile: ProfileRow }) {
             className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-background-card"
           >
             <Settings size={14} />
-            Configuración
+            {t("settings")}
           </Link>
           <form action={signOutAction} className="border-t border-border">
             <button
@@ -58,7 +60,7 @@ export function UserMenu({ profile }: { profile: ProfileRow }) {
               className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-danger hover:bg-background-card"
             >
               <LogOut size={14} />
-              Cerrar sesión
+              {t("signOut")}
             </button>
           </form>
         </div>

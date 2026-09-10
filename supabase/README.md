@@ -99,6 +99,21 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
    son redundantes con RLS a propósito (mismo criterio de "defensa en
    profundidad" que los filtros que se agregaron en la capa de servicios
    cuando los admins pasaron a poder ver contenido eliminado).
+8. `0008_lineups_content.sql` — 24 lineups reales más (3 por mapa, en los 8
+   mapas), a diferencia del seed original marcados `is_demo = false,
+   verified = true`: son posiciones reales que cualquiera puede usar, no
+   datos de relleno.
+9. `0009_search_i18n.sql` — al agregar inglés/francés/portugués (ver
+   `README.md` de la raíz), quedó claro que `search_content()` armaba texto
+   en español directo en SQL (`'Lineup · ' || mp.slug` como "subtítulo") —
+   imposible de traducir desde la UI. Esta migración hace `drop function` +
+   recrea `search_content` con un shape de retorno distinto
+   (`content_type, title, slug, map_slug` en vez de `..., subtitle, slug`):
+   ahora devuelve el dato crudo (`map_slug`) y es la UI la que arma el texto
+   final en el idioma del visitante (`t(type)` + `mapSlug`, ver
+   `quick-search.tsx`/`search/page.tsx`). `drop function` es necesario
+   porque Postgres no permite `create or replace function` cuando cambia el
+   tipo de retorno.
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import type { GameMap } from "@/types/content";
 import { Card } from "@/components/ui/card";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";

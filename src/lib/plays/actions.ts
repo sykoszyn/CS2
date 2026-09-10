@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { slugify } from "@/lib/utils/slugify";
@@ -19,14 +20,19 @@ export interface CreatePlayInput {
 export async function createPlayAction(
   input: CreatePlayInput,
 ): Promise<{ status: "error"; message: string }> {
+  const [t, tCommon, locale] = await Promise.all([
+    getTranslations("errors.plays"),
+    getTranslations("errors"),
+    getLocale(),
+  ]);
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
   if (!input.title.trim()) {
-    return { status: "error", message: "La jugada necesita un título." };
+    return { status: "error", message: t("titleRequired") };
   }
   if (!input.videoUrl.trim()) {
-    return { status: "error", message: "Las jugadas necesitan un video como evidencia." };
+    return { status: "error", message: t("videoRequired") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -35,7 +41,7 @@ export async function createPlayAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión para subir una jugada." };
+    return { status: "error", message: t("loginToCreate") };
   }
 
   const { data: video, error: videoError } = await supabase
@@ -45,7 +51,7 @@ export async function createPlayAction(
     .single();
 
   if (videoError || !video) {
-    return { status: "error", message: "No pudimos guardar el video. Revisá el link." };
+    return { status: "error", message: t("videoFailed") };
   }
 
   const slug = `${slugify(input.title)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -61,9 +67,10 @@ export async function createPlayAction(
   });
 
   if (error) {
-    return { status: "error", message: "No pudimos publicar la jugada. Intentá de nuevo." };
+    return { status: "error", message: t("createFailed") };
   }
 
   revalidatePath("/plays");
-  redirect(`/plays/${slug}`);
+  redirect({ href: `/plays/${slug}`, locale });
+  return undefined as never;
 }

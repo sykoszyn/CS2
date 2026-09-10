@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import type { ContentTypeEnum, UserRole } from "@/types/database";
@@ -13,8 +14,9 @@ const MODERATABLE_TABLE: Partial<Record<ContentTypeEnum, "lineups" | "boosts" | 
 };
 
 export async function toggleBanAction(userId: string, currentlyBanned: boolean): Promise<ToggleResult> {
+  const [t, tCommon] = await Promise.all([getTranslations("errors.admin"), getTranslations("errors")]);
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -23,10 +25,10 @@ export async function toggleBanAction(userId: string, currentlyBanned: boolean):
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión." };
+    return { status: "error", message: tCommon("loginRequired") };
   }
   if (userId === user.id) {
-    return { status: "error", message: "No podés banear tu propia cuenta." };
+    return { status: "error", message: t("cannotBanSelf") };
   }
 
   const { error } = await supabase
@@ -35,7 +37,7 @@ export async function toggleBanAction(userId: string, currentlyBanned: boolean):
     .eq("id", userId);
 
   if (error) {
-    return { status: "error", message: "No pudimos actualizar el estado de la cuenta." };
+    return { status: "error", message: t("banFailed") };
   }
 
   revalidatePath("/admin");
@@ -43,8 +45,9 @@ export async function toggleBanAction(userId: string, currentlyBanned: boolean):
 }
 
 export async function setRoleAction(userId: string, role: UserRole): Promise<ToggleResult> {
+  const [t, tCommon] = await Promise.all([getTranslations("errors.admin"), getTranslations("errors")]);
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -53,16 +56,16 @@ export async function setRoleAction(userId: string, role: UserRole): Promise<Tog
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión." };
+    return { status: "error", message: tCommon("loginRequired") };
   }
   if (userId === user.id) {
-    return { status: "error", message: "No podés cambiar tu propio rol." };
+    return { status: "error", message: t("cannotChangeOwnRole") };
   }
 
   const { error } = await supabase.from("profiles").update({ role }).eq("id", userId);
 
   if (error) {
-    return { status: "error", message: "No pudimos cambiar el rol de esa cuenta." };
+    return { status: "error", message: t("roleChangeFailed") };
   }
 
   revalidatePath("/admin");
@@ -74,8 +77,9 @@ export async function toggleVerifiedAction(
   currentlyVerified: boolean,
   pathToRevalidate: string,
 ): Promise<ToggleResult> {
+  const [t, tCommon] = await Promise.all([getTranslations("errors.admin"), getTranslations("errors")]);
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -84,13 +88,13 @@ export async function toggleVerifiedAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión." };
+    return { status: "error", message: tCommon("loginRequired") };
   }
 
   const { error } = await supabase.from("lineups").update({ verified: !currentlyVerified }).eq("id", lineupId);
 
   if (error) {
-    return { status: "error", message: "No pudimos actualizar la verificación del lineup." };
+    return { status: "error", message: t("verifyFailed") };
   }
 
   revalidatePath("/admin");
@@ -103,13 +107,14 @@ export async function removeContentAction(
   contentId: string,
   pathToRevalidate: string,
 ): Promise<ToggleResult> {
+  const [t, tCommon] = await Promise.all([getTranslations("errors.admin"), getTranslations("errors")]);
   if (!isSupabaseConfigured()) {
-    return { status: "error", message: "La base de datos no está configurada todavía." };
+    return { status: "error", message: tCommon("notConfigured") };
   }
 
   const table = MODERATABLE_TABLE[contentType];
   if (!table) {
-    return { status: "error", message: "Tipo de contenido no soportado." };
+    return { status: "error", message: t("unsupportedType") };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -118,13 +123,13 @@ export async function removeContentAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", message: "Iniciá sesión." };
+    return { status: "error", message: tCommon("loginRequired") };
   }
 
   const { error } = await supabase.from(table).update({ status: "removed" }).eq("id", contentId);
 
   if (error) {
-    return { status: "error", message: "No pudimos eliminar el contenido." };
+    return { status: "error", message: t("removeFailed") };
   }
 
   revalidatePath("/admin");

@@ -10,12 +10,12 @@ import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
  * back — without this, a session silently expires client-side.
  * See: https://supabase.com/docs/guides/auth/server-side/nextjs
  */
-export async function updateSession(request: NextRequest): Promise<NextResponse> {
+export async function updateSession(request: NextRequest, baseResponse?: NextResponse): Promise<NextResponse> {
   if (!isSupabaseConfigured()) {
-    return NextResponse.next({ request });
+    return baseResponse ?? NextResponse.next({ request });
   }
 
-  let response = NextResponse.next({ request });
+  let response = baseResponse ?? NextResponse.next({ request });
 
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,7 +29,13 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
           for (const { name, value } of cookiesToSet) {
             request.cookies.set(name, value);
           }
-          response = NextResponse.next({ request });
+          // Carry over anything already set on the incoming response (e.g. the
+          // locale cookie next-intl's middleware sets) instead of dropping it.
+          const refreshed = NextResponse.next({ request });
+          for (const cookie of response.cookies.getAll()) {
+            refreshed.cookies.set(cookie);
+          }
+          response = refreshed;
           for (const { name, value, options } of cookiesToSet) {
             response.cookies.set(name, value, options);
           }

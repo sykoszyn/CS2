@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useTransition, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { createPlayAction, type CreatePlayInput } from "@/lib/plays/actions";
 import type { GameMap } from "@/types/content";
-import { playCategoryOptions } from "@/lib/labels/play-labels";
+import { playCategoryValues } from "@/lib/labels/play-labels";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -14,10 +15,12 @@ const labelClass = "mb-1.5 block text-xs font-medium text-foreground-muted";
 export function CreatePlayForm({ maps }: { maps: GameMap[] }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("plays.form");
+  const tCategory = useTranslations("labels.playCategory");
 
   const [title, setTitle] = useState("");
   const [mapId, setMapId] = useState(maps[0]?.id ?? "");
-  const [category, setCategory] = useState(playCategoryOptions[0].value);
+  const [category, setCategory] = useState(playCategoryValues[0]);
   const [description, setDescription] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
 
@@ -44,12 +47,12 @@ export function CreatePlayForm({ maps }: { maps: GameMap[] }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <label className={labelClass}>Título</label>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ace en retake de B site" required />
+          <label className={labelClass}>{t("title")}</label>
+          <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("titlePlaceholder")} required />
         </div>
 
         <div>
-          <label className={labelClass}>Mapa</label>
+          <label className={labelClass}>{t("map")}</label>
           <select className={selectClass} value={mapId} onChange={(e) => setMapId(e.target.value)} required>
             {maps.map((m) => (
               <option key={m.id} value={m.id}>
@@ -60,35 +63,35 @@ export function CreatePlayForm({ maps }: { maps: GameMap[] }) {
         </div>
 
         <div>
-          <label className={labelClass}>Categoría</label>
+          <label className={labelClass}>{t("category")}</label>
           <select
             className={selectClass}
             value={category}
             onChange={(e) => setCategory(e.target.value as typeof category)}
           >
-            {playCategoryOptions.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
+            {playCategoryValues.map((c) => (
+              <option key={c} value={c}>
+                {tCategory(c)}
               </option>
             ))}
           </select>
         </div>
 
         <div className="sm:col-span-2">
-          <label className={labelClass}>Descripción</label>
+          <label className={labelClass}>{t("description")}</label>
           <Input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Contá cómo pasó la jugada"
+            placeholder={t("descriptionPlaceholder")}
           />
         </div>
 
         <div className="sm:col-span-2">
-          <label className={labelClass}>Video (YouTube)</label>
+          <label className={labelClass}>{t("video")}</label>
           <Input
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
-            placeholder="https://www.youtube.com/watch?v=..."
+            placeholder={t("videoPlaceholder")}
             required
           />
         </div>
@@ -97,7 +100,7 @@ export function CreatePlayForm({ maps }: { maps: GameMap[] }) {
       {error && <p className="rounded-md border border-danger/30 bg-danger/10 p-3 text-sm text-danger">{error}</p>}
 
       <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-        {pending ? "Publicando..." : "Publicar jugada"}
+        {pending ? t("publishing") : t("publish")}
       </Button>
     </form>
   );

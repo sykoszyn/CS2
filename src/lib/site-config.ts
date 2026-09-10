@@ -9,27 +9,28 @@ export const siteConfig = {
 } as const;
 
 export type NavItem = {
-  label: string;
+  /** Key into the "nav" message namespace — see messages/*.json. */
+  key: "home" | "maps" | "lineups" | "guides" | "boosts" | "plays" | "feed" | "search" | "profile";
   href: string;
   icon: "home" | "map" | "target" | "shield" | "swords" | "rss" | "search" | "user";
 };
 
 /** Primary navigation, shared by the desktop sidebar and the mobile bottom nav (subset). */
 export const primaryNav: NavItem[] = [
-  { label: "Inicio", href: "/", icon: "home" },
-  { label: "Mapas", href: "/maps", icon: "map" },
-  { label: "Lineups", href: "/lineups", icon: "target" },
-  { label: "Guías", href: "/guides", icon: "shield" },
-  { label: "Boosts", href: "/boosts", icon: "shield" },
-  { label: "Jugadas", href: "/plays", icon: "swords" },
-  { label: "Feed", href: "/feed", icon: "rss" },
+  { key: "home", href: "/", icon: "home" },
+  { key: "maps", href: "/maps", icon: "map" },
+  { key: "lineups", href: "/lineups", icon: "target" },
+  { key: "guides", href: "/guides", icon: "shield" },
+  { key: "boosts", href: "/boosts", icon: "shield" },
+  { key: "plays", href: "/plays", icon: "swords" },
+  { key: "feed", href: "/feed", icon: "rss" },
 ];
 
 /** Mobile bottom navigation is intentionally limited to 5 items (section 15). */
 export const mobileNav: NavItem[] = [
-  { label: "Inicio", href: "/", icon: "home" },
-  { label: "Mapas", href: "/maps", icon: "map" },
-  { label: "Buscar", href: "/search", icon: "search" },
-  { label: "Feed", href: "/feed", icon: "rss" },
-  { label: "Perfil", href: "/profile/me", icon: "user" },
+  { key: "home", href: "/", icon: "home" },
+  { key: "maps", href: "/maps", icon: "map" },
+  { key: "search", href: "/search", icon: "search" },
+  { key: "feed", href: "/feed", icon: "rss" },
+  { key: "profile", href: "/profile/me", icon: "user" },
 ];

@@ -8,10 +8,15 @@ import { guides } from "@/lib/mock/guides";
 
 export type SearchResultType = "map" | "lineup" | "boost" | "play" | "guide";
 
+/**
+ * `mapSlug` is returned separately from `type` (rather than a pre-built
+ * "Lineup · mirage" subtitle) so the UI can render it in whatever language
+ * the visitor is using — building that string in SQL would hardcode Spanish.
+ */
 export interface SearchResult {
   type: SearchResultType;
   title: string;
-  subtitle: string;
+  mapSlug: string | null;
   href: string;
 }
 
@@ -31,7 +36,7 @@ function searchMock(query: string, limit: number): SearchResult[] {
 
   for (const map of maps) {
     if (map.name.toLowerCase().includes(q) || map.slug.includes(q)) {
-      results.push({ type: "map", title: map.name, subtitle: "Mapa", href: `/maps/${map.slug}` });
+      results.push({ type: "map", title: map.name, mapSlug: map.slug, href: `/maps/${map.slug}` });
     }
   }
 
@@ -41,7 +46,7 @@ function searchMock(query: string, limit: number): SearchResult[] {
       results.push({
         type: "lineup",
         title: lineup.name,
-        subtitle: `Lineup · ${lineup.mapSlug}`,
+        mapSlug: lineup.mapSlug,
         href: `/lineups/${lineup.slug}`,
       });
     }
@@ -52,7 +57,7 @@ function searchMock(query: string, limit: number): SearchResult[] {
       results.push({
         type: "boost",
         title: boost.name,
-        subtitle: `Boost · ${boost.mapSlug}`,
+        mapSlug: boost.mapSlug,
         href: `/boosts/${boost.slug}`,
       });
     }
@@ -63,7 +68,7 @@ function searchMock(query: string, limit: number): SearchResult[] {
       results.push({
         type: "play",
         title: play.title,
-        subtitle: `Jugada · ${play.mapSlug}`,
+        mapSlug: play.mapSlug,
         href: `/plays/${play.slug}`,
       });
     }
@@ -71,7 +76,7 @@ function searchMock(query: string, limit: number): SearchResult[] {
 
   for (const guide of guides) {
     if (`${guide.title} ${guide.summary}`.toLowerCase().includes(q)) {
-      results.push({ type: "guide", title: guide.title, subtitle: "Guía", href: `/guides/${guide.slug}` });
+      results.push({ type: "guide", title: guide.title, mapSlug: guide.mapSlug ?? null, href: `/guides/${guide.slug}` });
     }
   }
 
@@ -80,10 +85,10 @@ function searchMock(query: string, limit: number): SearchResult[] {
 
 /**
  * Full-text search against `search_content()` (Postgres `tsvector`,
- * `supabase/migrations/0007_search.sql`) across maps/lineups/boosts/plays/guides,
- * ranked by relevance. Falls back to the in-memory mock search when Supabase
- * isn't configured or the query fails, same graceful-degradation pattern as
- * every other service in the app.
+ * `supabase/migrations/0007_search.sql` + `0009_search_i18n.sql`) across
+ * maps/lineups/boosts/plays/guides, ranked by relevance. Falls back to the
+ * in-memory mock search when Supabase isn't configured or the query fails,
+ * same graceful-degradation pattern as every other service in the app.
  */
 export async function search(query: string, limit = 8): Promise<SearchResult[]> {
   const q = query.trim();
@@ -98,7 +103,7 @@ export async function search(query: string, limit = 8): Promise<SearchResult[]> 
     return (data ?? []).map((row) => ({
       type: row.content_type as SearchResultType,
       title: row.title,
-      subtitle: row.subtitle,
+      mapSlug: row.map_slug,
       href: `${HREF_PREFIX[row.content_type as SearchResultType]}/${row.slug}`,
     }));
   } catch {

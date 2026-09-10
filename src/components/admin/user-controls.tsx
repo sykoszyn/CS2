@@ -2,15 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toggleBanAction, setRoleAction } from "@/lib/admin/actions";
 import { Button } from "@/components/ui/button";
 import type { UserRole } from "@/types/database";
 
-const ROLE_OPTIONS: { value: UserRole; label: string }[] = [
-  { value: "user", label: "Usuario" },
-  { value: "moderator", label: "Moderador" },
-  { value: "admin", label: "Admin" },
-];
+const ROLE_VALUES: UserRole[] = ["user", "moderator", "admin"];
 
 export function UserControls({
   userId,
@@ -24,9 +21,10 @@ export function UserControls({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  const t = useTranslations("admin.users");
 
   function handleBanToggle() {
-    if (!banned && !confirm("¿Suspender esta cuenta?")) return;
+    if (!banned && !confirm(t("confirmBan"))) return;
     setError(null);
     startTransition(async () => {
       const result = await toggleBanAction(userId, banned);
@@ -53,14 +51,14 @@ export function UserControls({
           disabled={pending}
           className="rounded-md border border-border bg-background-elevated px-2 py-1 text-xs text-foreground outline-none focus-visible:border-brand"
         >
-          {ROLE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
+          {ROLE_VALUES.map((value) => (
+            <option key={value} value={value}>
+              {t(`roles.${value}`)}
             </option>
           ))}
         </select>
         <Button size="sm" variant={banned ? "secondary" : "danger"} onClick={handleBanToggle} disabled={pending}>
-          {banned ? "Desbanear" : "Banear"}
+          {banned ? t("unban") : t("ban")}
         </Button>
       </div>
       {error && <p className="text-xs text-danger">{error}</p>}

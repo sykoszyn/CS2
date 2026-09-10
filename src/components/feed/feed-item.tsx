@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { MessageCircle, Share2 } from "lucide-react";
 import type { FeedItem } from "@/types/content";
 import type { ContentTypeEnum } from "@/types/database";
@@ -15,14 +16,8 @@ const typeToPath: Record<FeedItem["type"], string> = {
   boost: "/boosts",
 };
 
-const typeLabel: Record<FeedItem["type"], string> = {
-  lineup: "Lineup",
-  play: "Jugada",
-  guide: "Guía",
-  boost: "Boost",
-};
-
 export function FeedItemCard({ item, isLoggedIn }: { item: FeedItem; isLoggedIn: boolean }) {
+  const t = useTranslations("feed.item");
   const href = `${typeToPath[item.type]}/${item.targetSlug}`;
 
   return (
@@ -37,11 +32,11 @@ export function FeedItemCard({ item, isLoggedIn }: { item: FeedItem; isLoggedIn:
             <span className="text-foreground-muted">{item.title}</span>
           </p>
           <div className="mt-1 flex items-center gap-2">
-            <Badge>{typeLabel[item.type]}</Badge>
+            <Badge>{t(`types.${item.type}`)}</Badge>
             <span className="text-xs text-foreground-subtle">{formatRelativeDate(item.createdAt)}</span>
           </div>
           <Link href={href} className="mt-2 block text-sm font-medium text-brand hover:underline">
-            Ver contenido →
+            {t("viewContent")}
           </Link>
           <div className="mt-3 flex items-center gap-2">
             {item.contentId ? (
@@ -67,14 +62,14 @@ export function FeedItemCard({ item, isLoggedIn }: { item: FeedItem; isLoggedIn:
               href={href}
               className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium text-foreground-muted hover:text-foreground"
             >
-              <MessageCircle size={12} /> Comentar
+              <MessageCircle size={12} /> {t("comment")}
             </Link>
             <button
               type="button"
               className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium text-foreground-muted hover:text-foreground"
-              aria-label="Compartir"
+              aria-label={t("shareAriaLabel")}
             >
-              <Share2 size={12} /> Compartir
+              <Share2 size={12} /> {t("share")}
             </button>
           </div>
         </div>

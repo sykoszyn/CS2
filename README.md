@@ -197,6 +197,43 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
 - Sigue cayendo a la búsqueda en memoria si Supabase no está configurado,
   mismo patrón de fallback que el resto de los servicios.
 
+**FASE 11** (Idiomas, contenido real de lineups, marca) — completa:
+
+- **Internacionalización completa** con `next-intl`: interfaz entera (no solo
+  algunas pantallas) disponible en español (default), inglés, francés y
+  portugués, con URLs por idioma (`/es/lineups`, `/en/lineups`, `/fr/lineups`,
+  `/pt/lineups`) en vez de un selector invisible por cookie — así cada idioma
+  es indexable y compartible por separado.
+  - Todo `src/app` vive ahora bajo `src/app/[locale]/`, salvo los archivos
+    singleton de Next.js que nunca deben llevar prefijo de idioma
+    (`manifest.ts`, `robots.ts`, `sitemap.ts`, `opengraph-image.tsx`,
+    `favicon.ico`, `icon.png`, `apple-icon.png`) y las rutas de callback de
+    OAuth (`auth/*`), que son URLs fijas registradas en Google/Steam.
+  - `src/i18n/routing.ts` + `src/i18n/navigation.ts` exportan versiones
+    conscientes del idioma de `Link`, `redirect`, `usePathname` y `useRouter`
+    que reemplazan a las de `next/link`/`next/navigation` en toda la app.
+  - `src/proxy.ts` encadena el middleware de `next-intl` con el refresco de
+    sesión de Supabase en el mismo request — ninguno de los dos pisa las
+    cookies del otro.
+  - Diccionarios en `messages/{es,en,fr,pt}.json`, con las mismas 518 claves
+    en los cuatro archivos (verificado con un script, no a ojo).
+  - La función de búsqueda de Postgres (`search_content()`) ya no arma texto
+    en español directo en SQL (`'Lineup · ' || slug`) — ahora devuelve datos
+    crudos (`map_slug`) y el texto final se arma en la UI en el idioma del
+    visitante (`supabase/migrations/0009_search_i18n.sql`).
+- **Lineups reales y publicados**: 24 lineups nuevos (3 por mapa en los 8
+  mapas competitivos), marcados como `verified` y no-demo — contenido
+  pensado para funcionar de verdad, no placeholders (`supabase/migrations/0008_lineups_content.sql`).
+- **Logo**: se armó una versión más elaborada de la marca "S" naranja que ya
+  usaban la sidebar y los íconos (`src/components/layout/logo.tsx`), ahora
+  también protagonista del hero de la home.
+- **Headline de la home**: reemplaza "Aprendé Counter-Strike 2" (genérico)
+  por un mensaje centrado en lo que la comunidad sube — "Lineups de la
+  comunidad" en español, con textos equivalentes por idioma
+  (`home.heroPrefix`/`home.heroHighlight` en cada diccionario).
+- Selector de idioma (`src/components/layout/language-switcher.tsx`) en el
+  header, junto al buscador rápido.
+
 Pendiente (fuera de las fases numeradas, ver brief): guías conectadas a la
 base de datos (hoy siguen siendo mock), colecciones funcionales.
 
@@ -204,10 +241,19 @@ base de datos (hoy siguen siendo mock), colecciones funcionales.
 
 ```
 src/
-  app/            Rutas (App Router). Cada carpeta = una URL de la sección 29.
+  app/
+    [locale]/     Rutas con idioma (App Router). Cada carpeta = una URL de
+                   la sección 29, ahora prefijada por /es, /en, /fr o /pt.
+    (root)        Archivos singleton sin prefijo de idioma: manifest.ts,
+                   robots.ts, sitemap.ts, opengraph-image.tsx, íconos,
+                   y los route handlers de auth/* (callbacks de OAuth).
+  i18n/           routing.ts (idiomas soportados), navigation.ts (Link,
+                   redirect, usePathname, useRouter conscientes del idioma),
+                   request.ts (carga el diccionario del idioma activo).
   components/
     ui/           Design system genérico (Button, Card, Badge, Tabs...).
-    layout/       Sidebar, bottom nav, header, quick search, secciones.
+    layout/       Sidebar, bottom nav, header, quick search, logo,
+                   selector de idioma, secciones.
     maps/ lineups/ boosts/ plays/ guides/ feed/ auth/
                    Componentes específicos de cada dominio.
   lib/
@@ -218,15 +264,21 @@ src/
     likes/ favorites/ comments/
                    Server actions genéricas para cualquier tipo de
                    contenido (polimórficas por content_type).
-    labels/       Mapas enum -> etiqueta en español, compartidos entre
-                   cards, filtros y formularios.
+    labels/       Listas de valores de cada enum (sin texto) — las
+                   etiquetas se resuelven con `useTranslations` en cada
+                   componente, para que salgan en el idioma del visitante.
     mock/         Datos de demostración usados hasta que la DB esté poblada.
     utils/        Helpers (cn, slugify, formato de fechas/números, base URL).
     site-config.ts Navegación y metadata global del sitio.
   services/       Capa de acceso a datos (mapas, lineups, perfiles, búsqueda).
                    Punto de reemplazo cuando se conecten el resto de las tablas.
   types/          Tipos de dominio (`content.ts`) y de base de datos (`database.ts`).
-  proxy.ts        Reemplazo de middleware.ts en Next 16 — refresca la sesión.
+  proxy.ts        Reemplazo de middleware.ts en Next 16 — encadena el
+                   routing de idioma de next-intl con el refresco de sesión
+                   de Supabase.
+messages/
+  es.json en.json fr.json pt.json
+                   Diccionarios de traducción, mismas 518 claves en los 4.
 supabase/
   migrations/     Esquema SQL y datos de demostración, en orden numérico.
 public/           Assets estáticos (iconos, imágenes).
