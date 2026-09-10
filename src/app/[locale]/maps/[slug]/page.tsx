@@ -36,8 +36,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function MapDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function MapDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ tab?: string }>;
+}) {
   const { slug } = await params;
+  const { tab } = await searchParams;
   const map = await getMapBySlug(slug);
   if (!map) notFound();
 
@@ -72,7 +79,7 @@ export default async function MapDetailPage({ params }: { params: Promise<{ slug
 
       <div className="px-4 lg:px-6">
         <Tabs
-          defaultTab="calls"
+          defaultTab={["calls", "lineups", "boosts", "plays", "guides"].includes(tab ?? "") ? tab : "calls"}
           tabs={[
             {
               id: "calls",

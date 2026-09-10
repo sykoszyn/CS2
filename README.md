@@ -284,6 +284,14 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   todavía — `pin_x`/`pin_y` son nullable a propósito, nadie inventó
   coordenadas para contenido que no las tenía. Se van completando con el
   flujo de alta por click de acá en adelante.
+- **`/lineups` ya no lista todos los lineups de entrada**: mostraba una
+  grilla plana con filtros por mapa/lado/granada, lo cual dejaba de tener
+  sentido una vez que el visor de arriba ya resuelve eso por mapa. Ahora
+  `/lineups` es un selector de mapas (mismas cards que `/maps`) — elegís
+  un mapa y caés directo en su tab "Lineups" (`/maps/[slug]?tab=lineups`).
+  Un link viejo con `?map=slug` sigue funcionando: redirige al mismo
+  lugar en vez de romperse. El componente `LineupFilters` (grilla plana)
+  quedó sin uso y se eliminó.
 
 Pendiente (fuera de las fases numeradas, ver brief): guías conectadas a la
 base de datos (hoy siguen siendo mock), colecciones funcionales.

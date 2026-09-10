@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { getTranslations } from "next-intl/server";
-import { LineupCard } from "@/components/lineups/lineup-card";
-import { LineupFilters } from "@/components/lineups/lineup-filters";
-import { EmptyState } from "@/components/ui/empty-state";
+import { getLocale, getTranslations } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
+import { MapCard } from "@/components/maps/map-card";
 import { Button } from "@/components/ui/button";
-import { getLineups } from "@/services/lineups.service";
 import { getMaps } from "@/services/maps.service";
-import type { GrenadeTypeEnum, SideType } from "@/types/database";
 
 export const dynamic = "force-dynamic";
 
@@ -24,19 +20,15 @@ export async function generateMetadata({
 export default async function LineupsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ map?: string; side?: string; grenade?: string }>;
+  searchParams: Promise<{ map?: string }>;
 }) {
-  const { map, side, grenade } = await searchParams;
+  const { map } = await searchParams;
+  if (map) {
+    redirect({ href: `/maps/${map}?tab=lineups`, locale: await getLocale() });
+    return null;
+  }
 
-  const [lineups, maps] = await Promise.all([
-    getLineups({
-      mapSlug: map,
-      side: side as SideType | undefined,
-      grenadeType: grenade as GrenadeTypeEnum | undefined,
-    }),
-    getMaps(),
-  ]);
-
+  const maps = await getMaps();
   const t = await getTranslations("lineups.list");
 
   return (
@@ -51,22 +43,10 @@ export default async function LineupsPage({
         </Button>
       </div>
 
-      <div className="mt-4">
-        <Suspense>
-          <LineupFilters maps={maps} />
-        </Suspense>
-      </div>
-
-      <div className="mt-6">
-        {lineups.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {lineups.map((lineup, i) => (
-              <LineupCard key={lineup.id} lineup={lineup} index={i} />
-            ))}
-          </div>
-        ) : (
-          <EmptyState title={t("emptyTitle")} description={t("emptyDescription")} />
-        )}
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {maps.map((m, i) => (
+          <MapCard key={m.id} map={m} index={i} href={`/maps/${m.slug}?tab=lineups`} />
+        ))}
       </div>
     </div>
   );

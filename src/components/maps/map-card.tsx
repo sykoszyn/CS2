@@ -4,9 +4,18 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 
-export function MapCard({ map, index = 0 }: { map: GameMap; index?: number }) {
+export function MapCard({
+  map,
+  index = 0,
+  href,
+}: {
+  map: GameMap;
+  index?: number;
+  /** Override the default `/maps/[slug]` destination — e.g. deep-linking straight into a tab. */
+  href?: string;
+}) {
   return (
-    <Link href={`/maps/${map.slug}`} className="group block h-full">
+    <Link href={href ?? `/maps/${map.slug}`} className="group block h-full">
       <Card className="relative flex h-48 flex-col justify-end overflow-hidden transition-colors group-hover:border-brand/50 sm:h-56">
         <div className="absolute inset-0 bg-background-elevated">
           {map.radarUrl ? (
