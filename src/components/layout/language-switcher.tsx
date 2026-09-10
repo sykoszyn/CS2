@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Globe } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -12,12 +12,34 @@ export function LanguageSwitcher() {
   const t = useTranslations("languageSwitcher");
   const pathname = usePathname();
   const router = useRouter();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handlePointerDown(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
 
   return (
-    <div className="relative" onMouseLeave={() => setOpen(false)}>
+    <div ref={containerRef} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={t("label")}
+        aria-expanded={open}
         className="flex h-10 items-center gap-1.5 rounded-md border border-border px-2.5 text-sm text-foreground-muted hover:bg-background-elevated"
       >
         <Globe size={16} />

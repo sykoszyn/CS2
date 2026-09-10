@@ -28,11 +28,14 @@ export async function generateMetadata({
   const map = await getMapBySlug(slug);
   if (!map) return {};
 
-  const t = await getTranslations({ locale, namespace: "maps.detail" });
+  const [t, tCatalog] = await Promise.all([
+    getTranslations({ locale, namespace: "maps.detail" }),
+    getTranslations({ locale, namespace: "maps.catalog" }),
+  ]);
 
   return {
     title: `${map.name} — ${t("metaTitleSuffix")}`,
-    description: map.description,
+    description: tCatalog(`${map.slug}.description`),
   };
 }
 
@@ -58,7 +61,10 @@ export default async function MapDetailPage({
   const mapGuides = guides.filter((g) => g.mapSlug === slug);
   const isAdmin = profile?.role === "admin" || profile?.role === "moderator";
 
-  const t = await getTranslations("maps.detail");
+  const [t, tCatalog] = await Promise.all([
+    getTranslations("maps.detail"),
+    getTranslations("maps.catalog"),
+  ]);
 
   return (
     <div>
@@ -66,7 +72,9 @@ export default async function MapDetailPage({
         <MediaPlaceholder label={map.name} className="h-40 w-full lg:h-56" />
         <div className="px-4 py-4 lg:px-6">
           <h1 className="font-display text-2xl font-bold">{map.name}</h1>
-          <p className="mt-1 max-w-2xl text-sm text-foreground-muted">{map.description}</p>
+          <p className="mt-1 max-w-2xl text-sm text-foreground-muted">
+            {tCatalog(`${map.slug}.description`)}
+          </p>
           <div className="mt-2 flex gap-1.5">
             {map.bombsites.map((site) => (
               <Badge key={site} variant="brand">

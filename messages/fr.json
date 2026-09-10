@@ -205,6 +205,16 @@
       "adminHint": "Touchez n'importe quel point de la carte pour y ajouter un lineup.",
       "closePopover": "Fermer",
       "viewFull": "Voir le lineup complet →"
+    },
+    "catalog": {
+      "mirage": { "description": "Une carte classique de contrôle du mid. Deux bombsites reliés par Mid, avec Window et Connector comme points clés d'information." },
+      "inferno": { "description": "Une carte étroite et verticale où Banana est l'axe central des rotations vers le site B." },
+      "nuke": { "description": "Une carte verticale à deux étages, avec Rafters et Ramp comme zones critiques du site A." },
+      "ancient": { "description": "Une carte de jungle avec des lignes de vue courtes et beaucoup d'utilitaires utilisés via Mid." },
+      "anubis": { "description": "Une carte avec des canaux d'eau et un Mid divisé, qui favorise les executes coordonnés." },
+      "vertigo": { "description": "Une carte verticale en hauteur, avec un site B ouvert et un site A dense en couverture." },
+      "dust2": { "description": "La carte la plus emblématique de la série. Long A et Tunnels B rythment la partie." },
+      "overpass": { "description": "Une carte technique où Bathrooms et Monster sont des zones à fort trafic d'utilitaires." }
     }
   },
   "lineups": {

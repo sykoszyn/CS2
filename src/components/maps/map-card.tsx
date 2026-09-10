@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { GameMap } from "@/types/content";
 import { Card } from "@/components/ui/card";
@@ -14,6 +15,9 @@ export function MapCard({
   /** Override the default `/maps/[slug]` destination — e.g. deep-linking straight into a tab. */
   href?: string;
 }) {
+  const t = useTranslations("maps.catalog");
+  const description = t(`${map.slug}.description`);
+
   return (
     <Link href={href ?? `/maps/${map.slug}`} className="group block h-full">
       <Card className="relative flex h-48 flex-col justify-end overflow-hidden transition-colors group-hover:border-brand/50 sm:h-56">
@@ -44,7 +48,7 @@ export function MapCard({
           <p className="font-display text-base font-bold text-white drop-shadow-sm group-hover:text-brand sm:text-lg">
             {map.name}
           </p>
-          <p className="mt-0.5 line-clamp-2 text-xs text-white/75">{map.description}</p>
+          <p className="mt-0.5 line-clamp-2 text-xs text-white/75">{description}</p>
         </div>
       </Card>
     </Link>

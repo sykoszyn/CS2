@@ -205,6 +205,16 @@
       "adminHint": "Tap anywhere on the map to add a lineup there.",
       "closePopover": "Close",
       "viewFull": "View full lineup →"
+    },
+    "catalog": {
+      "mirage": { "description": "A classic mid-control map. Two bombsites connected through Mid, with Window and Connector as key information points." },
+      "inferno": { "description": "A narrow, vertical map with Banana as the central rotation path to B site." },
+      "nuke": { "description": "A vertical, two-story map, with Rafters and Ramp as critical zones on A site." },
+      "ancient": { "description": "A jungle map with short sightlines and heavy utility play through Mid." },
+      "anubis": { "description": "A map with water canals and a split Mid, favoring coordinated executes." },
+      "vertigo": { "description": "A tall, vertical map with an open B site and a heavily covered A site." },
+      "dust2": { "description": "The most iconic map in the series. Long A and Tunnels B set the pace of the game." },
+      "overpass": { "description": "A technical map with Bathrooms and Monster as high-traffic utility zones." }
     }
   },
   "lineups": {

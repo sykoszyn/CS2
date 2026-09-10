@@ -292,9 +292,29 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   Un link viejo con `?map=slug` sigue funcionando: redirige al mismo
   lugar en vez de romperse. El componente `LineupFilters` (grilla plana)
   quedó sin uso y se eliminó.
+- **Dos bugs de idioma corregidos**: el selector de idioma (header) se
+  cerraba solo al mover el mouse del botón hacia abajo para elegir una
+  opción — dependía de `onMouseLeave` en un contenedor cuyo tamaño de
+  layout no incluye al menú desplegado (es `absolute`), así que cualquier
+  micro-gap entre el botón y el menú disparaba el cierre antes del click.
+  Se cambió a detección de click-afuera (+ Escape), que es el patrón
+  correcto para este tipo de dropdown. Además, las descripciones de los
+  8 mapas quedaban siempre en español sin importar el idioma elegido,
+  porque venían directo de la base (`maps.description`, contenido único
+  por fila) en vez de la capa de traducción — se agregó un namespace
+  `maps.catalog` en `messages/*.json` con la descripción de cada mapa en
+  los 4 idiomas, y `MapCard`/`/maps/[slug]` la usan en vez del valor
+  crudo de la base. Sigue pendiente el mismo tratamiento para contenido
+  más voluminoso (instrucciones de lineups, descripciones de boosts/jugadas),
+  que hoy es texto único en español por ser contenido de la comunidad, no
+  interfaz — ver "Pendiente" más abajo.
 
 Pendiente (fuera de las fases numeradas, ver brief): guías conectadas a la
-base de datos (hoy siguen siendo mock), colecciones funcionales.
+base de datos (hoy siguen siendo mock), colecciones funcionales, y traducir
+el contenido en sí (instrucciones de lineups, descripciones de boosts y
+jugadas) a los 4 idiomas — hoy solo la interfaz y el catálogo de mapas
+están traducidos; ese contenido sigue en español único por fila en la
+base, como el resto del contenido subido por la comunidad.
 
 ## Estructura del proyecto
 

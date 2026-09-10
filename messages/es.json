@@ -205,6 +205,16 @@
       "adminHint": "Tocá cualquier punto del mapa para agregar un lineup ahí.",
       "closePopover": "Cerrar",
       "viewFull": "Ver lineup completo →"
+    },
+    "catalog": {
+      "mirage": { "description": "Mapa de mid-control clásico. Dos bombsites conectados por Mid, con Window y Connector como puntos clave." },
+      "inferno": { "description": "Mapa angosto y vertical con Banana como eje central de rotaciones hacia B site." },
+      "nuke": { "description": "Mapa vertical de dos plantas, con Rafters y Ramp como zonas críticas de A site." },
+      "ancient": { "description": "Mapa de jungla con líneas de vista cortas y mucho juego de utility en Mid." },
+      "anubis": { "description": "Mapa con canales de agua y Mid dividido, favorece ejecuciones coordinadas." },
+      "vertigo": { "description": "Mapa vertical en altura, con B site abierto y A site denso en cobertura." },
+      "dust2": { "description": "El mapa más icónico de la serie. Long A y Tunnels B definen el ritmo del juego." },
+      "overpass": { "description": "Mapa técnico con Bathrooms y Monster como zonas de alto tráfico de utility." }
     }
   },
   "lineups": {
