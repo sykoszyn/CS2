@@ -210,39 +210,45 @@ export default async function HomePage() {
       )}
 
       {/* TRENDING — real "new" signal from createdAt */}
-      <ContentRail eyebrow={t("trending.eyebrow")} title={t("trending.title")} href="/lineups" hrefLabel={t("trending.viewAll")}>
-        {trending.map((lineup) => {
-          const isNewLineup = isRecent(lineup.createdAt, NEW_WITHIN_MS);
-          return (
-            <div key={lineup.id} className="relative h-56 w-48 shrink-0 sm:w-56">
-              {isNewLineup && (
-                <span className="absolute left-2 top-2 z-10 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-accent-foreground">
-                  {t("trending.new")}
-                </span>
-              )}
-              <LineupCard lineup={lineup} />
-            </div>
-          );
-        })}
-      </ContentRail>
+      {trending.length > 0 && (
+        <ContentRail eyebrow={t("trending.eyebrow")} title={t("trending.title")} href="/lineups" hrefLabel={t("trending.viewAll")}>
+          {trending.map((lineup) => {
+            const isNewLineup = isRecent(lineup.createdAt, NEW_WITHIN_MS);
+            return (
+              <div key={lineup.id} className="relative h-56 w-48 shrink-0 sm:w-56">
+                {isNewLineup && (
+                  <span className="absolute left-2 top-2 z-10 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-accent-foreground">
+                    {t("trending.new")}
+                  </span>
+                )}
+                <LineupCard lineup={lineup} />
+              </div>
+            );
+          })}
+        </ContentRail>
+      )}
 
       {/* FEATURED PLAYS */}
-      <ContentRail eyebrow="Clip feed" title="Plays" href="/plays" hrefLabel={t("popular.viewAll")}>
-        {featuredPlays.map((play, i) => (
-          <div key={play.id} className="h-56 w-48 shrink-0 sm:w-56">
-            <PlayCard play={play} index={i} />
-          </div>
-        ))}
-      </ContentRail>
+      {featuredPlays.length > 0 && (
+        <ContentRail eyebrow="Clip feed" title="Plays" href="/plays" hrefLabel={t("popular.viewAll")}>
+          {featuredPlays.map((play, i) => (
+            <div key={play.id} className="h-56 w-48 shrink-0 sm:w-56">
+              <PlayCard play={play} index={i} />
+            </div>
+          ))}
+        </ContentRail>
+      )}
 
       {/* GUIDES */}
-      <ContentRail eyebrow={t("guides.eyebrow")} title={t("guides.title")} href="/guides" hrefLabel={t("guides.viewAll")}>
-        {guides.map((guide, i) => (
-          <div key={guide.id} className="h-56 w-48 shrink-0 sm:w-56">
-            <GuideCard guide={guide} index={i} />
-          </div>
-        ))}
-      </ContentRail>
+      {guides.length > 0 && (
+        <ContentRail eyebrow={t("guides.eyebrow")} title={t("guides.title")} href="/guides" hrefLabel={t("guides.viewAll")}>
+          {guides.map((guide, i) => (
+            <div key={guide.id} className="h-56 w-48 shrink-0 sm:w-56">
+              <GuideCard guide={guide} index={i} />
+            </div>
+          ))}
+        </ContentRail>
+      )}
     </div>
   );
 }

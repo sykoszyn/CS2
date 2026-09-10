@@ -1,7 +1,6 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { getMapBySlug } from "@/services/maps.service";
-import { boosts as mockBoosts, getBoostsByMap as getMockBoostsByMap } from "@/lib/mock/boosts";
 import type { Boost } from "@/types/content";
 import type { VideoRow } from "@/types/database";
 
@@ -59,7 +58,7 @@ function toBoost(row: BoostJoinRow): Boost {
 }
 
 export async function getBoosts(): Promise<Boost[]> {
-  if (!isSupabaseConfigured()) return mockBoosts;
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -71,13 +70,13 @@ export async function getBoosts(): Promise<Boost[]> {
     if (error) throw error;
     return (data as unknown as BoostJoinRow[]).map(toBoost);
   } catch {
-    return mockBoosts;
+    return [];
   }
 }
 
 export async function getBoostsByIds(ids: string[]): Promise<Boost[]> {
   if (ids.length === 0) return [];
-  if (!isSupabaseConfigured()) return mockBoosts.filter((b) => ids.includes(b.id));
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -85,7 +84,7 @@ export async function getBoostsByIds(ids: string[]): Promise<Boost[]> {
     if (error) throw error;
     return (data as unknown as BoostJoinRow[]).map(toBoost);
   } catch {
-    return mockBoosts.filter((b) => ids.includes(b.id));
+    return [];
   }
 }
 
@@ -108,7 +107,7 @@ export async function getBoostsByAuthor(userId: string): Promise<Boost[]> {
 }
 
 export async function getBoostsByMap(mapSlug: string): Promise<Boost[]> {
-  if (!isSupabaseConfigured()) return getMockBoostsByMap(mapSlug);
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const map = await getMapBySlug(mapSlug);
@@ -124,12 +123,12 @@ export async function getBoostsByMap(mapSlug: string): Promise<Boost[]> {
     if (error) throw error;
     return (data as unknown as BoostJoinRow[]).map(toBoost);
   } catch {
-    return getMockBoostsByMap(mapSlug);
+    return [];
   }
 }
 
 export async function getBoostBySlug(slug: string): Promise<Boost | null> {
-  if (!isSupabaseConfigured()) return mockBoosts.find((b) => b.slug === slug) ?? null;
+  if (!isSupabaseConfigured()) return null;
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -142,6 +141,6 @@ export async function getBoostBySlug(slug: string): Promise<Boost | null> {
     if (error) throw error;
     return data ? toBoost(data as unknown as BoostJoinRow) : null;
   } catch {
-    return mockBoosts.find((b) => b.slug === slug) ?? null;
+    return null;
   }
 }

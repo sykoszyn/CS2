@@ -460,7 +460,6 @@
       "createAccount": "Create account"
     },
     "level": "Level {level}",
-    "mockStats": { "lineups": "Lineups", "plays": "Plays", "guides": "Guides", "likes": "Likes", "verified": "Verified" },
     "stats": { "xp": "XP", "lineups": "Lineups", "plays": "Plays", "boosts": "Boosts", "likesReceived": "Likes received" },
     "joined": "Joined",
     "achievements": "Achievements",

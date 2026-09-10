@@ -371,6 +371,45 @@ Feed comunitario con sidebar de recomendados, overlay de búsqueda global
 más profundo, Perfil + descubrimiento de creadores, pulido específico de
 mobile, y el modo quiz de calls.
 
+**FASE 15** (Sacar todos los datos falsos) — completa:
+
+Hasta esta fase, cuando Supabase no estaba configurado o una consulta
+fallaba, los servicios de lineups/boosts/plays/búsqueda caían a datos de
+demostración embebidos en el código (`src/lib/mock/lineups.ts`,
+`boosts.ts`, `plays.ts`) — así que la app podía mostrar "72 lineups", un
+% de "funcionó" o un feed con actividad aunque la base real todavía no
+tuviera nada cargado. Se sacó esa ilusión por completo:
+
+- `lineups.service.ts` / `boosts.service.ts` / `plays.service.ts`: ya no
+  tienen fallback a datos de mentira. Sin Supabase configurado, o si la
+  consulta falla, devuelven lista vacía (o `null` en las funciones de
+  detalle) — el estado real (hoy, vacío) se muestra tal cual, con los
+  `EmptyState` que cada pantalla ya tenía.
+- `search.service.ts`: el buscador solo mantiene un fallback offline para
+  mapas (son 8 mapas reales del juego, no contenido inventado). Ya no
+  devuelve resultados de lineups/boosts/plays/guías cuando no hay
+  conexión a Supabase.
+- **Guías**: todavía no tienen tabla propia en la base (siguen siendo un
+  array en código, ver "Pendiente" arriba) — se vació ese array
+  (`src/lib/mock/guides.ts`) en vez de dejar una guía de ejemplo
+  ("Mirage desde cero") que nadie publicó.
+- **Perfiles de demostración**: se sacó el fallback de `demo_coach` /
+  `demo_player` (perfiles con nivel/XP/stats inventados) de
+  `profiles.service.ts` — `/profile/[username]` ahora solo muestra
+  cuentas reales de Supabase; un username que no existe da 404.
+- Se borraron los archivos de datos mock que quedaron sin ningún uso
+  (`src/lib/mock/lineups.ts`, `boosts.ts`, `plays.ts`, `feed.ts`,
+  `profiles.ts`) y el tipo `PublicProfile` que solo existía para ellos.
+- El Home (rieles de "Tendencia", "Plays" y "Guías") ya no renderiza una
+  sección editorial vacía cuando no hay contenido de ese tipo — cada
+  riel se oculta si no tiene nada real para mostrar.
+
+El contenido de ejemplo (los 72 lineups con diagramas, etc.) sigue
+existiendo como migraciones SQL (`0002_seed.sql`, `0008_lineups_content.sql`,
+`0010_lineups_expansion.sql`) para quien quiera poblar una base de
+desarrollo — lo que se eliminó es que la interfaz lo mostrara como si
+fuera contenido real ya publicado cuando la base de producción está vacía.
+
 ## Estructura del proyecto
 
 ```

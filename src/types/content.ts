@@ -171,18 +171,3 @@ export interface CommentWithAuthor {
   isOwn: boolean;
 }
 
-export interface PublicProfile {
-  username: string;
-  displayName: string;
-  avatarUrl?: string;
-  bio?: string;
-  level: number;
-  xp: number;
-  stats: {
-    lineupsCreated: number;
-    playsCreated: number;
-    guidesCreated: number;
-    likesReceived: number;
-    verifiedContent: number;
-  };
-}

@@ -1,10 +1,6 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { getMapBySlug } from "@/services/maps.service";
-import {
-  lineups as mockLineups,
-  getLineupBySlug as getMockLineupBySlug,
-} from "@/lib/mock/lineups";
 import type { Lineup, LineupMedia, LineupStep, Video } from "@/types/content";
 import type { LineupMediaRow, LineupStepRow, VideoRow, GrenadeTypeEnum, SideType } from "@/types/database";
 
@@ -122,17 +118,8 @@ function toLineup(row: LineupJoinRow, tags: string[] = []): Lineup {
   };
 }
 
-function filterMock(filters: LineupFilters): Lineup[] {
-  return mockLineups.filter((l) => {
-    if (filters.mapSlug && l.mapSlug !== filters.mapSlug) return false;
-    if (filters.side && l.side !== filters.side) return false;
-    if (filters.grenadeType && l.grenadeType !== filters.grenadeType) return false;
-    return true;
-  });
-}
-
 export async function getLineups(filters: LineupFilters = {}): Promise<Lineup[]> {
-  if (!isSupabaseConfigured()) return filterMock(filters);
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -151,7 +138,7 @@ export async function getLineups(filters: LineupFilters = {}): Promise<Lineup[]>
 
     return (data as unknown as LineupJoinRow[]).map((row) => toLineup(row));
   } catch {
-    return filterMock(filters);
+    return [];
   }
 }
 
@@ -161,7 +148,7 @@ export async function getLineupsByMap(mapSlug: string): Promise<Lineup[]> {
 
 export async function getLineupsByIds(ids: string[]): Promise<Lineup[]> {
   if (ids.length === 0) return [];
-  if (!isSupabaseConfigured()) return mockLineups.filter((l) => ids.includes(l.id));
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -169,7 +156,7 @@ export async function getLineupsByIds(ids: string[]): Promise<Lineup[]> {
     if (error) throw error;
     return (data as unknown as LineupJoinRow[]).map((row) => toLineup(row));
   } catch {
-    return mockLineups.filter((l) => ids.includes(l.id));
+    return [];
   }
 }
 
@@ -192,7 +179,7 @@ export async function getLineupsByAuthor(userId: string): Promise<Lineup[]> {
 }
 
 export async function getLineupBySlug(slug: string): Promise<Lineup | null> {
-  if (!isSupabaseConfigured()) return getMockLineupBySlug(slug) ?? null;
+  if (!isSupabaseConfigured()) return null;
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -219,7 +206,7 @@ export async function getLineupBySlug(slug: string): Promise<Lineup | null> {
 
     return toLineup(row, tags);
   } catch {
-    return getMockLineupBySlug(slug) ?? null;
+    return null;
   }
 }
 

@@ -27,13 +27,12 @@ export async function generateMetadata({
   const { username } = await params;
   if (username === "me") return {};
 
-  const result = await getPublicProfileByUsername(username);
-  if (!result) return {};
+  const profile = await getPublicProfileByUsername(username);
+  if (!profile) return {};
 
-  const { profile, kind } = result;
   return {
-    title: kind === "real" ? profile.display_name : profile.displayName,
-    description: kind === "real" ? profile.bio ?? undefined : profile.bio,
+    title: profile.display_name,
+    description: profile.bio ?? undefined,
   };
 }
 
@@ -67,41 +66,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     );
   }
 
-  const result = await getPublicProfileByUsername(username);
-  if (!result) notFound();
+  const profile = await getPublicProfileByUsername(username);
+  if (!profile) notFound();
 
-  if (result.kind === "mock") {
-    const { profile } = result;
-    const t = await getTranslations("profile");
-    const tStats = await getTranslations("profile.mockStats");
-
-    return (
-      <div className="px-4 py-8 lg:px-6">
-        <div className="flex items-center gap-4">
-          <div className="h-20 w-20 rounded-full bg-background-elevated" />
-          <div>
-            <h1 className="font-display text-2xl font-bold">{profile.displayName}</h1>
-            <p className="text-sm text-foreground-muted">@{profile.username}</p>
-          </div>
-          <Badge variant="brand" className="ml-auto">
-            {t("level", { level: profile.level })}
-          </Badge>
-        </div>
-
-        {profile.bio && <p className="mt-4 max-w-xl text-sm text-foreground-muted">{profile.bio}</p>}
-
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
-          <Stat label={tStats("lineups")} value={profile.stats.lineupsCreated} />
-          <Stat label={tStats("plays")} value={profile.stats.playsCreated} />
-          <Stat label={tStats("guides")} value={profile.stats.guidesCreated} />
-          <Stat label={tStats("likes")} value={profile.stats.likesReceived} />
-          <Stat label={tStats("verified")} value={profile.stats.verifiedContent} />
-        </div>
-      </div>
-    );
-  }
-
-  const { profile } = result;
   const locale = await getLocale();
   const joined = new Date(profile.created_at).toLocaleDateString(locale, {
     month: "long",

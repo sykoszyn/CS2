@@ -2,7 +2,6 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/is-configured";
 import { getMapBySlug } from "@/services/maps.service";
 import { getLikeStates } from "@/services/likes.service";
-import { plays as mockPlays, getPlaysByMap as getMockPlaysByMap } from "@/lib/mock/plays";
 import type { Play } from "@/types/content";
 import type { VideoRow } from "@/types/database";
 
@@ -68,7 +67,7 @@ async function attachLiveLikeState(plays: Play[]): Promise<Play[]> {
 }
 
 export async function getPlays(): Promise<Play[]> {
-  if (!isSupabaseConfigured()) return mockPlays;
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -80,13 +79,13 @@ export async function getPlays(): Promise<Play[]> {
     if (error) throw error;
     return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
   } catch {
-    return mockPlays;
+    return [];
   }
 }
 
 export async function getPlaysByIds(ids: string[]): Promise<Play[]> {
   if (ids.length === 0) return [];
-  if (!isSupabaseConfigured()) return mockPlays.filter((p) => ids.includes(p.id));
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -94,7 +93,7 @@ export async function getPlaysByIds(ids: string[]): Promise<Play[]> {
     if (error) throw error;
     return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
   } catch {
-    return mockPlays.filter((p) => ids.includes(p.id));
+    return [];
   }
 }
 
@@ -117,7 +116,7 @@ export async function getPlaysByAuthor(userId: string): Promise<Play[]> {
 }
 
 export async function getPlaysByMap(mapSlug: string): Promise<Play[]> {
-  if (!isSupabaseConfigured()) return getMockPlaysByMap(mapSlug);
+  if (!isSupabaseConfigured()) return [];
 
   try {
     const map = await getMapBySlug(mapSlug);
@@ -133,12 +132,12 @@ export async function getPlaysByMap(mapSlug: string): Promise<Play[]> {
     if (error) throw error;
     return attachLiveLikeState((data as unknown as PlayJoinRow[]).map(toPlay));
   } catch {
-    return getMockPlaysByMap(mapSlug);
+    return [];
   }
 }
 
 export async function getPlayBySlug(slug: string): Promise<Play | null> {
-  if (!isSupabaseConfigured()) return mockPlays.find((p) => p.slug === slug) ?? null;
+  if (!isSupabaseConfigured()) return null;
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -153,6 +152,6 @@ export async function getPlayBySlug(slug: string): Promise<Play | null> {
     const [play] = await attachLiveLikeState([toPlay(data as unknown as PlayJoinRow)]);
     return play;
   } catch {
-    return mockPlays.find((p) => p.slug === slug) ?? null;
+    return null;
   }
 }

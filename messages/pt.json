@@ -460,7 +460,6 @@
       "createAccount": "Criar conta"
     },
     "level": "Nível {level}",
-    "mockStats": { "lineups": "Lineups", "plays": "Jogadas", "guides": "Guias", "likes": "Likes", "verified": "Verificados" },
     "stats": { "xp": "XP", "lineups": "Lineups", "plays": "Jogadas", "boosts": "Boosts", "likesReceived": "Likes recebidos" },
     "joined": "Entrou em",
     "achievements": "Conquistas",
