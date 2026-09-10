@@ -69,6 +69,7 @@ export type MapRow = {
   image_url: string | null;
   thumbnail_url: string | null;
   radar_url: string | null;
+  radar_url_lower: string | null;
   version: string;
   bombsites: string[];
   active: boolean;
@@ -116,6 +117,8 @@ export type LineupRow = {
   status: ContentStatus;
   verified: boolean;
   is_demo: boolean;
+  pin_x: number | null;
+  pin_y: number | null;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;

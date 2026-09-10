@@ -22,6 +22,8 @@ export interface GameMap {
   imageUrl: string;
   thumbnailUrl: string;
   radarUrl: string;
+  /** Only set for maps with two vertical levels (Nuke) — the lower-floor radar. */
+  radarUrlLower?: string;
   version: string;
   active: boolean;
   bombsites: ("A" | "B")[];
@@ -76,6 +78,9 @@ export interface Lineup {
   video?: Video;
   steps: LineupStep[];
   media?: LineupMedia[];
+  /** Position of this lineup's pin on the map radar, 0-100 (% of image width/height). Unset until placed. */
+  pinX?: number;
+  pinY?: number;
   tags: string[];
   createdAt: string;
   usageCount: number;

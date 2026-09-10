@@ -84,6 +84,9 @@ export interface CreateLineupInput {
   videoSource: VideoSourceEnum;
   tags: string[];
   steps: CreateLineupStepInput[];
+  /** Position picked on the map radar (0-100), if the lineup was created via the map click-to-add flow. */
+  pinX?: number;
+  pinY?: number;
 }
 
 export async function createLineupAction(
@@ -134,6 +137,8 @@ export async function createLineupAction(
     distance: input.distance,
     video_url: input.videoUrl.trim(),
     video_source: input.videoSource,
+    pin_x: input.pinX ?? null,
+    pin_y: input.pinY ?? null,
     steps: input.steps.map((s) => ({
       order: s.order,
       title: s.title.trim(),

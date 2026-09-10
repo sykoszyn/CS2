@@ -78,6 +78,8 @@ interface LineupJoinRow {
   usage_count: number;
   verified: boolean;
   is_demo: boolean;
+  pin_x: number | null;
+  pin_y: number | null;
   created_at: string;
   maps: { slug: string } | null;
   profiles: { username: string } | null;
@@ -106,6 +108,8 @@ function toLineup(row: LineupJoinRow, tags: string[] = []): Lineup {
     video: toVideo(row.videos),
     steps: (row.lineup_steps ?? []).slice().sort((a, b) => a.step_order - b.step_order).map(toStep),
     media: (row.lineup_media ?? []).map(toMedia),
+    pinX: row.pin_x !== null ? Number(row.pin_x) : undefined,
+    pinY: row.pin_y !== null ? Number(row.pin_y) : undefined,
     tags,
     createdAt: row.created_at,
     usageCount: row.usage_count,

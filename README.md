@@ -257,6 +257,33 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   de la Fase anterior). Se ve en la página de detalle de cada lineup,
   debajo del video.
 
+**FASE 13** (Lineups sobre el radar del mapa, estilo CSNADES.gg) — completa:
+
+- **Visor interactivo por mapa** (`src/components/maps/map-lineup-viewer.tsx`,
+  tab "Lineups" de `/maps/[slug]`): el radar del mapa de fondo con un pin de
+  color por lineup (según tipo de granada), filtro por granada y por lado
+  con contador, y selector de piso para Nuke (el único mapa con dos
+  niveles). Click en un pin abre un popover con el resumen y link al
+  lineup completo.
+- **Alta por click para admins/moderadores**: si quien mira el mapa es
+  admin o moderador, tocar un punto vacío del radar lleva a
+  `/lineups/new` con el mapa y la posición (`pinX`/`pinY`, 0-100% de la
+  imagen) precargados — el formulario existente hace el resto, ahora
+  guardando esa posición junto con el resto del lineup
+  (`create_lineup_with_steps` RPC actualizado en
+  `0012_lineup_map_pins.sql`, columnas `lineups.pin_x`/`pin_y`).
+- **Sobre las imágenes de radar**: se pidió usar el radar real del juego de
+  fondo (no un diagrama propio como en la Fase 12) — a diferencia de
+  scrapear capturas de un sitio de terceros, acá el usuario provee sus
+  propios archivos de radar, así que la responsabilidad de esa fuente es
+  suya. `maps.radar_url` / `maps.radar_url_lower` (Nuke) quedan listos
+  para recibirlos; hasta que se carguen, el visor muestra el placeholder
+  genérico del resto del sitio en su lugar, sin romper nada.
+- Los 75 lineups existentes (72 reales + 3 demo) no tienen posición
+  todavía — `pin_x`/`pin_y` son nullable a propósito, nadie inventó
+  coordenadas para contenido que no las tenía. Se van completando con el
+  flujo de alta por click de acá en adelante.
+
 Pendiente (fuera de las fases numeradas, ver brief): guías conectadas a la
 base de datos (hoy siguen siendo mock), colecciones funcionales.
 

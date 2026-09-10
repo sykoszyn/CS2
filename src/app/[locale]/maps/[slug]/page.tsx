@@ -5,12 +5,13 @@ import { getMapBySlug, getMapZones } from "@/services/maps.service";
 import { getLineupsByMap } from "@/services/lineups.service";
 import { getBoostsByMap } from "@/services/boosts.service";
 import { getPlaysByMap } from "@/services/plays.service";
+import { getCurrentProfile } from "@/lib/auth/get-current-profile";
 import { guides } from "@/lib/mock/guides";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Tabs } from "@/components/ui/tabs";
 import { MapZoneViewer } from "@/components/maps/map-zone-viewer";
-import { LineupCard } from "@/components/lineups/lineup-card";
+import { MapLineupViewer } from "@/components/maps/map-lineup-viewer";
 import { BoostCard } from "@/components/boosts/boost-card";
 import { PlayCard } from "@/components/plays/play-card";
 import { GuideCard } from "@/components/guides/guide-card";
@@ -40,11 +41,15 @@ export default async function MapDetailPage({ params }: { params: Promise<{ slug
   const map = await getMapBySlug(slug);
   if (!map) notFound();
 
-  const zones = await getMapZones(map);
-  const mapLineups = await getLineupsByMap(slug);
-  const mapBoosts = await getBoostsByMap(slug);
-  const mapPlays = await getPlaysByMap(slug);
+  const [zones, mapLineups, mapBoosts, mapPlays, profile] = await Promise.all([
+    getMapZones(map),
+    getLineupsByMap(slug),
+    getBoostsByMap(slug),
+    getPlaysByMap(slug),
+    getCurrentProfile(),
+  ]);
   const mapGuides = guides.filter((g) => g.mapSlug === slug);
+  const isAdmin = profile?.role === "admin" || profile?.role === "moderator";
 
   const t = await getTranslations("maps.detail");
 
@@ -87,11 +92,7 @@ export default async function MapDetailPage({ params }: { params: Promise<{ slug
               label: t("tabs.lineups", { count: mapLineups.length }),
               content:
                 mapLineups.length > 0 ? (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {mapLineups.map((lineup, i) => (
-                      <LineupCard key={lineup.id} lineup={lineup} index={i} />
-                    ))}
-                  </div>
+                  <MapLineupViewer map={map} lineups={mapLineups} isAdmin={isAdmin} />
                 ) : (
                   <EmptyState title={t("emptyLineups")} />
                 ),

@@ -15,6 +15,8 @@ export const lineups: Lineup[] = [
     difficulty: 2,
     distance: "medium",
     authorUsername: "demo_coach",
+    pinX: 42,
+    pinY: 38,
     video: {
       id: "vid_1",
       source: "youtube",
@@ -72,6 +74,8 @@ export const lineups: Lineup[] = [
     difficulty: 1,
     distance: "close",
     authorUsername: "demo_coach",
+    pinX: 62,
+    pinY: 78,
     steps: [
       {
         order: 1,

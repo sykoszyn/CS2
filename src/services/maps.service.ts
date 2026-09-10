@@ -17,6 +17,7 @@ function toGameMap(row: MapRow): GameMap {
     imageUrl: row.image_url ?? "",
     thumbnailUrl: row.thumbnail_url ?? "",
     radarUrl: row.radar_url ?? "",
+    radarUrlLower: row.radar_url_lower ?? undefined,
     version: row.version,
     active: row.active,
     bombsites: row.bombsites as ("A" | "B")[],

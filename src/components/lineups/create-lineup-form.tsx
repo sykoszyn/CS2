@@ -22,7 +22,15 @@ const labelClass = "mb-1.5 block text-xs font-medium text-foreground-muted";
 
 let stepIdCounter = 0;
 
-export function CreateLineupForm({ maps }: { maps: GameMap[] }) {
+export function CreateLineupForm({
+  maps,
+  initialMapId,
+  initialPin,
+}: {
+  maps: GameMap[];
+  initialMapId?: string;
+  initialPin?: { x: number; y: number };
+}) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const t = useTranslations("lineups.form");
@@ -33,7 +41,7 @@ export function CreateLineupForm({ maps }: { maps: GameMap[] }) {
   const tClick = useTranslations("labels.clickType");
 
   const [name, setName] = useState("");
-  const [mapId, setMapId] = useState(maps[0]?.id ?? "");
+  const [mapId, setMapId] = useState(initialMapId ?? maps[0]?.id ?? "");
   const [grenadeType, setGrenadeType] = useState(grenadeTypeValues[0]);
   const [side, setSide] = useState<"t" | "ct" | "both">("t");
   const [throwZone, setThrowZone] = useState("");
@@ -78,6 +86,8 @@ export function CreateLineupForm({ maps }: { maps: GameMap[] }) {
       distance,
       videoUrl,
       videoSource: "youtube",
+      pinX: initialPin?.x,
+      pinY: initialPin?.y,
       tags: tagsInput.split(",").map((tag) => tag.trim()).filter(Boolean),
       steps: steps.map(({ key, ...step }) => {
         void key;
@@ -93,6 +103,12 @@ export function CreateLineupForm({ maps }: { maps: GameMap[] }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {initialPin && (
+        <p className="rounded-md border border-brand/30 bg-brand-muted px-3 py-2 text-sm text-brand">
+          {t("pinSelected", { x: initialPin.x, y: initialPin.y })}
+        </p>
+      )}
+
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label className={labelClass}>{t("name")}</label>

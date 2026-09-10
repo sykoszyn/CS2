@@ -193,6 +193,18 @@
       "alsoKnownAs": "También conocido como: ",
       "tapHint": "Tocá un punto del mapa para ver su call.",
       "allCalls": "Todos los calls"
+    },
+    "lineupViewer": {
+      "filterByGrenade": "Filtrar por granada",
+      "allGrenades": "Todas",
+      "filterBySide": "Lado",
+      "anySide": "Cualquiera",
+      "floor": "Piso",
+      "floorUpper": "Arriba",
+      "floorLower": "Abajo",
+      "adminHint": "Tocá cualquier punto del mapa para agregar un lineup ahí.",
+      "closePopover": "Cerrar",
+      "viewFull": "Ver lineup completo →"
     }
   },
   "lineups": {
@@ -247,6 +259,7 @@
       "submit": "Calificar"
     },
     "form": {
+      "pinSelected": "Posición seleccionada en el mapa: {x}%, {y}%",
       "name": "Nombre del lineup",
       "namePlaceholder": "Mirage Window Smoke desde T Spawn",
       "map": "Mapa",

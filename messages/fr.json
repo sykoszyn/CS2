@@ -193,6 +193,18 @@
       "alsoKnownAs": "Aussi connu comme : ",
       "tapHint": "Touchez un point de la carte pour voir son call.",
       "allCalls": "Tous les calls"
+    },
+    "lineupViewer": {
+      "filterByGrenade": "Filtrer par grenade",
+      "allGrenades": "Toutes",
+      "filterBySide": "Camp",
+      "anySide": "Peu importe",
+      "floor": "Étage",
+      "floorUpper": "Haut",
+      "floorLower": "Bas",
+      "adminHint": "Touchez n'importe quel point de la carte pour y ajouter un lineup.",
+      "closePopover": "Fermer",
+      "viewFull": "Voir le lineup complet →"
     }
   },
   "lineups": {
@@ -248,6 +260,7 @@
     },
     "form": {
       "name": "Nom du lineup",
+      "pinSelected": "Position sélectionnée sur la carte : {x}%, {y}%",
       "namePlaceholder": "Mirage Window Smoke depuis T Spawn",
       "map": "Carte",
       "grenade": "Grenade",

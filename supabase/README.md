@@ -132,6 +132,18 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
     `lineup_media` (diagrama SVG propio) a los 24 lineups de `0008` que
     quedaron sin una cuando se escribió `0010`, para que los 72 lineups
     reales tengan diagrama, no solo los 48 más nuevos.
+12. `0012_lineup_map_pins.sql` — agrega `lineups.pin_x`/`pin_y` (numeric
+    0-100, mismo criterio que `map_zones.x/y`) para poder mostrar cada
+    lineup como un pin sobre el radar del mapa, y `maps.radar_url_lower`
+    para Nuke (el único mapa con dos niveles verticales, y por lo tanto
+    dos radares). También actualiza `create_lineup_with_steps` (`create or
+    replace`, mismo tipo de retorno que en `0004`, no hace falta `drop`)
+    para aceptar `pin_x`/`pin_y` opcionales en el payload. Ambas columnas
+    son nullable a propósito: los 75 lineups que ya existían no tienen una
+    posición real conocida, así que no se les inventó ninguna — quedan sin
+    pin hasta que alguien los ubique a mano en el mapa (ver el flujo de
+    alta por click en `/maps/[slug]`, sección "Lineups sobre el radar" del
+    `README.md` de la raíz).
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.

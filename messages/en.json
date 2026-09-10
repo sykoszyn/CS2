@@ -193,6 +193,18 @@
       "alsoKnownAs": "Also known as: ",
       "tapHint": "Tap a point on the map to see its call.",
       "allCalls": "All calls"
+    },
+    "lineupViewer": {
+      "filterByGrenade": "Filter by grenade",
+      "allGrenades": "All",
+      "filterBySide": "Side",
+      "anySide": "Any",
+      "floor": "Floor",
+      "floorUpper": "Upper",
+      "floorLower": "Lower",
+      "adminHint": "Tap anywhere on the map to add a lineup there.",
+      "closePopover": "Close",
+      "viewFull": "View full lineup →"
     }
   },
   "lineups": {
@@ -248,6 +260,7 @@
     },
     "form": {
       "name": "Lineup name",
+      "pinSelected": "Position selected on the map: {x}%, {y}%",
       "namePlaceholder": "Mirage Window Smoke from T Spawn",
       "map": "Map",
       "grenade": "Grenade",
