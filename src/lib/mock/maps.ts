@@ -101,7 +101,7 @@ export const maps: GameMap[] = [
     description: "Mapa técnico con Bathrooms y Monster como zonas de alto tráfico de utility.",
     imageUrl: "/maps/overpass/overview.jpg",
     thumbnailUrl: "/maps/overpass/thumb.jpg",
-    radarUrl: "/maps/overpass/radar.png",
+    radarUrl: "/radars/overpass.webp",
     version: "CS2",
     active: true,
     bombsites: ["A", "B"],

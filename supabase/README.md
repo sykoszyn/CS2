@@ -147,9 +147,10 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
 13. `0013_radar_images.sql` — apunta `maps.radar_url`/`radar_url_lower` a
     los radares reales que el usuario subió directo al repo en
     `public/radars/` (no scrapeados de otro sitio — el mismo criterio de
-    sourcing que el resto de la media de la app). Cubre 7 de los 8 mapas
-    (falta Overpass); mientras tanto ese mapa sigue cayendo al placeholder
-    genérico en `MapLineupViewer`, sin romper nada.
+    sourcing que el resto de la media de la app). Cubre 7 de los 8 mapas.
+14. `0014_overpass_radar.sql` — completa el octavo (Overpass), subido en
+    formato WebP en vez de PNG (`public/radars/overpass.webp`) — los 8
+    mapas ya tienen radar real en el visor.
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.

@@ -276,11 +276,10 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
   fondo (no un diagrama propio como en la Fase 12) — a diferencia de
   scrapear capturas de un sitio de terceros, acá el usuario provee sus
   propios archivos de radar, así que la responsabilidad de esa fuente es
-  suya. Ya están cargados 7 de los 8 mapas (`public/radars/`, wireados en
-  `supabase/migrations/0013_radar_images.sql`): Mirage, Inferno, Nuke
-  (dos pisos), Ancient, Anubis, Vertigo (dos pisos) y Dust II. Falta
-  Overpass — mientras tanto ese mapa sigue mostrando el placeholder
-  genérico del resto del sitio en el visor, sin romper nada.
+  suya. Los 8 mapas ya tienen su radar real cargado en `public/radars/`
+  (wireados en `supabase/migrations/0013_radar_images.sql` y
+  `0014_overpass_radar.sql`): Mirage, Inferno, Nuke (dos pisos), Ancient,
+  Anubis, Vertigo (dos pisos), Dust II y Overpass.
 - Los 75 lineups existentes (72 reales + 3 demo) no tienen posición
   todavía — `pin_x`/`pin_y` son nullable a propósito, nadie inventó
   coordenadas para contenido que no las tenía. Se van completando con el
