@@ -8,24 +8,28 @@ import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 
-export function LineupStepViewer({ steps }: { steps: LineupStep[] }) {
+export function LineupStepViewer({ steps, big = false }: { steps: LineupStep[]; big?: boolean }) {
   const [index, setIndex] = useState(0);
   const step = steps[index];
   const t = useTranslations("lineups.stepViewer");
   const tClick = useTranslations("labels.clickType");
 
   return (
-    <div className="rounded-lg border border-border bg-background-card">
+    <div className={cn("rounded-lg border border-border bg-background-card", big && "border-brand/30")}>
       <div className="relative">
-        <MediaPlaceholder label={step.title} seed={index} className="h-64 w-full sm:h-80" />
+        <MediaPlaceholder
+          label={step.title}
+          seed={index}
+          className={cn("w-full", big ? "h-72 sm:h-[28rem]" : "h-64 sm:h-80")}
+        />
         <span className="absolute left-3 top-3 rounded-full bg-background/80 px-2.5 py-1 text-xs font-semibold">
           {t("stepOf", { current: index + 1, total: steps.length })}
         </span>
       </div>
 
-      <div className="p-4">
-        <p className="font-display text-lg font-semibold">{step.title}</p>
-        <p className="mt-1 text-sm text-foreground-muted">{step.instruction}</p>
+      <div className={cn(big ? "p-6" : "p-4")}>
+        <p className={cn("font-display font-semibold", big ? "text-2xl" : "text-lg")}>{step.title}</p>
+        <p className={cn("mt-1 text-foreground-muted", big ? "text-base" : "text-sm")}>{step.instruction}</p>
 
         <div className="mt-3 flex flex-wrap gap-2">
           {step.clickType && (

@@ -316,6 +316,61 @@ jugadas) a los 4 idiomas — hoy solo la interfaz y el catálogo de mapas
 están traducidos; ese contenido sigue en español único por fila en la
 base, como el resto del contenido subido por la comunidad.
 
+**FASE 14** (Rediseño total de UI/UX — primera tanda) — completa:
+
+Replanteo de la experiencia visual y de descubrimiento de contenido: se
+reemplaza el patrón genérico "sidebar + header + buscador + grilla de cards
+idénticas" por composición editorial (rails horizontales, un feature grande
++ varios secundarios, tamaños de card no uniformes) en las pantallas de
+mayor tráfico. Todo el contenido dinámico (contadores, badges "nuevo",
+porcentajes de "funcionó") sigue viniendo de Supabase/mock reales — nada
+inventado.
+
+- **Design tokens** (`src/app/globals.css`): se mantienen los nombres de
+  variables existentes (para no tocar cientos de referencias) y se agregan
+  `--background-surface-2`, `--background-overlay`, `--brand-glow`, más
+  utilidades nuevas: `.text-eyebrow` (label editorial), `.scroll-rail`
+  (contenedor con scroll-snap horizontal sin scrollbar visible),
+  `.bg-hero-mesh` (fondo del hero con gradientes radiales, sin imágenes
+  stock) y `.animate-scale-in` (respeta `prefers-reduced-motion`).
+- **Shell rediseñado**: sidebar agrupada por secciones (Descubrir /
+  Comunidad / Vos) con indicador de activo tipo barra lateral en vez de
+  pastilla llena; bottom nav móvil con un FAB flotante de subida rápida
+  para usuarios logueados; header más minimal con el buscador rápido
+  centrado.
+- **Búsqueda rápida** (`quick-search.tsx`): ahora agrupa resultados por
+  tipo (lineup/mapa/boost/jugada/guía) y recuerda búsquedas recientes
+  (`localStorage`). El mismo componente soporta una variante "hero" (campo
+  grande integrado en el home) y una "compact" (pastilla del header).
+- **Componentes nuevos**: `ContentRail` (eyebrow + título + link "ver todo"
+  + fila con scroll-snap) como reemplazo del patrón de grilla estática para
+  contenido editorial, y `StatPill` (chip de acción rápida con contador
+  real por tipo de granada).
+- **Home**: hero con búsqueda integrada, accesos rápidos por tipo de
+  granada con contadores reales, descubrimiento de mapas con stats al
+  hover, sección "Populares ahora" (1 destacado grande + 3 secundarios) y
+  rails de tendencias/jugadas/guías.
+- **`/maps`**: selector visual grande (no grilla plana) con el radar de
+  cada mapa de fondo y contadores reales de lineups/boosts/guías.
+- **`/lineups`**: hero de búsqueda + selector de mapas con contador total
+  real, en vez de la grilla plana anterior.
+- **`LineupCard`**: jerarquía visual clara (granada, mapa, lado, dificultad,
+  verificado, rating, % funcionó, autor) sin amontonar todo con el mismo
+  peso.
+- **Detalle de lineup + modo práctica**: nuevo componente
+  `LineupDetailBody` separa los pasos ("Cómo tirarlo") del resto
+  (tags/rating/comentarios). Un botón activa el "Modo práctica": los pasos
+  se ven en grande (`LineupStepViewer` con prop `big`) y el resto de la
+  página (tags, rating, comentarios) se oculta para que la pantalla se
+  sienta como una herramienta de entrenamiento, no como un artículo.
+
+Pendiente para la siguiente tanda del rediseño (ver brief, fuera de esta
+fase): Boosts ("encontrá algo inesperado"), Plays como feed de clips con
+autoplay al hover, Guías editoriales (destacada + rieles por categoría),
+Feed comunitario con sidebar de recomendados, overlay de búsqueda global
+más profundo, Perfil + descubrimiento de creadores, pulido específico de
+mobile, y el modo quiz de calls.
+
 ## Estructura del proyecto
 
 ```

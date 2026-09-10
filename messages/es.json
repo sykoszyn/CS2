@@ -15,7 +15,10 @@
     "profile": "Perfil",
     "favorites": "Favoritos",
     "collections": "Colecciones",
-    "admin": "Admin"
+    "admin": "Admin",
+    "groupCommunity": "Comunidad",
+    "groupYou": "Tuyo",
+    "upload": "Subir"
   },
   "footer": {
     "madeBy": "Hecho por la comunidad de CS2.",
@@ -34,6 +37,8 @@
     "closeAriaLabel": "Cerrar búsqueda",
     "noResults": "Sin resultados para \"{query}\".",
     "hint": "Probá \"mirage window\", \"boost nuke\" o \"molotov banana\".",
+    "recentSearches": "Búsquedas recientes",
+    "heroPlaceholder": "Buscá una smoke, flash, lineup, call...",
     "types": {
       "map": "Mapa",
       "lineup": "Lineup",
@@ -158,25 +163,50 @@
   "home": {
     "metaTitle": "Lineups comunitarios de CS2",
     "metaDescription": "Lineups, calls, boosts, jugadas y estrategias de CS2 creadas por la comunidad hispanohablante. Sin registro obligatorio.",
-    "heroPrefix": "Lineups",
-    "heroHighlight": "de la comunidad",
-    "heroSubtitle": "Lineups, estrategias, calls, boosts y jugadas creadas por la comunidad. Gratis, sin registro obligatorio.",
+    "heroPrefix": "Domina",
+    "heroHighlight": "CS2.",
+    "heroSubtitle": "Lineups, tácticas, callouts, boosts y jugadas — hechos por la comunidad de CS2.",
     "exploreLineups": "Explorar lineups",
     "exploreMaps": "Explorar mapas",
     "createAccount": "Crear cuenta",
-    "sections": {
-      "maps": { "title": "Mapas", "subtitle": "Elegí un mapa para ver sus calls, lineups y boosts" },
-      "popularLineups": { "title": "Lineups populares", "subtitle": "Las jugadas de utility más usadas por la comunidad" },
-      "featuredPlays": { "title": "Jugadas destacadas", "subtitle": "Clutches, aces y outplays de la comunidad" },
-      "guides": { "title": "Guías", "subtitle": "Aprendé un mapa desde cero o mejorá tu nivel" }
+    "quickActions": {
+      "eyebrow": "Encontrá tu utility",
+      "lineupsCount": "{count} lineups"
+    },
+    "mapDiscovery": {
+      "eyebrow": "Elegí tu campo de batalla",
+      "title": "Descubrí un mapa",
+      "explore": "Explorar {map}",
+      "lineupsCount": "{count} lineups"
+    },
+    "popular": {
+      "eyebrow": "Ahora mismo",
+      "title": "Popular en este momento",
+      "viewAll": "Ver todo"
+    },
+    "trending": {
+      "eyebrow": "Esta semana",
+      "title": "Tendencia esta semana",
+      "new": "Nuevo",
+      "viewAll": "Ver todo"
+    },
+    "guides": {
+      "eyebrow": "Aprendé",
+      "title": "Guías",
+      "viewAll": "Ver todo"
     }
   },
   "maps": {
     "list": {
       "metaTitle": "Mapas de CS2",
       "metaDescription": "Todos los mapas competitivos de Counter-Strike 2: calls, lineups, boosts y guías.",
+      "eyebrow": "Elegí tu campo de batalla",
       "title": "Mapas",
-      "subtitle": "Elegí un mapa para ver sus callouts, lineups, boosts y guías."
+      "subtitle": "Cada mapa con sus lineups, boosts y guías — tocá uno para entrar.",
+      "lineups": "{count} lineups",
+      "boosts": "{count} boosts",
+      "guides": "{count} guías",
+      "explore": "Explorar {map}"
     },
     "detail": {
       "metaTitleSuffix": "Calls, lineups y boosts",
@@ -221,8 +251,10 @@
     "list": {
       "metaTitle": "Lineups de CS2",
       "metaDescription": "Smokes, flashes, molotovs y HE grenades para todos los mapas competitivos de Counter-Strike 2, filtrados por mapa, lado y granada.",
+      "eyebrow": "Encontrá tu lineup",
       "title": "Lineups",
       "subtitle": "Elegí un mapa para ver sus lineups.",
+      "totalCount": "{count} lineups en total",
       "upload": "Subir lineup",
       "emptyTitle": "No encontramos lineups con esos filtros",
       "emptyDescription": "Probá cambiar el mapa, el lado o el tipo de granada."
@@ -245,7 +277,9 @@
       "noData": "Sin datos",
       "difficulty": "Dificultad",
       "uses": "Usos",
-      "stepsTitle": "Instrucciones paso a paso",
+      "stepsTitle": "Cómo tirarlo",
+    "practiceMode": "Modo práctica",
+    "exitPractice": "Salir",
     "diagramTitle": "Diagrama",
       "noSteps": "Este lineup todavía no tiene pasos cargados",
       "loginToRate": "Iniciá sesión para calificar este lineup",

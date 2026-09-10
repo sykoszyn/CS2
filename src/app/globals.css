@@ -4,21 +4,29 @@
   SmokeAR — design tokens.
   Dark mode is the primary experience (esports/competitive product).
   Light mode is supported as a secondary theme.
+
+  Surface hierarchy (dark): background -> surface -> surface-2 -> elevated.
+  Brand orange is an accent, not a default — most UI uses neutral surfaces
+  and borders; orange marks the few things that should pull the eye
+  (primary CTA, active nav state, verified/streak highlights).
 */
 :root {
-  --background: #0b0d10;
-  --background-elevated: #12151a;
-  --background-card: #151920;
-  --border: #232830;
-  --border-strong: #2e3540;
+  --background: #07080a;
+  --background-elevated: #0d0f13;
+  --background-card: #12151a;
+  --background-surface-2: #171b21;
+  --background-overlay: #1c2027;
+  --border: #20242c;
+  --border-strong: #2c313b;
 
-  --foreground: #f2f4f7;
-  --foreground-muted: #9aa3b2;
-  --foreground-subtle: #656d7a;
+  --foreground: #f4f6f9;
+  --foreground-muted: #98a1b0;
+  --foreground-subtle: #5f6774;
 
   --brand: #ff5c1a;
   --brand-foreground: #0b0d10;
   --brand-muted: #ff5c1a1a;
+  --brand-glow: #ff5c1a33;
 
   --accent: #35e0a1;
   --accent-foreground: #06120c;
@@ -37,6 +45,8 @@
   --background: #f7f8fa;
   --background-elevated: #ffffff;
   --background-card: #ffffff;
+  --background-surface-2: #f0f2f5;
+  --background-overlay: #ffffff;
   --border: #e4e7ec;
   --border-strong: #d0d5dd;
 
@@ -51,6 +61,8 @@
   --color-background: var(--background);
   --color-background-elevated: var(--background-elevated);
   --color-background-card: var(--background-card);
+  --color-background-surface-2: var(--background-surface-2);
+  --color-background-overlay: var(--background-overlay);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
 
@@ -61,6 +73,7 @@
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-muted: var(--brand-muted);
+  --color-brand-glow: var(--brand-glow);
 
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
@@ -106,9 +119,52 @@ body {
   scrollbar-color: var(--border-strong) transparent;
 }
 
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 .font-display {
   font-family: var(--font-display), var(--font-sans), sans-serif;
   letter-spacing: 0.01em;
+}
+
+/* Small uppercase label used above a heading ("MIRAGE", "TRENDING THIS WEEK") — the
+   editorial signature that replaces plain <h2 subtitle> pairs everywhere. */
+.text-eyebrow {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--foreground-subtle);
+}
+
+/* Horizontal content rail (Map Discovery, Trending, Popular...) — snap-scroll,
+   no visible scrollbar, works on touch and trackpad alike. */
+.scroll-rail {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximate;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-rail::-webkit-scrollbar {
+  display: none;
+}
+.scroll-rail > * {
+  scroll-snap-align: start;
+}
+
+/* Hero mesh background — a soft multi-point radial gradient, not a stock image. */
+.bg-hero-mesh {
+  background-image:
+    radial-gradient(55% 55% at 15% 0%, var(--brand-muted), transparent),
+    radial-gradient(45% 45% at 100% 15%, rgba(53, 224, 161, 0.1), transparent),
+    radial-gradient(60% 40% at 50% 100%, rgba(110, 168, 255, 0.06), transparent);
 }
 
 @keyframes fade-in {
@@ -124,4 +180,26 @@ body {
 
 .animate-fade-in {
   animation: fade-in 0.25s ease-out;
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.15s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-scale-in {
+    animation: none;
+  }
 }

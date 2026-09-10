@@ -20,7 +20,7 @@ import { LikeButton } from "@/components/ui/like-button";
 import { FavoriteButton } from "@/components/ui/favorite-button";
 import { ReportButton } from "@/components/reports/report-button";
 import { ModerationControls } from "@/components/moderation/moderation-controls";
-import { LineupStepViewer } from "@/components/lineups/lineup-step-viewer";
+import { LineupDetailBody } from "@/components/lineups/lineup-detail-body";
 import { RatingForm } from "@/components/lineups/rating-form";
 import { CommentSection } from "@/components/comments/comment-section";
 
@@ -89,15 +89,15 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
 
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-sm text-foreground-muted">
+          <div className="flex items-center gap-2 text-eyebrow text-foreground-subtle">
             <Link href={`/maps/${lineup.mapSlug}`} className="hover:text-brand">
               {map?.name ?? lineup.mapSlug}
             </Link>
             <span>/</span>
             <span>{tGrenade(lineup.grenadeType)}</span>
           </div>
-          <h1 className="mt-1 font-display text-2xl font-bold">{lineup.name}</h1>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
+          <h1 className="mt-1 font-display text-3xl font-bold tracking-tight sm:text-4xl">{lineup.name}</h1>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <Badge variant={lineup.side === "ct" ? "ct" : lineup.side === "t" ? "t" : "default"}>
               {lineup.side.toUpperCase()}
             </Badge>
@@ -131,24 +131,24 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-6 rounded-lg border border-border bg-background-card p-4 text-sm">
+      <div className="mt-5 grid grid-cols-2 gap-3 rounded-xl border border-border bg-background-card p-4 text-sm sm:grid-cols-4">
         <div>
-          <p className="text-xs text-foreground-subtle">{t("rating")}</p>
-          <RatingStars value={lineup.ratingAvg} count={lineup.ratingCount} />
+          <p className="text-eyebrow text-foreground-subtle">{t("rating")}</p>
+          <div className="mt-1"><RatingStars value={lineup.ratingAvg} count={lineup.ratingCount} /></div>
         </div>
         <div>
-          <p className="text-xs text-foreground-subtle">{t("worked")}</p>
-          <p className="font-display font-semibold text-success">
+          <p className="text-eyebrow text-foreground-subtle">{t("worked")}</p>
+          <p className="mt-1 font-display text-lg font-semibold text-success">
             {lineup.ratingCount > 0 ? `${lineup.workedPercent}%` : t("noData")}
           </p>
         </div>
         <div>
-          <p className="text-xs text-foreground-subtle">{t("difficulty")}</p>
-          <DifficultyDots value={lineup.difficulty} />
+          <p className="text-eyebrow text-foreground-subtle">{t("difficulty")}</p>
+          <div className="mt-1"><DifficultyDots value={lineup.difficulty} /></div>
         </div>
         <div>
-          <p className="text-xs text-foreground-subtle">{t("uses")}</p>
-          <p className="font-display font-semibold">{lineup.usageCount.toLocaleString(locale)}</p>
+          <p className="text-eyebrow text-foreground-subtle">{t("uses")}</p>
+          <p className="mt-1 font-display text-lg font-semibold">{lineup.usageCount.toLocaleString(locale)}</p>
         </div>
       </div>
 
@@ -186,52 +186,50 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
         </div>
       )}
 
-      <div className="mt-6">
-        <h2 className="mb-3 font-display text-lg font-semibold">{t("stepsTitle")}</h2>
-        {lineup.steps.length > 0 ? (
-          <LineupStepViewer steps={lineup.steps} />
-        ) : (
-          <EmptyState title={t("noSteps")} />
-        )}
-      </div>
+      <LineupDetailBody
+        steps={lineup.steps}
+        secondary={
+          <>
+            {lineup.tags.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-1.5">
+                {lineup.tags.map((tag) => (
+                  <Badge key={tag}>#{tag}</Badge>
+                ))}
+              </div>
+            )}
 
-      {lineup.tags.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-1.5">
-          {lineup.tags.map((tag) => (
-            <Badge key={tag}>#{tag}</Badge>
-          ))}
-        </div>
-      )}
+            <div className="mt-6">
+              {profile ? (
+                <RatingForm
+                  lineupId={lineup.id}
+                  lineupSlug={lineup.slug}
+                  initialStars={userRating?.stars}
+                  initialWorked={userRating?.worked}
+                />
+              ) : (
+                <EmptyState
+                  icon={LogIn}
+                  title={t("loginToRate")}
+                  action={
+                    <Button href={`/login?next=/lineups/${lineup.slug}`} size="sm">
+                      {t("login")}
+                    </Button>
+                  }
+                />
+              )}
+            </div>
 
-      <div className="mt-6">
-        {profile ? (
-          <RatingForm
-            lineupId={lineup.id}
-            lineupSlug={lineup.slug}
-            initialStars={userRating?.stars}
-            initialWorked={userRating?.worked}
-          />
-        ) : (
-          <EmptyState
-            icon={LogIn}
-            title={t("loginToRate")}
-            action={
-              <Button href={`/login?next=/lineups/${lineup.slug}`} size="sm">
-                {t("login")}
-              </Button>
-            }
-          />
-        )}
-      </div>
-
-      <div className="mt-8 border-t border-border pt-6">
-        <CommentSection
-          contentType="lineup"
-          contentId={lineup.id}
-          comments={comments}
-          isLoggedIn={Boolean(profile)}
-        />
-      </div>
+            <div className="mt-8 border-t border-border pt-6">
+              <CommentSection
+                contentType="lineup"
+                contentId={lineup.id}
+                comments={comments}
+                isLoggedIn={Boolean(profile)}
+              />
+            </div>
+          </>
+        }
+      />
     </div>
   );
 }

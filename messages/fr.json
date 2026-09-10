@@ -15,7 +15,10 @@
     "profile": "Profil",
     "favorites": "Favoris",
     "collections": "Collections",
-    "admin": "Admin"
+    "admin": "Admin",
+    "groupCommunity": "Communauté",
+    "groupYou": "Vous",
+    "upload": "Publier"
   },
   "footer": {
     "madeBy": "Fait par la communauté CS2.",
@@ -34,6 +37,8 @@
     "closeAriaLabel": "Fermer la recherche",
     "noResults": "Aucun résultat pour « {query} ».",
     "hint": "Essayez « mirage window », « boost nuke » ou « molotov banana ».",
+    "recentSearches": "Recherches récentes",
+    "heroPlaceholder": "Cherchez une smoke, flash, lineup, callout...",
     "types": {
       "map": "Carte",
       "lineup": "Lineup",
@@ -158,25 +163,50 @@
   "home": {
     "metaTitle": "Lineups communautaires CS2",
     "metaDescription": "Lineups, calls, boosts, plays et stratégies CS2 créés par la communauté. Aucun compte requis.",
-    "heroPrefix": "Lineups",
-    "heroHighlight": "communautaires",
-    "heroSubtitle": "Lineups, stratégies, calls, boosts et plays créés par la communauté. Gratuit, sans compte obligatoire.",
+    "heroPrefix": "Maîtrise",
+    "heroHighlight": "CS2.",
+    "heroSubtitle": "Lineups, tactiques, callouts, boosts et plays — créés par la communauté CS2.",
     "exploreLineups": "Explorer les lineups",
     "exploreMaps": "Explorer les cartes",
     "createAccount": "Créer un compte",
-    "sections": {
-      "maps": { "title": "Cartes", "subtitle": "Choisissez une carte pour voir ses calls, lineups et boosts" },
-      "popularLineups": { "title": "Lineups populaires", "subtitle": "Les utilities les plus utilisées par la communauté" },
-      "featuredPlays": { "title": "Plays en vedette", "subtitle": "Clutches, aces et outplays de la communauté" },
-      "guides": { "title": "Guides", "subtitle": "Apprenez une carte de zéro ou progressez" }
+    "quickActions": {
+      "eyebrow": "Trouve ton utility",
+      "lineupsCount": "{count} lineups"
+    },
+    "mapDiscovery": {
+      "eyebrow": "Choisis ton terrain",
+      "title": "Découvre une carte",
+      "explore": "Explorer {map}",
+      "lineupsCount": "{count} lineups"
+    },
+    "popular": {
+      "eyebrow": "En ce moment",
+      "title": "Populaire en ce moment",
+      "viewAll": "Voir tout"
+    },
+    "trending": {
+      "eyebrow": "Cette semaine",
+      "title": "Tendance cette semaine",
+      "new": "Nouveau",
+      "viewAll": "Voir tout"
+    },
+    "guides": {
+      "eyebrow": "Apprends",
+      "title": "Guides",
+      "viewAll": "Voir tout"
     }
   },
   "maps": {
     "list": {
       "metaTitle": "Cartes CS2",
       "metaDescription": "Toutes les cartes compétitives de Counter-Strike 2 : calls, lineups, boosts et guides.",
+      "eyebrow": "Choisis ton terrain",
       "title": "Cartes",
-      "subtitle": "Choisissez une carte pour voir ses callouts, lineups, boosts et guides."
+      "subtitle": "Chaque carte avec ses lineups, boosts et guides — touchez-en une pour explorer.",
+      "lineups": "{count} lineups",
+      "boosts": "{count} boosts",
+      "guides": "{count} guides",
+      "explore": "Explorer {map}"
     },
     "detail": {
       "metaTitleSuffix": "Calls, lineups et boosts",
@@ -221,8 +251,10 @@
     "list": {
       "metaTitle": "Lineups CS2",
       "metaDescription": "Smokes, flashes, molotovs et grenades HE pour toutes les cartes compétitives de Counter-Strike 2, filtrés par carte, côté et grenade.",
+      "eyebrow": "Trouve ton lineup",
       "title": "Lineups",
       "subtitle": "Choisissez une carte pour voir ses lineups.",
+      "totalCount": "{count} lineups en tout",
       "upload": "Publier un lineup",
       "emptyTitle": "Aucun lineup trouvé avec ces filtres",
       "emptyDescription": "Essayez de changer la carte, le côté ou le type de grenade."
@@ -245,7 +277,9 @@
       "noData": "Aucune donnée",
       "difficulty": "Difficulté",
       "uses": "Utilisations",
-      "stepsTitle": "Instructions étape par étape",
+      "stepsTitle": "Comment le lancer",
+      "practiceMode": "Mode entraînement",
+      "exitPractice": "Quitter",
     "diagramTitle": "Schéma",
       "noSteps": "Ce lineup n'a pas encore d'étapes",
       "loginToRate": "Connectez-vous pour noter ce lineup",

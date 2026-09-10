@@ -12,19 +12,19 @@ export function Header({ profile }: { profile: ProfileRow | null }) {
   const t = useTranslations("header");
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/80 px-4 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border/60 bg-background/85 px-4 backdrop-blur-md lg:px-6">
       <Link href="/" className="flex items-center gap-2 lg:hidden">
         <Logo iconOnly />
       </Link>
 
-      <div className="hidden flex-1 lg:flex">
+      <div className="hidden flex-1 justify-center lg:flex">
         <QuickSearchTrigger />
       </div>
 
       <Link
         href="/search"
         aria-label={t("searchAriaLabel")}
-        className="ml-auto flex h-10 w-10 items-center justify-center rounded-md border border-border text-foreground-muted lg:hidden"
+        className="ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground-muted lg:hidden"
       >
         <Search size={18} />
       </Link>

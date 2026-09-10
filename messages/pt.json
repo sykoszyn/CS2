@@ -15,7 +15,10 @@
     "profile": "Perfil",
     "favorites": "Favoritos",
     "collections": "Coleções",
-    "admin": "Admin"
+    "admin": "Admin",
+    "groupCommunity": "Comunidade",
+    "groupYou": "Você",
+    "upload": "Enviar"
   },
   "footer": {
     "madeBy": "Feito pela comunidade de CS2.",
@@ -34,6 +37,8 @@
     "closeAriaLabel": "Fechar busca",
     "noResults": "Nenhum resultado para \"{query}\".",
     "hint": "Tente \"mirage window\", \"boost nuke\" ou \"molotov banana\".",
+    "recentSearches": "Buscas recentes",
+    "heroPlaceholder": "Busque uma smoke, flash, lineup, callout...",
     "types": {
       "map": "Mapa",
       "lineup": "Lineup",
@@ -158,25 +163,50 @@
   "home": {
     "metaTitle": "Lineups da comunidade CS2",
     "metaDescription": "Lineups, calls, boosts, jogadas e estratégias de CS2 criadas pela comunidade. Sem conta obrigatória.",
-    "heroPrefix": "Lineups da",
-    "heroHighlight": "comunidade",
-    "heroSubtitle": "Lineups, estratégias, calls, boosts e jogadas criadas pela comunidade. Grátis, sem conta obrigatória.",
+    "heroPrefix": "Domine",
+    "heroHighlight": "o CS2.",
+    "heroSubtitle": "Lineups, táticas, callouts, boosts e jogadas — feitos pela comunidade CS2.",
     "exploreLineups": "Explorar lineups",
     "exploreMaps": "Explorar mapas",
     "createAccount": "Criar conta",
-    "sections": {
-      "maps": { "title": "Mapas", "subtitle": "Escolha um mapa para ver seus calls, lineups e boosts" },
-      "popularLineups": { "title": "Lineups populares", "subtitle": "As utilities mais usadas pela comunidade" },
-      "featuredPlays": { "title": "Jogadas em destaque", "subtitle": "Clutches, aces e outplays da comunidade" },
-      "guides": { "title": "Guias", "subtitle": "Aprenda um mapa do zero ou suba de nível" }
+    "quickActions": {
+      "eyebrow": "Encontre sua utility",
+      "lineupsCount": "{count} lineups"
+    },
+    "mapDiscovery": {
+      "eyebrow": "Escolha seu campo de batalha",
+      "title": "Descubra um mapa",
+      "explore": "Explorar {map}",
+      "lineupsCount": "{count} lineups"
+    },
+    "popular": {
+      "eyebrow": "Agora mesmo",
+      "title": "Popular agora",
+      "viewAll": "Ver tudo"
+    },
+    "trending": {
+      "eyebrow": "Esta semana",
+      "title": "Tendência da semana",
+      "new": "Novo",
+      "viewAll": "Ver tudo"
+    },
+    "guides": {
+      "eyebrow": "Aprenda",
+      "title": "Guias",
+      "viewAll": "Ver tudo"
     }
   },
   "maps": {
     "list": {
       "metaTitle": "Mapas de CS2",
       "metaDescription": "Todos os mapas competitivos de Counter-Strike 2: calls, lineups, boosts e guias.",
+      "eyebrow": "Escolha seu campo de batalha",
       "title": "Mapas",
-      "subtitle": "Escolha um mapa para ver seus callouts, lineups, boosts e guias."
+      "subtitle": "Cada mapa com seus lineups, boosts e guias — toque em um para entrar.",
+      "lineups": "{count} lineups",
+      "boosts": "{count} boosts",
+      "guides": "{count} guias",
+      "explore": "Explorar {map}"
     },
     "detail": {
       "metaTitleSuffix": "Calls, lineups e boosts",
@@ -221,8 +251,10 @@
     "list": {
       "metaTitle": "Lineups de CS2",
       "metaDescription": "Smokes, flashes, molotovs e granadas HE para todos os mapas competitivos de Counter-Strike 2, filtrados por mapa, lado e granada.",
+      "eyebrow": "Encontre seu lineup",
       "title": "Lineups",
       "subtitle": "Escolha um mapa para ver os lineups dele.",
+      "totalCount": "{count} lineups no total",
       "upload": "Publicar lineup",
       "emptyTitle": "Não encontramos lineups com esses filtros",
       "emptyDescription": "Tente mudar o mapa, o lado ou o tipo de granada."
@@ -245,7 +277,9 @@
       "noData": "Sem dados",
       "difficulty": "Dificuldade",
       "uses": "Usos",
-      "stepsTitle": "Instruções passo a passo",
+      "stepsTitle": "Como jogar",
+      "practiceMode": "Modo prática",
+      "exitPractice": "Sair",
     "diagramTitle": "Diagrama",
       "noSteps": "Este lineup ainda não tem passos cadastrados",
       "loginToRate": "Entre na sua conta para avaliar este lineup",

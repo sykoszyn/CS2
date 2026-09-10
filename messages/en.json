@@ -15,7 +15,10 @@
     "profile": "Profile",
     "favorites": "Favorites",
     "collections": "Collections",
-    "admin": "Admin"
+    "admin": "Admin",
+    "groupCommunity": "Community",
+    "groupYou": "You",
+    "upload": "Upload"
   },
   "footer": {
     "madeBy": "Made by the CS2 community.",
@@ -34,6 +37,8 @@
     "closeAriaLabel": "Close search",
     "noResults": "No results for \"{query}\".",
     "hint": "Try \"mirage window\", \"boost nuke\" or \"molotov banana\".",
+    "recentSearches": "Recent searches",
+    "heroPlaceholder": "Search a smoke, flash, lineup, callout...",
     "types": {
       "map": "Map",
       "lineup": "Lineup",
@@ -158,25 +163,50 @@
   "home": {
     "metaTitle": "Community CS2 Lineups",
     "metaDescription": "CS2 lineups, calls, boosts, plays and strategies made by the community. No account required.",
-    "heroPrefix": "Community",
-    "heroHighlight": "Lineups",
-    "heroSubtitle": "Lineups, strategies, calls, boosts and plays made by the community. Free, no account required.",
+    "heroPrefix": "Master",
+    "heroHighlight": "CS2.",
+    "heroSubtitle": "Lineups, tactics, callouts, boosts and plays — built by the CS2 community.",
     "exploreLineups": "Explore lineups",
     "exploreMaps": "Explore maps",
     "createAccount": "Create account",
-    "sections": {
-      "maps": { "title": "Maps", "subtitle": "Pick a map to see its calls, lineups and boosts" },
-      "popularLineups": { "title": "Popular lineups", "subtitle": "The most-used utility plays in the community" },
-      "featuredPlays": { "title": "Featured plays", "subtitle": "Clutches, aces and outplays from the community" },
-      "guides": { "title": "Guides", "subtitle": "Learn a map from scratch or level up" }
+    "quickActions": {
+      "eyebrow": "Find your utility",
+      "lineupsCount": "{count} lineups"
+    },
+    "mapDiscovery": {
+      "eyebrow": "Choose your battlefield",
+      "title": "Discover a map",
+      "explore": "Explore {map}",
+      "lineupsCount": "{count} lineups"
+    },
+    "popular": {
+      "eyebrow": "Right now",
+      "title": "Popular right now",
+      "viewAll": "View all"
+    },
+    "trending": {
+      "eyebrow": "This week",
+      "title": "Trending this week",
+      "new": "New",
+      "viewAll": "View all"
+    },
+    "guides": {
+      "eyebrow": "Learn",
+      "title": "Guides",
+      "viewAll": "View all"
     }
   },
   "maps": {
     "list": {
       "metaTitle": "CS2 Maps",
       "metaDescription": "Every competitive Counter-Strike 2 map: calls, lineups, boosts and guides.",
+      "eyebrow": "Choose your battlefield",
       "title": "Maps",
-      "subtitle": "Pick a map to see its callouts, lineups, boosts and guides."
+      "subtitle": "Every map with its lineups, boosts and guides — tap one to dive in.",
+      "lineups": "{count} lineups",
+      "boosts": "{count} boosts",
+      "guides": "{count} guides",
+      "explore": "Explore {map}"
     },
     "detail": {
       "metaTitleSuffix": "Calls, lineups and boosts",
@@ -221,8 +251,10 @@
     "list": {
       "metaTitle": "CS2 Lineups",
       "metaDescription": "Smokes, flashes, molotovs and HE grenades for every competitive Counter-Strike 2 map, filtered by map, side and grenade.",
+      "eyebrow": "Find your lineup",
       "title": "Lineups",
       "subtitle": "Pick a map to see its lineups.",
+      "totalCount": "{count} lineups total",
       "upload": "Upload lineup",
       "emptyTitle": "We didn't find lineups with those filters",
       "emptyDescription": "Try changing the map, side or grenade type."
@@ -245,7 +277,9 @@
       "noData": "No data",
       "difficulty": "Difficulty",
       "uses": "Uses",
-      "stepsTitle": "Step-by-step instructions",
+      "stepsTitle": "How to throw",
+      "practiceMode": "Practice mode",
+      "exitPractice": "Exit",
     "diagramTitle": "Diagram",
       "noSteps": "This lineup doesn't have steps loaded yet",
       "loginToRate": "Log in to rate this lineup",
