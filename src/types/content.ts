@@ -55,6 +55,11 @@ export interface LineupStep {
   clickType?: "left" | "right" | "hold";
 }
 
+export interface LineupMedia {
+  imageUrl: string;
+  caption?: string;
+}
+
 export interface Lineup {
   id: string;
   slug: string;
@@ -70,6 +75,7 @@ export interface Lineup {
   authorUsername: string;
   video?: Video;
   steps: LineupStep[];
+  media?: LineupMedia[];
   tags: string[];
   createdAt: string;
   usageCount: number;

@@ -5,8 +5,8 @@ import {
   lineups as mockLineups,
   getLineupBySlug as getMockLineupBySlug,
 } from "@/lib/mock/lineups";
-import type { Lineup, LineupStep, Video } from "@/types/content";
-import type { LineupStepRow, VideoRow, GrenadeTypeEnum, SideType } from "@/types/database";
+import type { Lineup, LineupMedia, LineupStep, Video } from "@/types/content";
+import type { LineupMediaRow, LineupStepRow, VideoRow, GrenadeTypeEnum, SideType } from "@/types/database";
 
 export interface LineupFilters {
   mapSlug?: string;
@@ -20,6 +20,7 @@ const LINEUP_SELECT = `
   profiles ( username ),
   videos ( * ),
   lineup_steps ( * ),
+  lineup_media ( image_url, caption ),
   ratings ( stars, worked )
 `;
 
@@ -58,6 +59,10 @@ function toStep(row: LineupStepRow): LineupStep {
   };
 }
 
+function toMedia(row: Pick<LineupMediaRow, "image_url" | "caption">): LineupMedia {
+  return { imageUrl: row.image_url, caption: row.caption ?? undefined };
+}
+
 // Shape returned by LINEUP_SELECT — looser than LineupRow because of the joins.
 interface LineupJoinRow {
   id: string;
@@ -78,6 +83,7 @@ interface LineupJoinRow {
   profiles: { username: string } | null;
   videos: VideoRow | null;
   lineup_steps: LineupStepRow[];
+  lineup_media: Pick<LineupMediaRow, "image_url" | "caption">[];
   ratings: RatingAgg[];
 }
 
@@ -99,6 +105,7 @@ function toLineup(row: LineupJoinRow, tags: string[] = []): Lineup {
     authorUsername: row.profiles?.username ?? "comunidad",
     video: toVideo(row.videos),
     steps: (row.lineup_steps ?? []).slice().sort((a, b) => a.step_order - b.step_order).map(toStep),
+    media: (row.lineup_media ?? []).map(toMedia),
     tags,
     createdAt: row.created_at,
     usageCount: row.usage_count,

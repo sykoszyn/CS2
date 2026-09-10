@@ -224,6 +224,7 @@
       "difficulty": "Difficulté",
       "uses": "Utilisations",
       "stepsTitle": "Instructions étape par étape",
+    "diagramTitle": "Schéma",
       "noSteps": "Ce lineup n'a pas encore d'étapes",
       "loginToRate": "Connectez-vous pour noter ce lineup",
       "login": "Se connecter"

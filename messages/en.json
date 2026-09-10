@@ -224,6 +224,7 @@
       "difficulty": "Difficulty",
       "uses": "Uses",
       "stepsTitle": "Step-by-step instructions",
+    "diagramTitle": "Diagram",
       "noSteps": "This lineup doesn't have steps loaded yet",
       "loginToRate": "Log in to rate this lineup",
       "login": "Log in"

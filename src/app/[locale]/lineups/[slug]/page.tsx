@@ -169,6 +169,23 @@ export default async function LineupDetailPage({ params }: { params: Promise<{ s
         </div>
       )}
 
+      {lineup.media && lineup.media.length > 0 && (
+        <div className="mt-6">
+          <h2 className="mb-3 font-display text-lg font-semibold">{t("diagramTitle")}</h2>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {lineup.media.map((m) => (
+              <figure key={m.imageUrl} className="overflow-hidden rounded-lg border border-border bg-background-card">
+                {/* eslint-disable-next-line @next/next/no-img-element -- generated SVG, no next/image optimization needed */}
+                <img src={m.imageUrl} alt={m.caption ?? lineup.name} className="w-full" />
+                {m.caption && (
+                  <figcaption className="px-3 py-2 text-xs text-foreground-subtle">{m.caption}</figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="mt-6">
         <h2 className="mb-3 font-display text-lg font-semibold">{t("stepsTitle")}</h2>
         {lineup.steps.length > 0 ? (

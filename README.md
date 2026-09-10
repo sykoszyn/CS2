@@ -234,6 +234,29 @@ obligatorio; cuenta opcional para guardar, subir y participar en la comunidad.
 - Selector de idioma (`src/components/layout/language-switcher.tsx`) en el
   header, junto al buscador rápido.
 
+**FASE 12** (Cobertura de lineups en los 8 mapas + diagramas) — completa:
+
+- **72 lineups reales y verificados** en total, repartidos ~9 por mapa en
+  los 8 mapas (antes eran 24, 3 por mapa): `0010_lineups_expansion.sql`
+  agrega 48 más cubriendo el otro bombsite, más tipos de granada (flash,
+  HE, decoy — antes solo smoke/molotov) y más situaciones (defensa,
+  retake, default), no solo ejecuciones T-side.
+- **Diagramas propios, no capturas de otros sitios**: se pidió agregar
+  capturas de pantalla reales sacadas de páginas de lineups externas, y
+  eso se descartó a propósito — esas imágenes son trabajo de otra persona
+  (composición, overlays, marcas) publicado bajo términos que casi nunca
+  permiten volver a alojarlo en otra web, exactamente la misma razón por
+  la que los videos de esta app son siempre un embed de YouTube y nunca un
+  archivo descargado (ver el comentario de la tabla `videos` en
+  `0001_init.sql`). En su lugar, cada uno de los 72 lineups reales tiene un
+  diagrama SVG propio (posición de tiro → punto de impacto, con badges de
+  lado/granada) generado para este proyecto — contenido 100% original, sin
+  riesgo de copyright — servido desde `public/lineup-diagrams/` y wireado
+  vía la tabla `lineup_media` (`0010_lineups_expansion.sql` para los 48
+  nuevos, `0011_lineup_diagrams_backfill.sql` para los 24 que ya existían
+  de la Fase anterior). Se ve en la página de detalle de cada lineup,
+  debajo del video.
+
 Pendiente (fuera de las fases numeradas, ver brief): guías conectadas a la
 base de datos (hoy siguen siendo mock), colecciones funcionales.
 

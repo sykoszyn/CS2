@@ -114,6 +114,24 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
    `quick-search.tsx`/`search/page.tsx`). `drop function` es necesario
    porque Postgres no permite `create or replace function` cuando cambia el
    tipo de retorno.
+10. `0010_lineups_expansion.sql` — 48 lineups reales más (6 por mapa, en los
+    8 mapas), llevando el total de lineups reales/verificados a 72 (~9 por
+    mapa): cubre el bombsite y los tipos de granada (flash/he/decoy) que
+    `0008` no había tocado. Mismas reglas que `0008`: `is_demo = false`,
+    `verified = true`, sin `video_id`. Además, cada lineup nuevo trae una
+    fila en `lineup_media` apuntando a un diagrama SVG propio bajo
+    `public/lineup-diagrams/` (posición de tiro → objetivo, generado para
+    este proyecto) — no una captura de pantalla de otro sitio. Esa
+    distinción importa: se pidió específicamente scrapear capturas reales
+    de páginas de lineups de terceros, y se descartó porque esas imágenes
+    son contenido ajeno bajo términos que casi nunca permiten rehostearlo,
+    el mismo criterio que ya aplicaba la tabla `videos` (embeds de
+    YouTube, nunca un archivo bajado y alojado acá — ver el comentario en
+    `0001_init.sql`).
+11. `0011_lineup_diagrams_backfill.sql` — agrega la misma fila de
+    `lineup_media` (diagrama SVG propio) a los 24 lineups de `0008` que
+    quedaron sin una cuando se escribió `0010`, para que los 72 lineups
+    reales tengan diagrama, no solo los 48 más nuevos.
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.
