@@ -119,6 +119,12 @@
       "right": "Click derecho",
       "hold": "Mantener"
     },
+    "throwTechnique": {
+      "normal": "Normal (parado)",
+      "jumpthrow": "Jumpthrow",
+      "walkthrow": "Walkthrow (caminando)",
+      "crouch": "Agachado"
+    },
     "boostCategory": {
       "common": "Común",
       "competitive": "Competitivo",
@@ -287,7 +293,6 @@
     },
     "stepViewer": {
       "stepOf": "Paso {current} / {total}",
-      "jumpthrow": "Jumpthrow",
       "previous": "Anterior",
       "next": "Siguiente",
       "goToStep": "Ir al paso {step}"
@@ -330,7 +335,7 @@
       "unspecified": "Sin especificar",
       "instruction": "Instrucción",
       "instructionPlaceholder": "Parate en la salida de T Spawn...",
-      "jumpthrow": "Requiere jumpthrow",
+      "throwTechnique": "Técnica de lanzamiento",
       "publishing": "Publicando...",
       "publish": "Publicar lineup"
     },

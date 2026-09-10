@@ -13,6 +13,7 @@ import type {
   GrenadeTypeEnum,
   LineupSituation,
   SideType,
+  ThrowTechniqueEnum,
   VideoSourceEnum,
 } from "@/types/database";
 
@@ -66,7 +67,7 @@ export interface CreateLineupStepInput {
   order: number;
   title: string;
   instruction: string;
-  jumpthrow: boolean;
+  throwTechnique: ThrowTechniqueEnum;
   clickType: ClickTypeEnum | "";
 }
 
@@ -143,7 +144,7 @@ export async function createLineupAction(
       order: s.order,
       title: s.title.trim(),
       instruction: s.instruction.trim(),
-      jumpthrow: s.jumpthrow,
+      throwTechnique: s.throwTechnique,
       clickType: s.clickType,
     })),
   };

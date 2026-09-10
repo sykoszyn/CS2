@@ -1,5 +1,5 @@
 import type { Lineup } from "@/types/content";
-import type { ClickTypeEnum } from "@/types/database";
+import type { ClickTypeEnum, ThrowTechniqueEnum } from "@/types/database";
 
 /**
  * Enum value lists for building <select> options — the display labels
@@ -18,3 +18,4 @@ export const situationValues: Lineup["situation"][] = [
 ];
 export const distanceValues: Lineup["distance"][] = ["close", "medium", "long"];
 export const clickTypeValues: ClickTypeEnum[] = ["left", "right", "hold"];
+export const throwTechniqueValues: ThrowTechniqueEnum[] = ["normal", "jumpthrow", "walkthrow", "crouch"];

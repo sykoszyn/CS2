@@ -53,7 +53,7 @@ export interface LineupStep {
   title: string;
   instruction: string;
   imageUrl: string;
-  jumpthrow?: boolean;
+  throwTechnique: "normal" | "jumpthrow" | "walkthrow" | "crouch";
   clickType?: "left" | "right" | "hold";
 }
 

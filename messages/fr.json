@@ -119,6 +119,12 @@
       "right": "Clic droit",
       "hold": "Maintenir"
     },
+    "throwTechnique": {
+      "normal": "Normal (debout)",
+      "jumpthrow": "Jumpthrow",
+      "walkthrow": "Walkthrow (en marchant)",
+      "crouch": "Accroupi"
+    },
     "boostCategory": {
       "common": "Commun",
       "competitive": "Compétitif",
@@ -287,7 +293,6 @@
     },
     "stepViewer": {
       "stepOf": "Étape {current} / {total}",
-      "jumpthrow": "Jumpthrow",
       "previous": "Précédent",
       "next": "Suivant",
       "goToStep": "Aller à l'étape {step}"
@@ -330,7 +335,7 @@
       "unspecified": "Non spécifié",
       "instruction": "Instruction",
       "instructionPlaceholder": "Placez-vous à la sortie de T Spawn...",
-      "jumpthrow": "Nécessite un jumpthrow",
+      "throwTechnique": "Technique de lancer",
       "publishing": "Publication...",
       "publish": "Publier le lineup"
     },

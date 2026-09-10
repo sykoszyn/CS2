@@ -23,6 +23,7 @@ export type ContentTypeEnum = "lineup" | "play" | "guide" | "boost" | "comment";
 export type SideType = "ct" | "t" | "both";
 export type GrenadeTypeEnum = "smoke" | "flash" | "molotov" | "he" | "decoy";
 export type ClickTypeEnum = "left" | "right" | "hold";
+export type ThrowTechniqueEnum = "normal" | "jumpthrow" | "walkthrow" | "crouch";
 export type LineupSituation = "attack" | "defense" | "retake" | "execute" | "anti-eco" | "default";
 export type DistanceType = "close" | "medium" | "long";
 export type BoostCategory = "common" | "competitive" | "exotic" | "secret";
@@ -131,7 +132,7 @@ export type LineupStepRow = {
   title: string;
   instruction: string;
   image_url: string | null;
-  jumpthrow: boolean;
+  throw_technique: ThrowTechniqueEnum;
   click_type: ClickTypeEnum | null;
   created_at: string;
 };

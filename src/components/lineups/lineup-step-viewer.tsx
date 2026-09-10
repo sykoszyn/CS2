@@ -13,6 +13,7 @@ export function LineupStepViewer({ steps, big = false }: { steps: LineupStep[]; 
   const step = steps[index];
   const t = useTranslations("lineups.stepViewer");
   const tClick = useTranslations("labels.clickType");
+  const tThrow = useTranslations("labels.throwTechnique");
 
   return (
     <div className={cn("rounded-lg border border-border bg-background-card", big && "border-brand/30")}>
@@ -38,10 +39,10 @@ export function LineupStepViewer({ steps, big = false }: { steps: LineupStep[]; 
               {tClick(step.clickType)}
             </span>
           )}
-          {step.jumpthrow && (
+          {step.throwTechnique !== "normal" && (
             <span className="flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs text-foreground-muted">
               <ArrowUpFromLine size={12} />
-              {t("jumpthrow")}
+              {tThrow(step.throwTechnique)}
             </span>
           )}
         </div>

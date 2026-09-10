@@ -50,7 +50,7 @@ function toStep(row: LineupStepRow): LineupStep {
     title: row.title,
     instruction: row.instruction,
     imageUrl: row.image_url ?? "",
-    jumpthrow: row.jumpthrow,
+    throwTechnique: row.throw_technique,
     clickType: row.click_type ?? undefined,
   };
 }

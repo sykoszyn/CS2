@@ -119,6 +119,12 @@
       "right": "Right click",
       "hold": "Hold"
     },
+    "throwTechnique": {
+      "normal": "Normal (standing)",
+      "jumpthrow": "Jumpthrow",
+      "walkthrow": "Walkthrow (walking)",
+      "crouch": "Crouch"
+    },
     "boostCategory": {
       "common": "Common",
       "competitive": "Competitive",
@@ -287,7 +293,6 @@
     },
     "stepViewer": {
       "stepOf": "Step {current} / {total}",
-      "jumpthrow": "Jumpthrow",
       "previous": "Previous",
       "next": "Next",
       "goToStep": "Go to step {step}"
@@ -330,7 +335,7 @@
       "unspecified": "Unspecified",
       "instruction": "Instruction",
       "instructionPlaceholder": "Stand at the T Spawn exit...",
-      "jumpthrow": "Requires jumpthrow",
+      "throwTechnique": "Throw technique",
       "publishing": "Publishing...",
       "publish": "Publish lineup"
     },

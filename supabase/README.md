@@ -36,8 +36,10 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
 
 1. `0001_init.sql` — esquema completo: tablas, enums, índices, triggers y
    políticas de Row Level Security.
-2. `0002_seed.sql` — datos de demostración (mapas, algunos lineups, boosts,
-   jugadas y una guía), todos marcados `is_demo = true` y `verified = false`.
+2. `0002_seed.sql` — solo datos de referencia reales: los 8 mapas de CS2 y
+   los calls de Mirage. Sin lineups/boosts/plays/guías de relleno — ese
+   contenido es lo que sube la comunidad, y arranca en cero a propósito
+   (ver "Pendiente" en el `README.md` de la raíz).
 3. `0003_steam_auth.sql` — columna `steam_id` en `profiles`, usada para
    reconocer a un jugador que vuelve a entrar con Steam.
 4. `0004_lineup_rpc.sql` — función `create_lineup_with_steps(payload jsonb)`
@@ -99,11 +101,7 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
    son redundantes con RLS a propósito (mismo criterio de "defensa en
    profundidad" que los filtros que se agregaron en la capa de servicios
    cuando los admins pasaron a poder ver contenido eliminado).
-8. `0008_lineups_content.sql` — 24 lineups reales más (3 por mapa, en los 8
-   mapas), a diferencia del seed original marcados `is_demo = false,
-   verified = true`: son posiciones reales que cualquiera puede usar, no
-   datos de relleno.
-9. `0009_search_i18n.sql` — al agregar inglés/francés/portugués (ver
+8. `0009_search_i18n.sql` — al agregar inglés/francés/portugués (ver
    `README.md` de la raíz), quedó claro que `search_content()` armaba texto
    en español directo en SQL (`'Lineup · ' || mp.slug` como "subtítulo") —
    imposible de traducir desde la UI. Esta migración hace `drop function` +
@@ -114,43 +112,32 @@ Los archivos viven en `supabase/migrations/` y se corren en orden numérico:
    `quick-search.tsx`/`search/page.tsx`). `drop function` es necesario
    porque Postgres no permite `create or replace function` cuando cambia el
    tipo de retorno.
-10. `0010_lineups_expansion.sql` — 48 lineups reales más (6 por mapa, en los
-    8 mapas), llevando el total de lineups reales/verificados a 72 (~9 por
-    mapa): cubre el bombsite y los tipos de granada (flash/he/decoy) que
-    `0008` no había tocado. Mismas reglas que `0008`: `is_demo = false`,
-    `verified = true`, sin `video_id`. Además, cada lineup nuevo trae una
-    fila en `lineup_media` apuntando a un diagrama SVG propio bajo
-    `public/lineup-diagrams/` (posición de tiro → objetivo, generado para
-    este proyecto) — no una captura de pantalla de otro sitio. Esa
-    distinción importa: se pidió específicamente scrapear capturas reales
-    de páginas de lineups de terceros, y se descartó porque esas imágenes
-    son contenido ajeno bajo términos que casi nunca permiten rehostearlo,
-    el mismo criterio que ya aplicaba la tabla `videos` (embeds de
-    YouTube, nunca un archivo bajado y alojado acá — ver el comentario en
-    `0001_init.sql`).
-11. `0011_lineup_diagrams_backfill.sql` — agrega la misma fila de
-    `lineup_media` (diagrama SVG propio) a los 24 lineups de `0008` que
-    quedaron sin una cuando se escribió `0010`, para que los 72 lineups
-    reales tengan diagrama, no solo los 48 más nuevos.
-12. `0012_lineup_map_pins.sql` — agrega `lineups.pin_x`/`pin_y` (numeric
+9. `0012_lineup_map_pins.sql` — agrega `lineups.pin_x`/`pin_y` (numeric
     0-100, mismo criterio que `map_zones.x/y`) para poder mostrar cada
     lineup como un pin sobre el radar del mapa, y `maps.radar_url_lower`
     para Nuke (el único mapa con dos niveles verticales, y por lo tanto
     dos radares). También actualiza `create_lineup_with_steps` (`create or
     replace`, mismo tipo de retorno que en `0004`, no hace falta `drop`)
     para aceptar `pin_x`/`pin_y` opcionales en el payload. Ambas columnas
-    son nullable a propósito: los 75 lineups que ya existían no tienen una
-    posición real conocida, así que no se les inventó ninguna — quedan sin
-    pin hasta que alguien los ubique a mano en el mapa (ver el flujo de
+    son nullable a propósito: un lineup sin posición conocida queda sin
+    pin hasta que alguien lo ubique a mano en el mapa (ver el flujo de
     alta por click en `/maps/[slug]`, sección "Lineups sobre el radar" del
     `README.md` de la raíz).
-13. `0013_radar_images.sql` — apunta `maps.radar_url`/`radar_url_lower` a
+10. `0013_radar_images.sql` — apunta `maps.radar_url`/`radar_url_lower` a
     los radares reales que el usuario subió directo al repo en
     `public/radars/` (no scrapeados de otro sitio — el mismo criterio de
     sourcing que el resto de la media de la app). Cubre 7 de los 8 mapas.
-14. `0014_overpass_radar.sql` — completa el octavo (Overpass), subido en
+11. `0014_overpass_radar.sql` — completa el octavo (Overpass), subido en
     formato WebP en vez de PNG (`public/radars/overpass.webp`) — los 8
     mapas ya tienen radar real en el visor.
+12. `0015_throw_technique.sql` — reemplaza `lineup_steps.jumpthrow`
+    (booleano) por un enum `throw_technique` (`normal`, `jumpthrow`,
+    `walkthrow`, `crouch`) — las técnicas de lanzamiento que se enseñan en
+    CS2, no solo el jumpthrow. `click_type` (izquierdo/derecho/mantener,
+    de `0001_init.sql`) sigue siendo un campo aparte: eso es el botón del
+    mouse, esto es la postura/movimiento al tirar. Actualiza
+    `create_lineup_with_steps` para aceptar `throwTechnique` en vez de
+    `jumpthrow` en el payload de cada paso.
 
 En el **SQL Editor** de Supabase: abrí cada archivo en el repo, copiá el
 contenido completo, pegalo en una query nueva y ejecutalo — en ese orden.

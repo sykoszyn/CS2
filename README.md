@@ -404,11 +404,60 @@ tuviera nada cargado. Se sacó esa ilusión por completo:
   sección editorial vacía cuando no hay contenido de ese tipo — cada
   riel se oculta si no tiene nada real para mostrar.
 
-El contenido de ejemplo (los 72 lineups con diagramas, etc.) sigue
-existiendo como migraciones SQL (`0002_seed.sql`, `0008_lineups_content.sql`,
-`0010_lineups_expansion.sql`) para quien quiera poblar una base de
-desarrollo — lo que se eliminó es que la interfaz lo mostrara como si
-fuera contenido real ya publicado cuando la base de producción está vacía.
+Al momento de escribir esto, el contenido de ejemplo (los 72 lineups con
+diagramas de la Fase 12) todavía existía como migraciones SQL para quien
+quisiera poblar una base de desarrollo — ver FASE 16 más abajo, donde se
+terminó sacando también eso.
+
+**FASE 16** (Poner lineups/boosts/plays/guías en cero de verdad + técnica
+de lanzamiento) — completa:
+
+La Fase 15 sacó la ilusión de datos falsos a nivel interfaz, pero las
+migraciones (`0002_seed.sql`, `0008_lineups_content.sql`,
+`0010_lineups_expansion.sql`, `0011_lineup_diagrams_backfill.sql`)
+todavía insertaban los 72 lineups reales/verificados de la Fase 12 (más
+2 boosts, 2 jugadas y 1 guía de demostración) si alguien corría las
+migraciones contra una base nueva. Se pidió que quedara todo en cero de
+verdad para subir contenido real desde cero:
+
+- `0002_seed.sql` se recortó a solo datos de referencia reales: los 8
+  mapas de CS2 y los calls de Mirage (nada de lineups/boosts/plays/guía
+  de relleno).
+- `0008_lineups_content.sql`, `0010_lineups_expansion.sql` y
+  `0011_lineup_diagrams_backfill.sql` se borraron por completo — eran
+  pura inserción de datos, sin cambios de esquema, así que no dejan nada
+  colgado en migraciones posteriores.
+- Validado corriendo las 12 migraciones que quedan contra un Postgres
+  local limpio: `lineups`/`lineup_steps`/`boosts`/`plays`/`guides`
+  terminan en 0 filas, `maps`/`map_zones` con los 8 mapas reales y los 5
+  calls de Mirage.
+- **Técnica de lanzamiento**: `lineup_steps.jumpthrow` (un booleano, solo
+  contemplaba el jumpthrow) se reemplazó por un enum `throw_technique`
+  con las técnicas que de verdad se enseñan en CS2 — `normal` (parado),
+  `jumpthrow`, `walkthrow` (caminando) y `crouch` (agachado).
+  `click_type` (izquierdo/derecho/mantener) sigue siendo un campo
+  separado — es el botón del mouse, no la postura al tirar. El
+  formulario de `/lineups/new` (`create-lineup-form.tsx`) ahora tiene un
+  selector de técnica de lanzamiento por paso en vez del checkbox de
+  jumpthrow, y el visor de pasos (`lineup-step-viewer.tsx`) muestra la
+  técnica elegida como badge cuando no es la normal.
+- Migración `0015_throw_technique.sql`: crea el enum, agrega la columna
+  (`not null default 'normal'`), migra cualquier fila con `jumpthrow =
+  true` a `throw_technique = 'jumpthrow'`, borra la columna vieja y
+  actualiza `create_lineup_with_steps` para aceptar `throwTechnique` en
+  el payload de cada paso.
+
+No tengo credenciales de Supabase de este proyecto en este entorno, así
+que no pude aplicar las migraciones contra la base de producción real —
+lo que se hizo fue dejar los archivos de migración listos para que,
+cuando se corran (`supabase db push` o pegándolos en el SQL Editor, en
+orden), la base termine exactamente en este estado. Si la base de
+producción ya tenía migraciones aplicadas de una tanda anterior con los
+72 lineups de ejemplo, hace falta un `delete from lineups; delete from
+boosts; delete from plays; delete from guides;` manual además de correr
+`0015` — las migraciones nuevas no revierten filas que ya existan en una
+base que corrió las viejas `0008`/`0010`/`0011` antes de que se
+borraran.
 
 ## Estructura del proyecto
 

@@ -11,6 +11,7 @@ import {
   situationValues,
   distanceValues,
   clickTypeValues,
+  throwTechniqueValues,
 } from "@/lib/labels/lineup-labels";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,7 @@ export function CreateLineupForm({
   const tSituation = useTranslations("labels.situation");
   const tDistance = useTranslations("labels.distance");
   const tClick = useTranslations("labels.clickType");
+  const tThrow = useTranslations("labels.throwTechnique");
 
   const [name, setName] = useState("");
   const [mapId, setMapId] = useState(initialMapId ?? maps[0]?.id ?? "");
@@ -52,13 +54,13 @@ export function CreateLineupForm({
   const [videoUrl, setVideoUrl] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [steps, setSteps] = useState<(CreateLineupStepInput & { key: number })[]>([
-    { key: stepIdCounter++, order: 1, title: "", instruction: "", jumpthrow: false, clickType: "" },
+    { key: stepIdCounter++, order: 1, title: "", instruction: "", throwTechnique: "normal", clickType: "" },
   ]);
 
   function addStep() {
     setSteps((prev) => [
       ...prev,
-      { key: stepIdCounter++, order: prev.length + 1, title: "", instruction: "", jumpthrow: false, clickType: "" },
+      { key: stepIdCounter++, order: prev.length + 1, title: "", instruction: "", throwTechnique: "normal", clickType: "" },
     ]);
   }
 
@@ -287,6 +289,22 @@ export function CreateLineupForm({
                     ))}
                   </select>
                 </div>
+                <div>
+                  <label className={labelClass}>{t("throwTechnique")}</label>
+                  <select
+                    className={selectClass}
+                    value={step.throwTechnique}
+                    onChange={(e) =>
+                      updateStep(index, { throwTechnique: e.target.value as CreateLineupStepInput["throwTechnique"] })
+                    }
+                  >
+                    {throwTechniqueValues.map((technique) => (
+                      <option key={technique} value={technique}>
+                        {tThrow(technique)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="sm:col-span-2">
                   <label className={labelClass}>{t("instruction")}</label>
                   <Input
@@ -296,15 +314,6 @@ export function CreateLineupForm({
                     required
                   />
                 </div>
-                <label className="flex items-center gap-2 text-sm text-foreground-muted sm:col-span-2">
-                  <input
-                    type="checkbox"
-                    checked={step.jumpthrow}
-                    onChange={(e) => updateStep(index, { jumpthrow: e.target.checked })}
-                    className="h-4 w-4 rounded border-border-strong"
-                  />
-                  {t("jumpthrow")}
-                </label>
               </div>
             </div>
           ))}
